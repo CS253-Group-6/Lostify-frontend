@@ -1,17 +1,20 @@
-import 'package:final_project/components/customButton.dart';
-import 'package:final_project/components/input.dart';
+import 'package:final_project/components/auth/auth_input.dart';
+import 'package:final_project/components/auth/custom_auth_button.dart';
 import 'package:flutter/material.dart';
 
-class AdminLogin extends StatefulWidget {
-  const AdminLogin({super.key});
+class ResetPasswordPage extends StatefulWidget {
+  const ResetPasswordPage({super.key});
 
   @override
-  State<AdminLogin> createState() => _AdminLoginState();
+  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
 }
 
-class _AdminLoginState extends State<AdminLogin> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  final _emailController = TextEditingController();
+
+  void handleResetPassword(){
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +47,7 @@ class _AdminLoginState extends State<AdminLogin> {
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
                       child: Text(
-                        "Welcome Admin!",
+                        "Reset your password!",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 24,
@@ -61,27 +64,9 @@ class _AdminLoginState extends State<AdminLogin> {
                           child: Column(
                             children: [
                               Input(textController: _emailController,hintText: "Enter email",showEyeIcon: false,),
-                              SizedBox(height: 16,),
-
-                              Input(textController: _passwordController,hintText: "Enter Password",showEyeIcon: true,),
-                              SizedBox(height: 16,),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                // margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
-                                child: Text(
-                                  "Forgot password?",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15,
-                                    color: Color(0xFF007AFF),
-                                  ),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
                               SizedBox(height: 24,),
-                              //TODO: add custom button
-                              Custombutton(text: "Login")
 
+                              Custombutton(text: "Reset Password",onClick: handleResetPassword,)
                             ],
                           ),
                         ),

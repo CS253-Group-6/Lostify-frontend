@@ -26,7 +26,13 @@ class _InputState extends State<Input> {
         border: Border.all(color: Color(0xFFC5C6CC),width: 2)
 
       ),
-      child: TextField(
+      child: TextFormField(
+        validator: (value){
+          if(value == null || value.isEmpty){
+            return "Please fill this field";
+          }
+          return null;
+        },
         controller: widget.textController,
         decoration: InputDecoration(
             filled: true,
