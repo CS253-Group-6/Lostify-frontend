@@ -23,6 +23,16 @@ class _FoundItemPage1State extends State<FoundItemPage1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Found an item', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -37,21 +47,7 @@ class _FoundItemPage1State extends State<FoundItemPage1> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.black),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    "Found an Item",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
-                  ),
-                ],
-              ),
+
               const SizedBox(height: 30),
 
               Text("Upload Image", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),

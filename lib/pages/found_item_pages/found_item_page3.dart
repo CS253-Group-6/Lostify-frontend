@@ -46,6 +46,16 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Found an item', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -63,25 +73,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Back arrow + Page Title
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.black),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    "Found an Item",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
+
               const SizedBox(height: 30),
 
               // Location where item was found

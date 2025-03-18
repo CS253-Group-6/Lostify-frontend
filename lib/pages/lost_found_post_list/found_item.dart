@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/components/lost_items/lost_item_box.dart';
-import 'package:flutter_projects/models/post.dart';
+import 'package:final_project/components/lost_items/lost_item_box.dart';
+import 'package:final_project/models/post.dart';
 
 class FoundItem extends StatefulWidget {
   const FoundItem({Key? key}) : super(key: key);
@@ -75,7 +75,7 @@ class _FoundItemState extends State<FoundItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Found Items', style: TextStyle(color: Colors.white)),
+        title: const Text('Found Items', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,

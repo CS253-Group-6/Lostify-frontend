@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/components/lost_items/lost_item_box.dart';
-import 'package:flutter_projects/models/post.dart';
+import 'package:final_project/components/lost_items/lost_item_box.dart';
+import 'package:final_project/models/post.dart';
 
 class LostItem extends StatefulWidget {
   const LostItem({Key? key}) : super(key: key);
