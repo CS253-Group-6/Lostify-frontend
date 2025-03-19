@@ -48,7 +48,7 @@ class _FoundItemPage1State extends State<FoundItemPage1> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              const SizedBox(height: 30),
+
 
               Text("Upload Image", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
               const SizedBox(height: 10),
@@ -79,7 +79,7 @@ class _FoundItemPage1State extends State<FoundItemPage1> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => FoundItemPage2()));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: Colors.blue,
                   minimumSize: Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),

@@ -34,7 +34,7 @@ class FoundItemPage2 extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              const SizedBox(height: 30),
+
 
               Text("Add Title and Description", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
               const SizedBox(height: 10),
@@ -46,6 +46,7 @@ class FoundItemPage2 extends StatelessWidget {
                   fillColor: Colors.white,
                   hintText: "Title",
                   hintStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: Colors.grey, // Change hint text color
                     fontSize: 15, // Change hint text size
                   ),
@@ -62,20 +63,21 @@ class FoundItemPage2 extends StatelessWidget {
                   fillColor: Colors.white,
                   hintText: "Found item Description",
                   hintStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: Colors.grey, // Change hint text color
                     fontSize: 15, // Change hint text size
                   ),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
                 ),
               ),
-              const SizedBox(height: 270),
+              const SizedBox(height: 250),
 
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => FoundItemPage3()));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: Colors.blue,
                   minimumSize: Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),

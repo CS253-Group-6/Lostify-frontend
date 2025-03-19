@@ -49,6 +49,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
       appBar: AppBar(
         title: const Text('Found an item', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
+
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
@@ -74,7 +75,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
             children: [
               // Back arrow + Page Title
 
-              const SizedBox(height: 30),
+
 
               // Location where item was found
               Text(
@@ -144,7 +145,11 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                               selectedDate != null
                                   ? DateFormat('dd/MM/yyyy').format(selectedDate!)
                                   : "DD/MM/YY",
-                              style: TextStyle(fontSize: 15, color: Colors.grey),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: selectedTime != null ? Colors.black : Colors.grey,
+                              ),
                             ),
                             Icon(Icons.calendar_today, color: Colors.grey), // Calendar icon
                           ],
@@ -168,11 +173,14 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              selectedTime != null
-                                  ? selectedTime!.format(context)
-                                  : "Time",
-                              style: TextStyle(fontSize: 15, color: Colors.grey),
+                              selectedTime != null ? selectedTime!.format(context) : "Time",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: selectedTime != null ? Colors.black : Colors.grey,
+                              ),
                             ),
+
                             Icon(Icons.access_time, color: Colors.grey), // Clock icon
                           ],
                         ),
@@ -227,7 +235,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                   // Handle next navigation
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: Colors.blue,
                   minimumSize: Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),

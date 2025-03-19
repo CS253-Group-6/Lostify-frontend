@@ -19,6 +19,9 @@ class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  void handleReset(){
+    Navigator.of(context).pushNamed('/reset-password');
+  }
   void handleSubmit() async{
     if(_loginKey.currentState!.validate()){
       context.read<UserProvider>().setEmail(newEmail: _emailController.text);
@@ -94,14 +97,17 @@ class _LoginState extends State<Login> {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   // margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
-                                  child: Text(
-                                    "Forgot password?",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15,
-                                      color: Color(0xFF007AFF),
+                                  child: GestureDetector(
+                                    onTap: handleReset,
+                                    child: Text(
+                                      "Forgot password?",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        color: Color(0xFF007AFF),
+                                      ),
+                                      textAlign: TextAlign.start,
                                     ),
-                                    textAlign: TextAlign.start,
                                   ),
                                 ),
                                 SizedBox(height: 24,),
