@@ -1,8 +1,8 @@
-import 'package:final_project/components/auth/custom_auth_button.dart';
-import 'package:final_project/components/auth/auth_input.dart';
-import 'package:final_project/pages/profile_pages/profileform_page.dart';
-import 'package:final_project/providers/user_provider.dart';
-import 'package:final_project/services/auth_api.dart';
+import '/components/auth/custom_auth_button.dart';
+import '/components/auth/auth_input.dart';
+import '/pages/profile_pages/profileform_page.dart';
+import '/providers/user_provider.dart';
+import '/services/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,13 +29,13 @@ class _LoginState extends State<Login> {
         "email": _emailController.text,
         "password": _passwordController.text
       };
-      Map<String,dynamic> response = await AuthApi.login(loginDetails);
-      if(response['statusCode'] == 200){
-        Navigator.of(context).pushReplacementNamed('/');
-      }else{
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-
+      // Map<String,dynamic> response = await AuthApi.login(loginDetails);
+      // if(response['statusCode'] == 200){
+      //   Navigator.of(context).pushReplacementNamed('/');
+      // }else{
+      //   Navigator.of(context).pushReplacementNamed('/');
+      // }
+      Navigator.of(context).pushReplacementNamed('/home');
     }
 
   }

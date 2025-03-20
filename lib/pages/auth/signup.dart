@@ -1,8 +1,8 @@
-import "package:final_project/components/auth/custom_auth_button.dart";
-import "package:final_project/models/user_model.dart";
-import "package:final_project/pages/profile_pages/profileform_page.dart";
-import "package:final_project/providers/user_provider.dart";
-import "package:final_project/services/auth_api.dart";
+import "/components/auth/custom_auth_button.dart";
+import "/models/user_model.dart";
+import "/pages/profile_pages/profileform_page.dart";
+import "/providers/user_provider.dart";
+import "/services/auth_api.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 class SignUp extends StatefulWidget {
@@ -36,224 +36,233 @@ class _SignUpState extends State<SignUp> {
           email: _emailController.text,
           password: _passwordController.text
       );
-      Map<String,dynamic> response = await AuthApi.signUp(user);
-      if(response['statusCode'] == 200){
-        Navigator.of(context).pushNamed('/create-profile',arguments: {
-          'username': _usernameController.text,
-          'email' :  _emailController.text,
-          'password' : _passwordController.text
-        });
-      }else{
-        Navigator.of(context).pushReplacementNamed('/');
-      }
+      // Map<String,dynamic> response = await AuthApi.signUp(user);
+      // if(response['statusCode'] == 200){
+      //   Navigator.of(context).pushNamed('/create-profile',arguments: {
+      //     'username': _usernameController.text,
+      //     'email' :  _emailController.text,
+      //     'password' : _passwordController.text
+      //   });
+      // }else{
+      //   Navigator.of(context).pushReplacementNamed('/');
+      // }
+      Navigator.of(context).pushNamed('/create-profile');
     }
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/images/Admin Login.png"),
-              fit: BoxFit.cover
-          )
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            children: [
-              Column(
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/Admin Login.png"),
+                fit: BoxFit.cover
+            )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
-                        ),
-                    ),
-                  ),
-                  Align(
-                    alignment : Alignment.centerLeft,
-                    child: Text(
-                        "Create a new account to get started.",
-                        style: TextStyle(
-                          color: Color(0xFF71727A),
-                        ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24,),
-              Form(
-                key: _formKey,
-                  child: Column(
+                  Column(
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "Username",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
+                            "Sign Up",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold
+                            ),
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          // color: Colors.black.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Color(0xFFC5C6CC),width: 2)
-                        ),
-                        child: TextFormField(
-                          controller: _usernameController,
-                          validator: (value){
-                            if(value == null || value.isEmpty){
-                              return "Please enter your username";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.transparent,
-                            hintText: 'Username',
-                            hintStyle: TextStyle(
-                              color: Color(0xFF8F9098)
+                      Align(
+                        alignment : Alignment.centerLeft,
+                        child: Text(
+                            "Create a new account to get started.",
+                            style: TextStyle(
+                              color: Color(0xFF71727A),
                             ),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
-                          ),
                         ),
                       ),
-                      SizedBox(height: 8,),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Email",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              // color: Colors.black.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Color(0xFFC5C6CC),width: 2)
-
-                            ),
-                            child: TextFormField(
-                              controller: _emailController,
-                              validator: (value){
-                                if(value == null || value.isEmpty){
-                                  return "Please enter your email";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.transparent,
-                                hintText: 'Email Address',
-                                hintStyle: TextStyle(
-                                    color: Color(0xFF8F9098)
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Password",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              // color: Colors.black.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Color(0xFFC5C6CC),width: 2)
-
-                            ),
-                            child: TextFormField(
-                              controller: _passwordController,
-                              obscureText: _isObscuredpassword,
-                              validator: (value){
-                                if(value == null || value.isEmpty){
-                                  return "Please enter your password";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.transparent,
-                                hintText: 'Password',
-                                hintStyle: TextStyle(
-                                    color: Color(0xFF8F9098)
-                                ),
-                                suffixIcon: IconButton(onPressed: (){setState(() {
-                                  _isObscuredpassword = !_isObscuredpassword;
-                                });}, icon: Icon(_isObscuredpassword ? Icons.visibility_off:Icons.visibility)),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              // color: Colors.black.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Color(0xFFC5C6CC),width: 2)
-
-                            ),
-                            child: TextFormField(
-                              validator: (value){
-                                if(value != _passwordController.text){
-                                  return "Passwords do not match";
-                                }
-                                return null;
-                              },
-                              obscureText: _isObscuredConfirmPassword,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.transparent,
-                                hintText: 'Confirm Password',
-                                hintStyle: TextStyle(
-                                    color: Color(0xFF8F9098)
-                                ),
-                                suffixIcon: IconButton(onPressed: (){setState(() {
-                                  _isObscuredConfirmPassword = !_isObscuredConfirmPassword;
-                                });}, icon: _isObscuredConfirmPassword ? Icon(Icons.visibility_off) : Icon(Icons.visibility)),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 50,),
-                      Custombutton(text: "Sign Up", onClick: handleSubmit)
                     ],
-                  )
+                  ),
+                  SizedBox(height: 24,),
+                  Form(
+                    key: _formKey,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Username",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              // color: Colors.black.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Color(0xFFC5C6CC),width: 2)
+                            ),
+                            child: TextFormField(
+                              controller: _usernameController,
+                              validator: (value){
+                                if(value == null || value.isEmpty){
+                                  return "Please enter your username";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.transparent,
+                                hintText: 'Username',
+                                hintStyle: TextStyle(
+                                  color: Color(0xFF8F9098)
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 8,),
+                          Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Email",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  // color: Colors.black.withOpacity(0.3),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Color(0xFFC5C6CC),width: 2)
+                      
+                                ),
+                                child: TextFormField(
+                                  controller: _emailController,
+                                  validator: (value){
+                                    if(value == null || value.isEmpty){
+                                      return "Please enter your email";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.transparent,
+                                    hintText: 'Email Address',
+                                    hintStyle: TextStyle(
+                                        color: Color(0xFF8F9098)
+                                    ),
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8,),
+                          Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Password",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  // color: Colors.black.withOpacity(0.3),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Color(0xFFC5C6CC),width: 2)
+                      
+                                ),
+                                child: TextFormField(
+                                  controller: _passwordController,
+                                  obscureText: _isObscuredpassword,
+                                  validator: (value){
+                                    if(value == null || value.isEmpty){
+                                      return "Please enter your password";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.transparent,
+                                    hintText: 'Password',
+                                    hintStyle: TextStyle(
+                                        color: Color(0xFF8F9098)
+                                    ),
+                                    suffixIcon: IconButton(onPressed: (){setState(() {
+                                      _isObscuredpassword = !_isObscuredpassword;
+                                    });}, icon: Icon(_isObscuredpassword ? Icons.visibility_off:Icons.visibility)),
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8,),
+                          Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  // color: Colors.black.withOpacity(0.3),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Color(0xFFC5C6CC),width: 2)
+                      
+                                ),
+                                child: TextFormField(
+                                  validator: (value){
+                                    if(value != _passwordController.text){
+                                      return "Passwords do not match";
+                                    }
+                                    return null;
+                                  },
+                                  obscureText: _isObscuredConfirmPassword,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.transparent,
+                                    hintText: 'Confirm Password',
+                                    hintStyle: TextStyle(
+                                        color: Color(0xFF8F9098)
+                                    ),
+                                    suffixIcon: IconButton(onPressed: (){setState(() {
+                                      _isObscuredConfirmPassword = !_isObscuredConfirmPassword;
+                                    });}, icon: _isObscuredConfirmPassword ? Icon(Icons.visibility_off) : Icon(Icons.visibility)),
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 50,),
+                          Custombutton(text: "Sign Up", onClick: handleSubmit)
+                        ],
+                      )
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

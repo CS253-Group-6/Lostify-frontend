@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:final_project/models/user_model.dart';
+import '/models/user_model.dart';
 import 'package:http/http.dart' as http;
 class AuthApi{
   static const String baseUrl = "http://127.0.0.1:5000";

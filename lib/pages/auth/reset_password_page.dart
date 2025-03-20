@@ -1,5 +1,5 @@
-import 'package:final_project/components/auth/auth_input.dart';
-import 'package:final_project/components/auth/custom_auth_button.dart';
+import '/components/auth/auth_input.dart';
+import '/components/auth/custom_auth_button.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordPage extends StatefulWidget {
