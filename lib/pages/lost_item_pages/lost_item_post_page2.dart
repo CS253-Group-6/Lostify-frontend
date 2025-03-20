@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:first_project/components/lost_items/DropDown.dart';
 import 'package:provider/provider.dart';
 import '../../providers/form_data_provider.dart';
+import 'package:intl/intl.dart';
 
 class LostAnItem2 extends StatefulWidget {
   const LostAnItem2({super.key});
@@ -12,35 +12,17 @@ class LostAnItem2 extends StatefulWidget {
 
 class _LostAnItem2State extends State<LostAnItem2> {
   final FocusNode _focusNode1 = FocusNode();
-  bool _isFocused1 = false;
   final FocusNode _focusNode2 = FocusNode();
-  bool _isFocused2 = false;
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
-  DateTime? _selectedDate;
-  TimeOfDay? _selectedTime;
   String? _location;
   final List<String> _dropdownItems = [
-    'Hall 1',
-    'Hall 2',
-    'Hall 3',
-    'Hall 4',
-    'Hall 5',
-    'Hall 6',
-    'Hall 7',
-    'Hall 8',
-    'Hall 9',
-    'Hall 10',
-    'Hall 11',
-    'Hall 12',
-    'Hall 13',
-    'Hall 14',
-    'RM',
-    'LHC',
-    'CC',
-    'Library',
-    'IME'
+    'Hall 1', 'Hall 2', 'Hall 3', 'Hall 4', 'Hall 5', 'Hall 6', 'Hall 7', 'Hall 8', 'Hall 9', 'Hall 10',
+    'Hall 11', 'Hall 12', 'Hall 13', 'Hall 14', 'RM', 'LHC', 'CC', 'Library', 'IME'
   ];
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -56,6 +38,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
       });
     }
   }
+
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -69,59 +52,36 @@ class _LostAnItem2State extends State<LostAnItem2> {
       });
     }
   }
-  void _setLocation(String? loc){
-    _location = loc;
-  }
-  @override
-  void initState() {
-    super.initState();
-    _focusNode1.addListener(() {
-      setState(() {
-        _isFocused1 = _focusNode1.hasFocus;
-      });
-    });
-    _focusNode2.addListener(() {
-      setState(() {
-        _isFocused2 = _focusNode2.hasFocus;
-      });
-    });
-  }
 
-  @override
-  void dispose() {
-    _focusNode1.dispose();
-    _focusNode2.dispose();
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Padding(
-          padding: const EdgeInsets.only(left: 50),
+          padding: const EdgeInsets.only(left: 60),
           child: Text(
             "Lost An Item",
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
+              color: Colors.white,
             ),
           ),
         ),
-        backgroundColor: Colors.lightBlue[300],
-        leading: Image.asset("assets/LostifyIcon.png"),
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/bg1.png'),
+            image: AssetImage('assets/background.png'),
             fit: BoxFit.cover,
           ),
         ),
         padding: EdgeInsets.all(20),
         child: Column(children: [
-          SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Align(
@@ -135,7 +95,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
               ),
             ),
           ),
-          SizedBox(height: 30,),
+          SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Align(
@@ -143,21 +103,38 @@ class _LostAnItem2State extends State<LostAnItem2> {
               child: const Text(
                 "Location",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-          SizedBox(height: 12),
-          DropDown(
-            name: "Choose the location where you lost it.",
-            dropdownItems: _dropdownItems,
-            locationSelected: _setLocation,
+          const SizedBox(height: 10),
+          DropdownButtonFormField<String>(
+            value: _location,
+            items: _dropdownItems.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Text(item, style: TextStyle(color: Colors.black)),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _location = newValue;
+              });
+            },
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              hintText: 'Location where you lost it',
+              hintStyle: TextStyle(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Align(
@@ -165,43 +142,32 @@ class _LostAnItem2State extends State<LostAnItem2> {
               child: const Text(
                 "Date",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 10),
           TextField(
             focusNode: _focusNode1,
             controller: _dateController,
+            style: TextStyle(color: Colors.black),
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black, width: 3),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue, width: 2),
-                borderRadius: BorderRadius.circular(20),
-              ),
               hintText: 'Select Date',
-              suffixIcon: _isFocused1?Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Icon(Icons.calendar_month_rounded,size: 30,),
-              ):Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Icon(Icons.calendar_today_rounded,size: 30,),
+              hintStyle: TextStyle(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(15),
               ),
-              border: OutlineInputBorder(),
+              suffixIcon: Icon(Icons.calendar_today, color: Colors.grey),
             ),
             readOnly: true,
             onTap: () => _selectDate(context),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Align(
@@ -209,70 +175,53 @@ class _LostAnItem2State extends State<LostAnItem2> {
               child: const Text(
                 "Time",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 10),
           TextField(
             focusNode: _focusNode2,
             controller: _timeController,
+            style: TextStyle(color: Colors.black),
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black, width: 3),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue, width: 2),
-                borderRadius: BorderRadius.circular(20),
-              ),
               hintText: 'Select Time',
-              suffixIcon: _isFocused2?Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Icon(Icons.access_time_filled_rounded,size: 30,),
-              ):Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Icon(Icons.access_time_rounded,size: 30,),
+              hintStyle: TextStyle(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(15),
               ),
-              border: OutlineInputBorder(),
+              suffixIcon: Icon(Icons.access_time, color: Colors.grey),
             ),
             readOnly: true,
             onTap: () => _selectTime(context),
           ),
-          SizedBox(
-            height: 50,
-          ),
-          FilledButton(
+
+
+          const SizedBox(height: 210),
+          // Next Button
+          ElevatedButton(
             onPressed: () {
-              Map<String, dynamic> formData = {
-                'Location': _location,
-                'Date': _dateController.text,
-                'Time': _timeController.text,
-              };
-              Provider.of<FormDataProvider>(context, listen: false)
-                  .updateData(formData);
-              Navigator.pushNamed(context, '/lost_an_item/page3');
+              // Handle next navigation
             },
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.blueAccent[700],
-              foregroundColor: Colors.white,
-              minimumSize: Size(300, 45),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              minimumSize: Size(double.infinity, 50),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
             child: Text(
-              'Post',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              "Post",
+              style: TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
-        ]),
+        ]
+        ),
       ),
     );
   }

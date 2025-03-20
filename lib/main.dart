@@ -12,6 +12,9 @@ import 'pages/lost_found_post_list/found_item.dart';
 import 'pages/lost_found_post_list/lost_item.dart';
 import 'pages/found_item_pages/found_item_page2.dart';
 import 'pages/found_item_pages/found_item_page3.dart';
+import 'pages/lost_item_pages/lost_item_post_page1.dart';
+import 'pages/lost_item_pages/lost_item_post_page2.dart';
+
 
 void main() {
   runApp(
@@ -46,8 +49,8 @@ class MyApp extends StatelessWidget {
         // '/home': (context) => , // home page
         //
         // // lost item routes
-        // '/lost/post/1' : (context) => , //lost postpage 1
-        // '/lost/post/2' : (context) => , //lost postpage 2
+        '/lost/post/1' : (context) => LostAnItem1(), //lost postpage 1
+         '/lost/post/2' : (context) => LostAnItem2(), //lost postpage 2
         '/lost-items' : (context) => LostItem(), // lost_page
         //
         // // found items routes
