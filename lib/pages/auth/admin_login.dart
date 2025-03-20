@@ -1,5 +1,9 @@
-import 'package:final_project/components/auth/custom_auth_button.dart';
-import 'package:final_project/components/auth/auth_input.dart';
+import 'package:provider/provider.dart';
+
+import '/providers/user_provider.dart';
+
+import '/components/auth/custom_auth_button.dart';
+import '/components/auth/auth_input.dart';
 import 'package:flutter/material.dart';
 
 class AdminLogin extends StatefulWidget {
@@ -13,8 +17,23 @@ class _AdminLoginState extends State<AdminLogin> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void handleClick(){
+  final _adminKey = GlobalKey<FormState>();
 
+  void handleSubmit() async{
+    if(_adminKey.currentState!.validate()){
+      context.read<UserProvider>().setEmail(newEmail: _emailController.text);
+      var adminLoginDetails = {
+        "email": _emailController.text,
+        "password": _passwordController.text
+      };
+      // Map<String,dynamic> response = await AuthApi.login(loginDetails);
+      // if(response['statusCode'] == 200){
+      //   Navigator.of(context).pushReplacementNamed('/');
+      // }else{
+      //   Navigator.of(context).pushReplacementNamed('/');
+      // }
+      Navigator.of(context).pushReplacementNamed('/home');
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -62,31 +81,34 @@ class _AdminLoginState extends State<AdminLogin> {
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 30),
                           width: double.infinity,
-                          child: Column(
-                            children: [
-                              Input(textController: _emailController,hintText: "Enter email",showEyeIcon: false,),
-                              SizedBox(height: 16,),
-
-                              Input(textController: _passwordController,hintText: "Enter Password",showEyeIcon: true,),
-                              SizedBox(height: 16,),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                // margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
-                                child: Text(
-                                  "Forgot password?",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15,
-                                    color: Color(0xFF007AFF),
+                          child: Form(
+                            key: _adminKey,
+                            child: Column(
+                              children: [
+                                Input(textController: _emailController,hintText: "Enter email",showEyeIcon: false,),
+                                SizedBox(height: 16,),
+                            
+                                Input(textController: _passwordController,hintText: "Enter Password",showEyeIcon: true,),
+                                SizedBox(height: 16,),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  // margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
+                                  child: Text(
+                                    "Forgot password?",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15,
+                                      color: Color(0xFF007AFF),
+                                    ),
+                                    textAlign: TextAlign.start,
                                   ),
-                                  textAlign: TextAlign.start,
                                 ),
-                              ),
-                              SizedBox(height: 24,),
-                              //TODO: add custom button
-                              Custombutton(text: "Login",onClick: handleClick,)
-
-                            ],
+                                SizedBox(height: 24,),
+                                //TODO: add custom button
+                                Custombutton(text: "Login",onClick: handleSubmit,)
+                            
+                              ],
+                            ),
                           ),
                         ),
                       ),

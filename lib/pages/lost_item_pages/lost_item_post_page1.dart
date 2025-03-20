@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:first_project/components/lost_items/uploadImage.dart';
+import '/components/lost_items/uploadImage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/form_data_provider.dart';

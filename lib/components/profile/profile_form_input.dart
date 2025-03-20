@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class ProfileFormInput extends StatelessWidget {
   final String label,hintText;
+  final bool validate;
   final TextEditingController controller;
-  const ProfileFormInput({super.key,required this.label,required this.hintText,required this.controller});
+  const ProfileFormInput({super.key,required this.label,required this.hintText,required this.controller,required this.validate});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class ProfileFormInput extends StatelessWidget {
             label,
             style: TextStyle(
               fontWeight: FontWeight.w500,
+              fontSize: 16
             ),
           ),
         ),
@@ -29,7 +31,7 @@ class ProfileFormInput extends StatelessWidget {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: controller,
             validator: (value){
-              if(value == null || value.isEmpty){
+              if((value == null || value.isEmpty) && validate){
                 return "Please enter your $label";
               }
               return null;

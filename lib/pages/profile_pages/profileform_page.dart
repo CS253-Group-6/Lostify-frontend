@@ -1,8 +1,8 @@
 import "dart:io";
-import "package:final_project/components/auth/custom_auth_button.dart";
-import "package:final_project/components/profile/profile_form_input.dart";
-import "package:final_project/pages/auth/confirmation_code.dart";
-import "package:final_project/providers/user_provider.dart";
+import "/components/auth/custom_auth_button.dart";
+import "/components/profile/profile_form_input.dart";
+import "/pages/auth/confirmation_code.dart";
+import "/providers/user_provider.dart";
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
 import "package:provider/provider.dart";
@@ -69,94 +69,96 @@ class _ProfileFormState extends State<ProfileForm> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/Admin Login.png"),
-                  fit: BoxFit.cover
-              )
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Create Profile",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold
+        child: SafeArea(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/Admin Login.png"),
+                    fit: BoxFit.cover
+                )
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Create Profile",
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24,),
-                Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        ProfileFormInput(label: "Name", hintText: "Enter Name", controller: _nameController),
-                        SizedBox(height: 8,),
-                        ProfileFormInput(label: "Phone Number", hintText: "Enter Contact number", controller: _phoneController),
-                        SizedBox(height: 8,),
-                        ProfileFormInput(label: "Campus address", hintText: "Enter campus address", controller: _addressController),
-                        SizedBox(height: 8,),
-                        ProfileFormInput(label: "Designation", hintText: "Enter Designation", controller: _designationController),
-                        SizedBox(height: 8,),
-                        ProfileFormInput(label: "PF/Roll No.", hintText: "Enter PF/Roll number", controller: _rollNoController),
-                        SizedBox(height: 8,),
-                        Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Upload Profile pic",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
+                    ],
+                  ),
+                  SizedBox(height: 24,),
+                  Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          ProfileFormInput(label: "Name", hintText: "Enter Name", controller: _nameController,validate: true,),
+                          SizedBox(height: 8,),
+                          ProfileFormInput(label: "Phone Number", hintText: "Enter Contact number", controller: _phoneController,validate: true,),
+                          SizedBox(height: 8,),
+                          ProfileFormInput(label: "Campus address", hintText: "Enter campus address", controller: _addressController,validate: true,),
+                          SizedBox(height: 8,),
+                          ProfileFormInput(label: "Designation", hintText: "Enter Designation", controller: _designationController,validate: false,),
+                          SizedBox(height: 8,),
+                          ProfileFormInput(label: "PF/Roll No.", hintText: "Enter PF/Roll number", controller: _rollNoController,validate: false,),
+                          SizedBox(height: 8,),
+                          Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Upload Profile pic",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 8,),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _image != null
-                                      ? Text("Selected File: ${_image!.path.split('/').last}")
-                                      : Text("No file selected"),
-        
-                                  SizedBox(height: 20),
-                                  ElevatedButton(
-                                    onPressed: _pickImage,
-                                    child: Text("Choose File"),
-                                    style: ElevatedButton.styleFrom(
-                                        foregroundColor: Colors.white,
-                                        backgroundColor: Color(0xFF32ADE6),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(4.0),
-                                        )
+                              SizedBox(height: 8,),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _image != null
+                                        ? Text("Selected File: ${_image!.path.split('/').last}")
+                                        : Text("No file selected"),
+          
+                                    SizedBox(height: 20),
+                                    ElevatedButton(
+                                      onPressed: _pickImage,
+                                      child: Text("Choose File"),
+                                      style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: Color(0xFF32ADE6),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(4.0),
+                                          )
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-        
-        
-                        SizedBox(height: 50,),
-                        Custombutton(text: "Get OTP", onClick: handleSubmit)
-                      ],
-                    )
-                ),
-              ],
+                            ],
+                          ),
+          
+          
+                          SizedBox(height: 50,),
+                          Custombutton(text: "Get OTP", onClick: handleSubmit)
+                        ],
+                      )
+                  ),
+                ],
+              ),
             ),
           ),
         ),

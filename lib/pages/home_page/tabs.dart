@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lostify/components/home/item_box.dart';
+import '/components/home/item_box.dart';
 
 class AllItemsTab extends StatelessWidget {
   const AllItemsTab({super.key});

@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:final_project/models/post.dart';
+import '/models/post.dart';
 
 const double kItemBoxOpacity = 0.7;
 const double kItemBoxBorderRadius = 30.0;
