@@ -19,6 +19,7 @@ import 'pages/lost_found_post_list/lost_item.dart';
 import 'pages/found_item_pages/found_item_page2.dart';
 import 'pages/found_item_pages/found_item_page3.dart';
 import 'pages/home_page/homepage.dart';
+import 'pages/search_page.dart';
 
 void main() {
   runApp(
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/chat-list',
+      initialRoute: '/search',
       routes: {
         // auth routes
         '/user/login': (context) => Login(),
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
         // others
         // '/about' : (context) => , // about us page
         // '/notifications' : (context) => , //notifications
-        // '/search' : (context) => , //search_page
+        '/search' : (context) => SearchPage() , //search_page
       },
     );
   }

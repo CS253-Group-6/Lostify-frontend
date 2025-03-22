@@ -36,21 +36,28 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blue,
         title: Row(
           children: [
             CircleAvatar(
               backgroundImage: NetworkImage('https://via.placeholder.com/40'),
             ),
             SizedBox(width: 10),
-            Text(widget.name),
+            Text(widget.name,style:
+                TextStyle(
+                      color: Colors.white,
+                      fontSize: 19,
+
+               ),
+            ),
+
             Spacer(),
             ElevatedButton(
                 onPressed: (){},
-                child: Text("Close Chat"),
+                child: Text("Close"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
-                  foregroundColor: Colors.white
+                  foregroundColor: Colors.white,
                 ),
             )
           ],
@@ -99,9 +106,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: _controller,
                     decoration: InputDecoration(
-                      hintText: 'Write a message...',
+                      hintText: '  Write a message...',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                   ),

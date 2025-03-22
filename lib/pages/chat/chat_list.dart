@@ -37,12 +37,20 @@ class MessagesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Text('Messages'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+        title: Padding(
+          padding: const EdgeInsets.only(left: 80),
+          child: Text(
+            "Messages",
+            style: TextStyle(
+              color: Colors.white,
+
+            ),
+          ),
         ),
+        backgroundColor: Colors.blue,
+        leading: IconButton(onPressed: () {
+          Navigator.pushNamed(context, '/chat-list');},
+            icon: Icon(Icons.arrow_back,color: Colors.white)),
       ),
       body: ListView.builder(
         itemCount: conversations.length,
