@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
         height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/Login_bg.png"), // Check pubspec.yaml for proper asset declaration
+            image: AssetImage("assets/images/home_bg.png"), // Check pubspec.yaml for proper asset declaration
             fit: BoxFit.fill,
           ),
         ),
