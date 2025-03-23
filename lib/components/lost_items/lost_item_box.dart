@@ -1,30 +1,35 @@
-import 'dart:ui';
+// lib/components/lost_items/lost_item_box.dart
+
 import 'package:flutter/material.dart';
-import '/models/post.dart';
+import 'package:flutter_projects/models/post.dart';
 
 const double kItemBoxOpacity = 0.7;
 const double kItemBoxBorderRadius = 30.0;
 
-class ItemBox extends StatelessWidget {
-  const ItemBox({
+/// A widget displaying basic info about a [Post].
+/// When tapped, it triggers a callback to show the item details overlay
+/// on the same page (LostItem or FoundItem).
+class LostItemBox extends StatelessWidget {
+  const LostItemBox({
     Key? key,
     required this.post,
-    required this.onOpenChat,
+    required this.onViewDetails,
   }) : super(key: key);
 
   final Post post;
-  final VoidCallback onOpenChat;
+  final VoidCallback onViewDetails;
 
-  String _formatDate(DateTime? date) => date != null ? date.toString().split(' ')[0] : 'NA';
+  String _formatDate(DateTime? date) =>
+      date != null ? date.toString().split(' ')[0] : 'NA';
 
   Widget _buildImage() {
     if (post.imageUrl != null && post.imageUrl!.isNotEmpty) {
-      final image = post.imageUrl!.startsWith('http')
+      final imageWidget = post.imageUrl!.startsWith('http')
           ? Image.network(post.imageUrl!, width: 80, height: 80, fit: BoxFit.cover)
           : Image.asset(post.imageUrl!, width: 80, height: 80, fit: BoxFit.cover);
       return ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: image,
+        child: imageWidget,
       );
     }
     return Container(
@@ -43,6 +48,7 @@ class ItemBox extends StatelessWidget {
         : (lowerStatus == 'not returned' || lowerStatus == 'missing')
         ? Colors.red
         : Colors.black;
+
     final dateLabel = (lowerStatus == 'returned' || lowerStatus == 'not returned')
         ? 'Returned Date'
         : 'Found Date';
@@ -87,8 +93,8 @@ class ItemBox extends StatelessWidget {
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: onOpenChat,
-                  child: const Text('Open Chat'),
+                  onPressed: onViewDetails,
+                  child: const Text('View Post'),
                 ),
               ],
             ),
