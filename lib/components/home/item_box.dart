@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 
+import '../../pages/home_page/item_details_page.dart';
+
 /// Type of post (for lost item or for found item). Passed as argument
 /// to the constructor of [PostType].
-enum PostType {lost, found}
+enum PostType { lost, found }
 
 /// Details of a post.
-/// 
+///
 /// This class groups together attributes of a post, similar to a C `struct`.
-/// 
+///
 /// #### Public members:
-/// 
+///
 /// * `postType` – An instance of [PostType] indicating whether the post is
 ///                for a lost item or for a found item.
-/// 
+///
 /// * `id` – The unique identifier assigned to the post in the database.
-/// 
+///
 /// * `title` – The title given to the post.
-/// 
+///
 /// * `status` – ?
-/// 
+///
 /// * `regDate` – The date of creation of the post.
-/// 
-/// * `foundDate` – ?
-/// 
+///
+/// * `description` – Description of the post.
+///
 /// * `itemImage` – An optional image of the article concerned.
 final class Post {
   const Post({
@@ -31,7 +33,8 @@ final class Post {
     required this.title,
     this.status = '',
     required this.regDate,
-    this.img
+    this.description = '',
+    this.imageProvider,
   });
 
   /// An instance of [PostType] indicating whether the post is
@@ -39,19 +42,22 @@ final class Post {
   final PostType postType;
 
   /// The unique identifier assigned to the post in the database.
-  final int       id;
+  final int id;
 
   /// The title given to the post.
-  final String    title;
+  final String title;
 
   /// ?
-  final String    status;
+  final String status;
 
   /// The date of creation of the post.
-  final DateTime  regDate;
+  final DateTime regDate;
+
+  /// Description of the post.
+  final String description;
 
   /// An optional image of the article concerned.
-  final Image?    img;
+  final ImageProvider? imageProvider;
 }
 
 /// Style constant for transparency of [ItemBox]
@@ -63,37 +69,34 @@ const double kItemBoxOpacity = 0.7;
 const double kItemBoxBorderRadius = 20.0;
 
 /// A card displaying details of a post in brief.
-/// 
+///
 /// Inherits from [StatelessWidget].
 class ItemBox extends StatelessWidget {
   const ItemBox({super.key, required this.post});
 
   final Post post;
-  
-  PostType  get postType  => post.postType;
-  int       get id        => post.id;
-  String    get title     => post.title;
-  String    get status    => post.status;
-  DateTime  get regDate   => post.regDate;
-  final DateTime? foundDate = null;     // ?
-  Image?    get itemImage => post.img;
+
+  PostType get postType => post.postType;
+  int get id => post.id;
+  String get title => post.title;
+  String get status => post.status;
+  DateTime get regDate => post.regDate;
+  DateTime? get foundDate => null; // Placeholder
+  ImageProvider? get itemImage => post.imageProvider;
 
   @override
   Widget build(BuildContext context) {
     // Determine color based on status text
-    final Color statusColor = postType == PostType.found ? Colors.green : Colors.red;
+    final Color statusColor =
+        postType == PostType.found ? Colors.green : Colors.red;
 
     return Container(
-      // Box takes full available width
       width: double.infinity,
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        // Semi-transparent white background
         color: Colors.white.withValues(alpha: kItemBoxOpacity),
-        // Rounded corners
         borderRadius: BorderRadius.circular(kItemBoxBorderRadius),
-        // Optional box shadow for depth
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade300,
@@ -102,7 +105,6 @@ class ItemBox extends StatelessWidget {
           ),
         ],
       ),
-      // Layout: image on the left, text on the right
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -110,7 +112,12 @@ class ItemBox extends StatelessWidget {
           if (itemImage != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: itemImage,
+              child: Image(
+                image: itemImage!,
+                fit: BoxFit.contain,
+                height: 80,
+                width: 80,
+              ),
             )
           else
             Container(
@@ -123,7 +130,6 @@ class ItemBox extends StatelessWidget {
               ),
             ),
           const SizedBox(width: 16),
-          // Expanded column with text and "Open Chat" button
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,16 +153,21 @@ class ItemBox extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text('Found on: ${dateAsString(foundDate)}'),
                 const SizedBox(height: 8),
-                // "Open Chat" button with a black background and white text
+                // "View Post" button navigates to ItemDetailsPage
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () {
-                    // TODO: Handle chat logic
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ItemDetailsPage(post: post),
+                      ),
+                    );
                   },
-                  child: const Text('View post'),
+                  child: const Text('View Post'),
                 ),
               ],
             ),

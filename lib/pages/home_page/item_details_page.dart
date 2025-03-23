@@ -1,0 +1,136 @@
+import 'package:flutter/material.dart';
+
+import '../../components/home/item_box.dart';
+
+class ItemDetailsPage extends StatelessWidget {
+  final Post post;
+
+  const ItemDetailsPage({super.key, required this.post});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(post.title), // Display the title of the item
+        backgroundColor: Colors.blue,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Display the image if available
+            if (post.imageProvider != null)
+              Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image(
+                    image: post.imageProvider!,
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              )
+            else
+              Center(
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  color: Colors.grey[300],
+                  child: const Icon(
+                    Icons.image_not_supported,
+                    size: 100,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            const SizedBox(height: 16),
+            // Title
+            Text(
+              post.title,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            // Date of registration
+            Row(
+              children: [
+                const Icon(Icons.calendar_today, size: 16),
+                const SizedBox(width: 8),
+                Text('Registered on: ${ItemBox.dateAsString(post.regDate)}'),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Item type (Lost/Found)
+            Row(
+              children: [
+                Icon(
+                  post.postType == PostType.lost
+                      ? Icons.search
+                      : Icons.check_circle_outline,
+                  size: 16,
+                  color: post.postType == PostType.lost
+                      ? Colors.red
+                      : Colors.green,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  post.postType == PostType.lost ? 'Lost Item' : 'Found Item',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: post.postType == PostType.lost
+                        ? Colors.red
+                        : Colors.green,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Description:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              post.description,
+              // style: TextStyle(fontSize: 16),
+            ),
+            const Spacer(),
+            // Action buttons (e.g., Report, Share, Chat)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${post.title} reported!')),
+                    );
+                  },
+                  icon: const Icon(Icons.report),
+                  label: const Text('Report'),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Shared ${post.title}!')),
+                    );
+                  },
+                  icon: const Icon(Icons.share),
+                  label: const Text('Share'),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Chat feature coming soon!')),
+                    );
+                  },
+                  icon: const Icon(Icons.chat_bubble_outline),
+                  label: const Text('Chat'),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

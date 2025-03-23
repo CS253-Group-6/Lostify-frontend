@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '/components/home/item_box.dart';
 
 class AllItemsTab extends StatelessWidget {
@@ -6,16 +7,17 @@ class AllItemsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Post> items = [             // Replace with `context<allItemsProvider>.watch().itemList`
+    List<Post> items = [
+      // Replace with `context<allItemsProvider>.watch().itemList`
       Post(
         postType: PostType.lost,
         id: 8,
         title: 'Hercules cycle',
         regDate: DateTime(2025, 03, 13),
-        img: Image.network(
+        description:
+            'I lost my cycle pls find it pls pls pls I\'ll give u Anirudh\'s gf for a night',
+        imageProvider: NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-          height: 80,
-          width: 80,
         ),
       ),
       Post(
@@ -59,8 +61,7 @@ class AllItemsTab extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          for (var post in items)
-            ItemBox(post: post),
+          for (var post in items) ItemBox(post: post),
         ],
       ),
     );
@@ -72,16 +73,17 @@ class LostItemsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Post> items = [             // Replace with `context<lostItemsProvider>.watch().itemList`
+    List<Post> items = [
+      // Replace with `context<lostItemsProvider>.watch().itemList`
       Post(
         postType: PostType.lost,
         id: 8,
         title: 'Hercules cycle',
         regDate: DateTime(2025, 03, 13),
-        img: Image.network(
+        description:
+            'I lost my cycle pls find it pls pls pls I\'ll give u my gf',
+        imageProvider: NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-          height: 80,
-          width: 80,
         ),
       ),
       Post(
@@ -125,8 +127,7 @@ class LostItemsTab extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          for (var post in items)
-            ItemBox(post: post),
+          for (var post in items) ItemBox(post: post),
         ],
       ),
     );
@@ -138,16 +139,17 @@ class FoundItemsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Post> items = [             // Replace with `context<foundItemsProvider>.watch().itemList`
+    List<Post> items = [
+      // Replace with `context<foundItemsProvider>.watch().itemList`
       Post(
         postType: PostType.lost,
         id: 8,
         title: 'Hercules cycle',
         regDate: DateTime(2025, 03, 13),
-        img: Image.network(
+        description:
+            'I lost my cycle pls find it pls pls pls I\'ll give u my gf',
+        imageProvider: NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-          height: 80,
-          width: 80,
         ),
       ),
       Post(
@@ -191,8 +193,7 @@ class FoundItemsTab extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          for (var post in items)
-            ItemBox(post: post),
+          for (var post in items) ItemBox(post: post),
         ],
       ),
     );
