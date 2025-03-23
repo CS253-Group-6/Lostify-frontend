@@ -35,6 +35,7 @@ final class Post {
     required this.regDate,
     this.description = '',
     this.imageProvider,
+    this.address = '',
   });
 
   /// An instance of [PostType] indicating whether the post is
@@ -58,6 +59,9 @@ final class Post {
 
   /// An optional image of the article concerned.
   final ImageProvider? imageProvider;
+
+  /// Address associated with the post.
+  final String address;
 }
 
 /// Style constant for transparency of [ItemBox]

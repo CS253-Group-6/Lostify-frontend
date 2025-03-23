@@ -85,6 +85,15 @@ class ItemDetailsPage extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 8),
+            // Location
+            Row(
+              children: [
+                const Icon(Icons.location_pin, size: 16),
+                const SizedBox(width: 8),
+                Text('Location: ${post.address}'),
+              ],
+            ),
             const SizedBox(height: 16),
             const Text(
               'Description:',

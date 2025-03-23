@@ -10,16 +10,16 @@ class AllItemsTab extends StatelessWidget {
     List<Post> items = [
       // Replace with `context<allItemsProvider>.watch().itemList`
       Post(
-        postType: PostType.lost,
-        id: 8,
-        title: 'Hercules cycle',
-        regDate: DateTime(2025, 03, 13),
-        description:
-            'I lost my cycle pls find it pls pls pls I\'ll give u Anirudh\'s gf for a night',
-        imageProvider: NetworkImage(
-          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-        ),
-      ),
+          postType: PostType.lost,
+          id: 8,
+          title: 'Hercules cycle',
+          regDate: DateTime(2025, 03, 13),
+          description:
+              'I lost my cycle pls find it pls pls pls I\'ll give u Anirudh\'s gf for a night',
+          imageProvider: NetworkImage(
+            'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+          ),
+          address: 'Hall 5'),
       Post(
         postType: PostType.found,
         id: 9,

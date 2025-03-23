@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Get screen height for responsive positioning of elements
@@ -11,7 +14,10 @@ class HomePage extends StatelessWidget {
         height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/Login_bg.png"), // Check pubspec.yaml for proper asset declaration
+            image: AssetImage(
+                "assets/images/Login_bg.png"), // Check pubspec.yaml for proper asset declaration
+            image: AssetImage(
+                "assets/Login_bg.png"), // Check pubspec.yaml for proper asset declaration
             fit: BoxFit.fill,
           ),
         ),
@@ -19,7 +25,8 @@ class HomePage extends StatelessWidget {
           children: [
             // Positioned App Name and Tagline (above the buttons)
             Positioned(
-              top: screenHeight * 0.42, // Adjust this value to move the texts higher or lower
+              top: screenHeight *
+                  0.42, // Adjust this value to move the texts higher or lower
               left: 0,
               right: 0,
               child: Column(
@@ -49,7 +56,8 @@ class HomePage extends StatelessWidget {
 
             // Lowered Buttons
             Positioned(
-              top: screenHeight * 0.65, // Responsive vertical positioning for buttons
+              top: screenHeight *
+                  0.65, // Responsive vertical positioning for buttons
               left: 0,
               right: 0,
               child: Column(
