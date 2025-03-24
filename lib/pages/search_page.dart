@@ -21,6 +21,7 @@ class _SearchPageState extends State<SearchPage> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
+      locale: const Locale('en', 'GB'),
     );
     if (pickedDate != null) {
       setState(() {
@@ -57,18 +58,17 @@ class _SearchPageState extends State<SearchPage> {
             const Icon(Icons.search, color: Colors.white), // Magnifier icon
           ],
         ),
-
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,
-
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/new_background.png"), // Updated background image
+            image: AssetImage(
+                "assets/images/new_background.png"), // Updated background image
             fit: BoxFit.cover,
           ),
         ),
@@ -92,9 +92,7 @@ class _SearchPageState extends State<SearchPage> {
                 hint: Text(
                   "Select expected lost places",
                   style: TextStyle(fontSize: 15, color: Colors.grey),
-
                 ),
-
                 items: locations.map((String location) {
                   return DropdownMenuItem<String>(
                     value: location,
@@ -144,12 +142,15 @@ class _SearchPageState extends State<SearchPage> {
                           children: [
                             Text(
                               selectedDate != null
-                                  ? DateFormat('dd/MM/yyyy').format(selectedDate!)
+                                  ? DateFormat('dd/MM/yyyy')
+                                      .format(selectedDate!)
                                   : "Start Date",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
-                                color: selectedDate != null ? Colors.black : Colors.grey,
+                                color: selectedDate != null
+                                    ? Colors.black
+                                    : Colors.grey,
                               ),
                             ),
                             Icon(Icons.calendar_today, color: Colors.grey),
@@ -174,12 +175,15 @@ class _SearchPageState extends State<SearchPage> {
                           children: [
                             Text(
                               selectedDate != null
-                                  ? DateFormat('dd/MM/yyyy').format(selectedDate!)
+                                  ? DateFormat('dd/MM/yyyy')
+                                      .format(selectedDate!)
                                   : "End Date",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
-                                color: selectedDate != null ? Colors.black : Colors.grey,
+                                color: selectedDate != null
+                                    ? Colors.black
+                                    : Colors.grey,
                               ),
                             ),
                             Icon(Icons.calendar_today, color: Colors.grey),
@@ -215,7 +219,6 @@ class _SearchPageState extends State<SearchPage> {
                     Icon(Icons.search, color: Colors.white), // Magnifier icon
                   ],
                 ),
-
               ),
             ],
           ),

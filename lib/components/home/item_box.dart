@@ -153,9 +153,9 @@ class ItemBox extends StatelessWidget {
                   style: TextStyle(color: statusColor),
                 ),
                 const SizedBox(height: 4),
-                Text('Registered on: ${dateAsString(regDate)}'),
+                Text('Registered Date: ${dateAsString(regDate)}'),
                 const SizedBox(height: 4),
-                Text('Found on: ${dateAsString(foundDate)}'),
+                Text('Found Date: ${dateAsString(foundDate)}'),
                 const SizedBox(height: 8),
                 // "View Post" button navigates to ItemDetailsPage
                 ElevatedButton(
@@ -171,7 +171,7 @@ class ItemBox extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('View Post'),
+                  child: const Text('View'),
                 ),
               ],
             ),
