@@ -19,6 +19,7 @@ import 'pages/lost_found_post_list/lost_item.dart';
 import 'pages/profile_pages/profileform_page.dart';
 import 'pages/search_page.dart';
 import 'providers/user_provider.dart';
+import 'pages/home_page/home_interface.dart';
 
 void main() {
   runApp(
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/home',
+      initialRoute: '/lost-items',
       routes: {
         // auth routes
         '/user/login': (context) => Login(),
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         // '/profile-dashboard' : (context) => , // profile_dashboard page
 
         // home pages
-        // '/': (context) => , // home interface
+        '/homeInterface': (context) => HomeInterface(), // home interface
         '/home': (context) => HomePage(), // home page
 
         // // lost item routes

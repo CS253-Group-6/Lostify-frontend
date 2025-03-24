@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomeInterface extends StatelessWidget {
+  const HomeInterface({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +16,7 @@ class HomePage extends StatelessWidget {
           image: DecorationImage(
             image: AssetImage(
                 "assets/images/Login_bg.png"), // Check pubspec.yaml for proper asset declaration
-            image: AssetImage(
-                "assets/Login_bg.png"), // Check pubspec.yaml for proper asset declaration
+
             fit: BoxFit.fill,
           ),
         ),

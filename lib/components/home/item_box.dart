@@ -171,7 +171,7 @@ class ItemBox extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('View Post'),
+                  child: const Text('View'),
                 ),
               ],
             ),

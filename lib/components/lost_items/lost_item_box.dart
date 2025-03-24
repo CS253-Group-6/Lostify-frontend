@@ -1,7 +1,7 @@
 // lib/components/lost_items/lost_item_box.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/models/post.dart';
+import '/models/post.dart';
 
 const double kItemBoxOpacity = 0.7;
 const double kItemBoxBorderRadius = 30.0;
@@ -94,7 +94,7 @@ class LostItemBox extends StatelessWidget {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: onViewDetails,
-                  child: const Text('View Post'),
+                  child: const Text('View'),
                 ),
               ],
             ),

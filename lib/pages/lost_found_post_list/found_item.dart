@@ -1,9 +1,9 @@
 // lib/pages/lost_found_post_list/found_item.dart
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/components/lost_items/lost_item_box.dart';
-import 'package:flutter_projects/models/post.dart';
-import 'package:flutter_projects/pages/lost_found_post_list/chat_page.dart';
+import '/components/lost_items/lost_item_box.dart';
+import '/models/post.dart';
+import '/pages/lost_found_post_list/chat_page.dart';
 
 class FoundItem extends StatefulWidget {
   const FoundItem({Key? key}) : super(key: key);
