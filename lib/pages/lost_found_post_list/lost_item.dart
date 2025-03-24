@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '/components/lost_items/lost_item_box.dart';
 import '/models/post.dart';
+import '/pages/lost_found_post_list/chat_page.dart';
 
 class LostItem extends StatefulWidget {
   const LostItem({Key? key}) : super(key: key);
@@ -59,14 +60,15 @@ class _LostItemState extends State<LostItem> {
     ),
   ];
 
-  bool _chatOpen = false;
+  bool _showDetails = false;
   Post? _selectedPost;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Lost Items', style: TextStyle(color: Colors.white)),
+        title: const Text('Your Lost Items', style: TextStyle(color: Colors
+            .white)),
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,
@@ -77,6 +79,7 @@ class _LostItemState extends State<LostItem> {
       ),
       body: Stack(
         children: [
+          // Background: list of lost items
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -90,11 +93,11 @@ class _LostItemState extends State<LostItem> {
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
                   return Center(
-                    child: ItemBox(
+                    child: LostItemBox(
                       post: posts[index],
-                      onOpenChat: () {
+                      onViewDetails: () {
                         setState(() {
-                          _chatOpen = true;
+                          _showDetails = true;
                           _selectedPost = posts[index];
                         });
                       },
@@ -104,82 +107,210 @@ class _LostItemState extends State<LostItem> {
               ),
             ),
           ),
-          if (_chatOpen)
-            ...[
-              Positioned.fill(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                  child: Container(color: Colors.black12),
+
+          // Overlay for item details
+          if (_showDetails && _selectedPost != null) ...[
+            // Blurred backdrop
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                child: Container(color: Colors.black12),
+              ),
+            ),
+            // Details card
+            Positioned(
+              top: MediaQuery
+                  .of(context)
+                  .padding
+                  .top + kToolbarHeight + 10,
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: Material(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _buildItemDetails(_selectedPost!),
                 ),
               ),
-              Positioned(
-                top: MediaQuery.of(context).padding.top + kToolbarHeight + 10,
-                left: 16,
-                right: 16,
-                bottom: 16,
-                child: Material(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: _buildChatContent(),
-                  ),
-                ),
-              ),
-            ],
+            ),
+          ],
         ],
       ),
     );
   }
 
-  Widget _buildChatContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          _selectedPost != null ? 'Chat for: ${_selectedPost!.title}' : 'Chat',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        const SizedBox(height: 8),
-        const Expanded(
-          child: Center(
-            child: Text(
-              "Chat messages appear here...\n(Integrate with backend)",
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Type a message',
-                  border: OutlineInputBorder(),
+  Widget _buildItemDetails(Post post) {
+    // Hard-coded example info
+    const String itemDescription = "This is a detailed description of the item. Condition, features, any identifying marks, etc.";
+    const String itemTime = "07:55 PM";
+    const String itemDate = "05 Sept 2025";
+    const String itemPlace = "College ground, New SAC, IIT Kanpur";
+
+    // Helper to format date strings (without time)
+    String formatDate(DateTime? date) =>
+        date != null ? date.toString().split(' ')[0] : 'NA';
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Header row: back arrow + "Item Details"
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  setState(() {
+                    _showDetails = false;
+                    _selectedPost = null;
+                  });
+                },
+              ),
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Text(
+                  "Item Details",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: () {},
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
+              const SizedBox(width: 40), // Balance the back arrow space
+            ],
           ),
-          onPressed: () {
-            setState(() {
-              _chatOpen = false;
-              _selectedPost = null;
-            });
-          },
-          child: const Text('Close Chat'),
-        ),
-      ],
+          const SizedBox(height: 16),
+
+          // Item image with smaller frame and complete image visible
+          if (post.imageUrl != null && post.imageUrl!.isNotEmpty)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: post.imageUrl!.startsWith('http')
+                  ? Image.network(
+                post.imageUrl!,
+                height: 120,
+                fit: BoxFit.contain,
+              )
+                  : Image.asset(
+                post.imageUrl!,
+                height: 120,
+                fit: BoxFit.contain,
+              ),
+            )
+          else
+            Container(
+              height: 120,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(Icons.image, color: Colors.grey, size: 50),
+            ),
+          const SizedBox(height: 16),
+
+          // Title
+          Text(
+            post.title,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+
+          // Description
+          Text(
+            itemDescription,
+            style: const TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 16),
+
+          // Status and dates
+          Text("Status: ${post.status}", style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 4),
+          Text("Registered Date: ${formatDate(post.regDate)}",
+              style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 4),
+          Text("Found/Returned Date: ${formatDate(post.closedDate)}",
+              style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 16),
+
+          // Separate rows for Time, Date, Venue
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.access_time, size: 16),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Time: $itemTime",
+                  style: const TextStyle(fontSize: 16),
+                  maxLines: 2,
+                  overflow: TextOverflow.visible,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.calendar_today, size: 16),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Date: $itemDate",
+                  style: const TextStyle(fontSize: 16),
+                  maxLines: 2,
+                  overflow: TextOverflow.visible,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.place, size: 16),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Venue: $itemPlace",
+                  style: const TextStyle(fontSize: 16),
+                  maxLines: 2,
+                  overflow: TextOverflow.visible,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Buttons row: "Report" & "Open Chat"
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildTransparentButton("Report", onPressed: () {
+                // TODO: Integrate report logic
+              }),
+              _buildTransparentButton("Open Chat", onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ChatPage()),
+                );
+              }),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTransparentButton(String label,
+      {required VoidCallback onPressed}) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: Colors.blue,
+        side: const BorderSide(color: Colors.blue),
+      ),
+      child: Text(label),
     );
   }
 }

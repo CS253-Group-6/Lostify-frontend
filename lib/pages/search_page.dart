@@ -8,37 +8,37 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String? selectedSearchLocation;
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
+  DateTime? selectedDate1;
+  DateTime? selectedDate2;
 
   // Sample dropdown options
   List<String> locations = ["Library", "Cafeteria", "Park", "Classroom", "Gym"];
 
-  // Opens the DatePicker
-  Future<void> _pickDate(BuildContext context) async {
+  Future<void> _pickStartDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: selectedDate1 ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
       locale: const Locale('en', 'GB'),
     );
-    if (pickedDate != null) {
+    if (pickedDate != null && pickedDate != selectedDate1) {
       setState(() {
-        selectedDate = pickedDate;
+        selectedDate1 = pickedDate;
       });
     }
   }
 
-  // Opens the TimePicker
-  Future<void> _pickTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
+  Future<void> _pickEndDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialDate: selectedDate2 ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
     );
-    if (pickedTime != null) {
+    if (pickedDate != null && pickedDate != selectedDate2) {
       setState(() {
-        selectedTime = pickedTime;
+        selectedDate2 = pickedDate;
       });
     }
   }
@@ -129,7 +129,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => _pickDate(context),
+                      onTap: () => _pickStartDate(context),
                       child: Container(
                         height: 50,
                         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -141,9 +141,9 @@ class _SearchPageState extends State<SearchPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              selectedDate != null
+                              selectedDate1 != null
                                   ? DateFormat('dd/MM/yyyy')
-                                      .format(selectedDate!)
+                                      .format(selectedDate1!)
                                   : "Start Date",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -162,7 +162,7 @@ class _SearchPageState extends State<SearchPage> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => _pickDate(context),
+                      onTap: () => _pickEndDate(context),
                       child: Container(
                         height: 50,
                         padding: EdgeInsets.symmetric(horizontal: 10),
