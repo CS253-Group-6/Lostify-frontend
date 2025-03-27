@@ -4,7 +4,8 @@ import '../../providers/form_data_provider.dart';
 import 'package:intl/intl.dart';
 
 class LostAnItem2 extends StatefulWidget {
-  const LostAnItem2({super.key});
+  final Map<String,dynamic> formdata;
+  const LostAnItem2({super.key,required this.formdata});
 
   @override
   State<LostAnItem2> createState() => _LostAnItem2State();
@@ -73,6 +74,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
 
   @override
   Widget build(BuildContext context) {
+    var formData = widget.formdata;
     return Scaffold(
       appBar: AppBar(
         title: Padding(
