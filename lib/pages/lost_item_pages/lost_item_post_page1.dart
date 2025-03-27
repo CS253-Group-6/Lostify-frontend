@@ -42,7 +42,7 @@ class _LostAnItem1State extends State<LostAnItem1> {
         ),
         backgroundColor: Colors.blue,
         leading: IconButton(onPressed: () {
-          Navigator.pushNamed(context, '/lost_an_item/page2');},
+          Navigator.pushNamed(context, '/home');},
             icon: Icon(Icons.arrow_back,color: Colors.white)),
       ),
       body: Container(
@@ -121,6 +121,13 @@ class _LostAnItem1State extends State<LostAnItem1> {
 
               ElevatedButton(
                 onPressed: () {
+                  Map<String, dynamic> formData = {
+                      'Title': _titleController.text,
+                      'Description': _descriptionController.text,
+                      'Image': _image,
+                    };
+                    Provider.of<FormDataProvider>(context, listen: false)
+                        .updateData(formData);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => LostAnItem2()));
                 },
                 style: ElevatedButton.styleFrom(
