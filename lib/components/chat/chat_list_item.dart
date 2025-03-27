@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/pages/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../models/chat_model.dart';
 
 class ChatListItem extends StatefulWidget {
   // firebase data snapshot
@@ -61,20 +62,25 @@ class _ChatListItemState extends State<ChatListItem>
         trailing: Column(
           children: [
             Text(widget.chat['status']),
-            Text(DateFormat('hh:mm').format(
-                (widget.chat['lastMessageTime'] as Timestamp).toDate())),
+            Text(
+              widget.chat['lastMessageTime'] is Timestamp
+                  ? DateFormat('hh:mm').format(
+                      (widget.chat['lastMessageTime'] as Timestamp).toDate(),
+                    )
+                  : widget.chat['lastMessageTime'] as String,
+            ),
           ],
         ),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(chatDetails: {
-                      "senderId": widget.chat['users'][0],
-                      "recieverId": widget.chat['users'][1],
-                      "itemId": widget.chat['itemId'],
-                      "chatRoomId": widget.chat.id,
-                    })),
+                builder: (context) => ChatScreen(
+                    chatDetails: ChatDetails(
+                        senderId: widget.chat['users'][0],
+                        recieverId: widget.chat['users'][1],
+                        itemId: widget.chat['itemId'],
+                        chatRoomId: widget.chat.id))),
           );
         });
   }

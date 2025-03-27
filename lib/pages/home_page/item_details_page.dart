@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:final_project/services/chat_api.dart';
+
 import '../../components/home/item_box.dart';
 import '../chat/chat_list.dart';
 import '../chat/chat_screen.dart';
@@ -18,45 +20,7 @@ class ItemDetailsPage extends StatelessWidget {
       required this.postOwnerId,
       required this.post});
 
-  final FirebaseFirestore _chatInstance = FirebaseFirestore.instance;
-
-  String createChatId(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-    int currUserId = profileProvider.id;
-    if (currUserId < postOwnerId) {
-      return '${currUserId}_${postOwnerId}';
-    } else {
-      return '${postOwnerId}_$currUserId';
-    }
-  }
-
-  void _addChat(BuildContext context) {
-    String chatId = createChatId(context);
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-    int currUserId = profileProvider.id;
-    _chatInstance.collection("chats").doc(chatId).set({
-      "users": [currUserId, postOwnerId],
-      "lastMessage": "",
-      "lastMessageTime": Timestamp.now(),
-      "itemId": itemId,
-      "status": "Offline",
-      "unreadMessagesNumber": 0,
-    });
-
-    Map<String, dynamic> chatDetails = {
-      "senderId": currUserId,
-      "recieverId": postOwnerId,
-      "itemId": itemId,
-      "chatRoomId": chatId,
-    };
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChatScreen(chatDetails: chatDetails),
-      ),
-    );
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,7 +142,7 @@ class ItemDetailsPage extends StatelessWidget {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    _addChat(context);
+                    ChatServices.addChat(context,itemId,postOwnerId);
                   },
                   icon: const Icon(Icons.chat_bubble_outline),
                   label: const Text('Chat'),

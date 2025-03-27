@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/models/chat_model.dart';
 import 'package:final_project/services/notifications_api.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:final_project/components/home/item_box.dart';
@@ -89,12 +90,7 @@ class MyApp extends StatelessWidget {
         // chat pages
         '/chat-list': (context) => ChatList(),
         '/chat-screen': (context) => ChatScreen(
-              chatDetails: {
-                "senderId": 1,
-                "recieverId": 1,
-                "itemId": 1,
-                "chatRoomId": "1234",
-              },
+              chatDetails: ChatDetails(senderId: 1, recieverId: 1, itemId: 1, chatRoomId: '8_9'),
             ),
         // others
         // '/about' : (context) => , // about us page

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:final_project/components/home/item_box.dart';
+import 'package:final_project/models/chat_model.dart';
 import 'package:final_project/pages/chat/chat_list.dart';
 import 'package:final_project/pages/chat/chat_screen.dart';
 import 'package:final_project/providers/profile_provider.dart';
@@ -27,7 +28,8 @@ class _ItemDetailsState extends State<ItemDetails> {
   final FirebaseFirestore _chatInstance = FirebaseFirestore.instance;
 
   String createChatId() {
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     int currUserId = profileProvider.id;
     if (currUserId < widget.postOwnerId) {
       return '${currUserId}_${widget.postOwnerId}';
@@ -38,7 +40,8 @@ class _ItemDetailsState extends State<ItemDetails> {
 
   void _addChat() {
     String chatId = createChatId();
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     int currUserId = profileProvider.id;
     _chatInstance.collection("chats").doc(chatId).set({
       "users": [currUserId, widget.postOwnerId],
@@ -49,12 +52,11 @@ class _ItemDetailsState extends State<ItemDetails> {
       "unreadMessagesNumber": 0,
     });
 
-    Map<String, dynamic> chatDetails = {
-      "senderId": currUserId,
-      "recieverId": widget.postOwnerId,
-      "itemId": widget.itemId,
-      "chatRoomId": chatId,
-    };
+    ChatDetails chatDetails = ChatDetails(
+        senderId: currUserId,
+        recieverId: widget.postOwnerId,
+        itemId: widget.itemId,
+        chatRoomId: chatId);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -87,7 +89,8 @@ class _ItemDetailsState extends State<ItemDetails> {
               height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(0), // No border radius for full-width
+                borderRadius:
+                    BorderRadius.circular(0), // No border radius for full-width
               ),
               clipBehavior: Clip.hardEdge,
               child: Image.asset(
@@ -121,31 +124,37 @@ class _ItemDetailsState extends State<ItemDetails> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                          const Icon(Icons.calendar_today,
+                              size: 16, color: Colors.grey),
                           const SizedBox(width: 4),
                           Text(
                             DateFormat('d MMM').format(widget.post.regDate),
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                          const Icon(Icons.access_time,
+                              size: 16, color: Colors.grey),
                           const SizedBox(width: 4),
                           Text(
                             DateFormat('h:mm a').format(widget.post.regDate),
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.location_pin, size: 16, color: Colors.grey),
+                          const Icon(Icons.location_pin,
+                              size: 16, color: Colors.grey),
                           const SizedBox(width: 4),
                           Text(
                             widget.post.address,
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -159,7 +168,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                       TextButton.icon(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Shared ${widget.post.title}!')),
+                            SnackBar(
+                                content: Text('Shared ${widget.post.title}!')),
                           );
                         },
                         icon: const Icon(Icons.share, color: Colors.grey),
@@ -172,7 +182,9 @@ class _ItemDetailsState extends State<ItemDetails> {
                       TextButton.icon(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${widget.post.title} reported!')),
+                            SnackBar(
+                                content:
+                                    Text('${widget.post.title} reported!')),
                           );
                         },
                         icon: const Icon(Icons.report, color: Colors.grey),
@@ -205,7 +217,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                               ),
                               Text(
                                 'B.tech 2nd Year', // Kept your user data
-                                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.grey),
                               ),
                             ],
                           ),
