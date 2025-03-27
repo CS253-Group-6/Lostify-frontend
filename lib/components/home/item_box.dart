@@ -97,7 +97,7 @@ class ItemBox extends StatelessWidget {
 
     // function to add chat for the post in user's chat list
     void handleItemDetails() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetails(itemId: id, postOwnerId: 1,post:post)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetailsPage(itemId: id, postOwnerId: 1,post:post)));
     }
 
     return Container(

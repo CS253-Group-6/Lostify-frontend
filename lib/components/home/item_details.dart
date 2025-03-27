@@ -12,11 +12,12 @@ import 'package:intl/intl.dart';
 class ItemDetails extends StatefulWidget {
   final int itemId, postOwnerId;
   final Post post;
-  const ItemDetails(
-      {super.key,
-      required this.itemId,
-      required this.postOwnerId,
-      required this.post});
+  const ItemDetails({
+    super.key,
+    required this.itemId,
+    required this.postOwnerId,
+    required this.post,
+  });
 
   @override
   State<ItemDetails> createState() => _ItemDetailsState();
@@ -26,8 +27,7 @@ class _ItemDetailsState extends State<ItemDetails> {
   final FirebaseFirestore _chatInstance = FirebaseFirestore.instance;
 
   String createChatId() {
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     int currUserId = profileProvider.id;
     if (currUserId < widget.postOwnerId) {
       return '${currUserId}_${widget.postOwnerId}';
@@ -38,8 +38,7 @@ class _ItemDetailsState extends State<ItemDetails> {
 
   void _addChat() {
     String chatId = createChatId();
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     int currUserId = profileProvider.id;
     _chatInstance.collection("chats").doc(chatId).set({
       "users": [currUserId, widget.postOwnerId],
@@ -57,149 +56,178 @@ class _ItemDetailsState extends State<ItemDetails> {
       "chatRoomId": chatId,
     };
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ChatScreen(chatDetails: chatDetails)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(chatDetails: chatDetails),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text(
-          "Item Details",
-          style: TextStyle(
-            fontSize: 38,
-            fontWeight: FontWeight.bold,
-          ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.blue),
+          onPressed: () => Navigator.of(context).pop(),
         ),
+        title: const Text(
+          'Item details',
+          style: TextStyle(color: Colors.blue, fontSize: 18),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                // width: MediaQuery.of(context).size.width,
-                // decoration: BoxDecoration(
-                //   color: Colors.blueAccent[100],
-                // ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Full-width image
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(0), // No border radius for full-width
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Image.asset(
+                'assets/images/items.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    widget.post.title,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Description
+                  Text(
+                    widget.post.description,
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                  const SizedBox(height: 16),
+                  // Date, Time, and Location in a row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 350,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child:  Image.asset('assets/images/items.png'),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.post.title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 32),
-                        ),
-                      ),
-                      Text(
-                        widget.post.description,
-                        style: TextStyle(
-                            fontSize: 18, color: Colors.grey.shade600),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.lightBlue.shade100,
-                            borderRadius: BorderRadius.circular(12)),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.date_range),
-                                Text(
-                                  DateFormat('MMMM d, y').format(widget.post.regDate),
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.watch_later_outlined),
-                                Text(
-                                  DateFormat('h:mm a').format(widget.post.regDate),
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.location_on),
-                                Text(
-                                  widget.post.address,
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
+                      Row(
+                        children: [
+                          const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            DateFormat('d MMM').format(widget.post.regDate),
+                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          GestureDetector(
-                            onTap: _addChat,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.lightBlue.shade200,
-                                  borderRadius: BorderRadius.circular(12)),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 32, vertical: 20),
-                              child: Text(
-                                "Chat",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ),
+                          const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            DateFormat('h:mm a').format(widget.post.regDate),
+                            style: const TextStyle(fontSize: 12, color: Colors.grey),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.lightBlue.shade200,
-                                borderRadius: BorderRadius.circular(12)),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 20),
-                            child: Text(
-                              "Report",
-                              style: TextStyle(fontSize: 20),
-                            ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Icon(Icons.location_pin, size: 16, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            widget.post.address,
+                            style: const TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         ],
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  // Action buttons (Share, Report)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Shared ${widget.post.title}!')),
+                          );
+                        },
+                        icon: const Icon(Icons.share, color: Colors.grey),
+                        label: const Text(
+                          'Share',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      const SizedBox(width: 32),
+                      TextButton.icon(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('${widget.post.title} reported!')),
+                          );
+                        },
+                        icon: const Icon(Icons.report, color: Colors.grey),
+                        label: const Text(
+                          'Report',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  // User profile and Chat button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey,
+                          child: Icon(Icons.person, color: Colors.white),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Vinay Chavan', // Kept your user data
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'B.tech 2nd Year', // Kept your user data
+                                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: _addChat,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: const Text('Chat'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                child: ListTile(
-                  leading: Icon(Icons.supervised_user_circle),
-                  title: Text("Vinay Chavan"),
-                  subtitle: Text("B.tech 2nd Year"),
-                ),
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

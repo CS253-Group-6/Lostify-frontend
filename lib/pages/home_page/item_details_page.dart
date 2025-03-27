@@ -1,11 +1,61 @@
-import 'package:flutter/material.dart';
-
+import 'dart:io';
 import '../../components/home/item_box.dart';
+import '../chat/chat_list.dart';
+import '../chat/chat_screen.dart';
+import '../../providers/profile_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class ItemDetailsPage extends StatelessWidget {
   final Post post;
+  final int itemId, postOwnerId;
 
-  const ItemDetailsPage({super.key, required this.post});
+  ItemDetailsPage(
+      {super.key,
+      required this.itemId,
+      required this.postOwnerId,
+      required this.post});
+
+  final FirebaseFirestore _chatInstance = FirebaseFirestore.instance;
+
+  String createChatId(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    int currUserId = profileProvider.id;
+    if (currUserId < postOwnerId) {
+      return '${currUserId}_${postOwnerId}';
+    } else {
+      return '${postOwnerId}_$currUserId';
+    }
+  }
+
+  void _addChat(BuildContext context) {
+    String chatId = createChatId(context);
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    int currUserId = profileProvider.id;
+    _chatInstance.collection("chats").doc(chatId).set({
+      "users": [currUserId, postOwnerId],
+      "lastMessage": "",
+      "lastMessageTime": Timestamp.now(),
+      "itemId": itemId,
+      "status": "Offline",
+      "unreadMessagesNumber": 0,
+    });
+
+    Map<String, dynamic> chatDetails = {
+      "senderId": currUserId,
+      "recieverId": postOwnerId,
+      "itemId": itemId,
+      "chatRoomId": chatId,
+    };
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(chatDetails: chatDetails),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,9 +178,7 @@ class ItemDetailsPage extends StatelessWidget {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Chat feature coming soon!')),
-                    );
+                    _addChat(context);
                   },
                   icon: const Icon(Icons.chat_bubble_outline),
                   label: const Text('Chat'),
