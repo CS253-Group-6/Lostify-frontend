@@ -1,13 +1,14 @@
+import 'dart:io';
 import 'package:final_project/services/chat_api.dart';
-<<<<<<< HEAD
-import '../../components/home/item_box.dart';
-import 'package:flutter/material.dart';
-
-=======
-import 'package:flutter/material.dart';
 
 import '../../components/home/item_box.dart';
->>>>>>> dba698992e15b222c3dc47c9c82f67923dd5b397
+import '../chat/chat_list.dart';
+import '../chat/chat_screen.dart';
+import '../../providers/profile_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class ItemDetailsPage extends StatelessWidget {
   final Post post;
@@ -20,6 +21,7 @@ class ItemDetailsPage extends StatelessWidget {
       required this.postOwnerId,
       required this.post,
       this.extraProperty});
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +129,7 @@ class ItemDetailsPage extends StatelessWidget {
               children: [
                 const Icon(Icons.location_pin, size: 16),
                 const SizedBox(width: 8),
-                Text('Location: ${post.address1}'),
+                Text('Location: ${post.address}'),
               ],
             ),
             const SizedBox(height: 16),
@@ -177,7 +179,7 @@ class ItemDetailsPage extends StatelessWidget {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    ChatServices.addChat(context, itemId, postOwnerId);
+                    ChatServices.addChat(context,itemId,postOwnerId);
                   },
                   icon: const Icon(Icons.chat_bubble_outline),
                   label: const Text('Chat'),

@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 
-=======
 import 'package:cloud_firestore/cloud_firestore.dart';
->>>>>>> dba698992e15b222c3dc47c9c82f67923dd5b397
+
 import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/chat_model.dart';
 import 'package:final_project/pages/chat/chat_screen.dart';
@@ -153,7 +151,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               size: 16, color: Colors.grey),
                           const SizedBox(width: 4),
                           Text(
-                            widget.post.address1,
+                            widget.post.address,
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.grey),
                           ),
