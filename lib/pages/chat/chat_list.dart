@@ -1,72 +1,54 @@
-import '/pages/chat/chat_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/components/chat/chat_list_item.dart';
+import 'package:final_project/providers/profile_provider.dart';
+import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../../models/coversation_model.dart';
 
 
 // Messages Screen
-class MessagesScreen extends StatelessWidget {
-  final List<Conversation> conversations = [
-    Conversation(
-      name: 'Aaiisha Thakur',
-      lastMessage: 'So Aditya, can we meet today!',
-      time: '18:31',
-      profileImageUrl: 'https://via.placeholder.com/40', // Replace with actual URL
-    ),
-    Conversation(
-      name: 'Riya Singh',
-      lastMessage: 'Sure.',
-      time: '06:12',
-      profileImageUrl: 'https://via.placeholder.com/40',
-    ),
-    Conversation(
-      name: 'Abel Joseph',
-      lastMessage: '~~ Thanks dude 😊',
-      time: 'Yesterday',
-      profileImageUrl: 'https://via.placeholder.com/40',
-    ),
-    Conversation(
-      name: 'Vineet Kumar',
-      lastMessage: 'I\'m happy that you got bag',
-      time: 'Yesterday',
-      profileImageUrl: 'https://via.placeholder.com/40',
-    ),
-  ];
+class ChatList extends StatefulWidget {
+  const ChatList({super.key});
+
+  @override
+  State<ChatList> createState() => _ChatListState();
+}
+
+class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Text('Messages'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+        appBar: AppBar(
+          backgroundColor: Colors.blueAccent,
+          title: const Text('Messages'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {},
+          ),
         ),
-      ),
-      body: ListView.builder(
-        itemCount: conversations.length,
-        itemBuilder: (context, index) {
-          final convo = conversations[index];
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(convo.profileImageUrl),
-            ),
-            title: Text(convo.name),
-            subtitle: Text(convo.lastMessage),
-            trailing: Text(convo.time),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatScreen(name: convo.name),
-                ),
-              );
-            },
-          );
-        },
-      ),
-      
-    );
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("chats")
+              .where("users",
+                  arrayContains: context.watch<ProfileProvider>().id)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error ${snapshot.error}'));
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No chats found'));
+            }
+            return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final convo = snapshot.data!.docs[index];
+                  return ChatListItem(chat: convo);
+                });
+          },
+        ));
   }
 }

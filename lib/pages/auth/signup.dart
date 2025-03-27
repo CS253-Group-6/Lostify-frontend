@@ -36,16 +36,18 @@ class _SignUpState extends State<SignUp> {
           email: _emailController.text,
           password: _passwordController.text
       );
-      // Map<String,dynamic> response = await AuthApi.signUp(user);
-      // if(response['statusCode'] == 200){
-      //   Navigator.of(context).pushNamed('/create-profile',arguments: {
-      //     'username': _usernameController.text,
-      //     'email' :  _emailController.text,
-      //     'password' : _passwordController.text
-      //   });
-      // }else{
-      //   Navigator.of(context).pushReplacementNamed('/');
-      // }
+
+      
+      Map<String,dynamic> response = await AuthApi.signUp(user);
+      if(response['statusCode'] == 200){
+        Navigator.of(context).pushNamed('/create-profile',arguments: {
+          'username': _usernameController.text,
+          'email' :  _emailController.text,
+          'password' : _passwordController.text
+        });
+      }else{
+        Navigator.of(context).pushReplacementNamed('/');
+      }
       Navigator.of(context).pushNamed('/create-profile');
     }
   }

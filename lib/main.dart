@@ -1,6 +1,13 @@
-import 'package:final_project/components/home/item_details.dart';
-import 'package:final_project/pages/chat/chat_list.dart';
-import 'package:final_project/pages/chat/chat_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/services/notifications_api.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:final_project/components/home/item_box.dart';
+import 'package:final_project/models/post.dart' as ModelsPost;
+import 'package:final_project/providers/profile_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import '/components/home/item_details.dart';
+import '/pages/chat/chat_list.dart';
+import '/pages/chat/chat_screen.dart';
 
 import '/pages/lost_item_pages/lost_item_post_page1.dart';
 import '/pages/lost_item_pages/lost_item_post_page2.dart';
@@ -20,22 +27,32 @@ import 'pages/found_item_pages/found_item_page2.dart';
 import 'pages/found_item_pages/found_item_page3.dart';
 import 'pages/home_page/homepage.dart';
 
-void main() {
+
+final navigatorKey = GlobalKey<NavigatorState>();
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await NotificationsApi().initialise();
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => UserProvider()), // Register UserProvider
+        ChangeNotifierProvider(
+            create: (context) => UserProvider()), // Register UserProvider
+        ChangeNotifierProvider(create: (context) => ProfileProvider())
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/chat-list',
+      initialRoute: '/user/login',
+      navigatorKey: navigatorKey,
       routes: {
         // auth routes
         '/user/login': (context) => Login(),
@@ -47,26 +64,37 @@ class MyApp extends StatelessWidget {
         // profile routes
         '/create-profile': (context) => ProfileForm(),
         // '/profile-dashboard' : (context) => , // profile_dashboard page
-        
+
         // home pages
         // '/': (context) => , // home interface
         '/home': (context) => HomePage(), // home page
-        '/item-details' : (context) => ItemDetails(),
-        
+        '/item-details': (context) => ItemDetails(
+              itemId: 0,
+              postOwnerId: 0,
+              post: Post(postType: PostType.lost, id: 0, title: 'title', status: 'status', regDate: DateTime.now()),
+            ),
+
         // // lost item routes
-        '/lost/post/1' : (context) => LostAnItem1(), //lost postpage 1
-        '/lost/post/2' : (context) => LostAnItem2(), //lost postpage 2
-        '/lost-items' : (context) => LostItem(), // lost_page
-        
+        '/lost/post/1': (context) => LostAnItem1(), //lost postpage 1
+        '/lost/post/2': (context) => LostAnItem2(), //lost postpage 2
+        '/lost-items': (context) => LostItem(), // lost_page
+
         // found items routes
-        '/found/post/1' : (context) => FoundItemPage1(), // found post page1
-         '/found/post/2' : (context) => FoundItemPage2(), // found post page2
-         '/found/post/3' : (context) => FoundItemPage3(), // found post page3
-         '/found-items': (context) => FoundItem(), // found_items
-        
+        '/found/post/1': (context) => FoundItemPage1(), // found post page1
+        '/found/post/2': (context) => FoundItemPage2(), // found post page2
+        '/found/post/3': (context) => FoundItemPage3(), // found post page3
+        '/found-items': (context) => FoundItem(), // found_items
+
         // chat pages
-        '/chat-list': (context) => MessagesScreen(),
-        '/chat-screen' : (context) => ChatScreen(name: "Vinay"),
+        '/chat-list': (context) => ChatList(),
+        '/chat-screen': (context) => ChatScreen(
+              chatDetails: {
+                "senderId": 1,
+                "recieverId": 1,
+                "itemId": 1,
+                "chatRoomId": "1234",
+              },
+            ),
         // others
         // '/about' : (context) => , // about us page
         // '/notifications' : (context) => , //notifications

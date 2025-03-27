@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:final_project/pages/chat/chat_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -113,7 +114,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     title: const Text('Messages'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatList()));
+                    },
                   ),
                   ListTile(
                     title: const Text('Settings'),

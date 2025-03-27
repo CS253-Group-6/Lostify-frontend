@@ -8,7 +8,7 @@ class AuthApi{
   // Sign up api call
   static Future<Map<String,dynamic>> signUp(User user) async{
     final response = await http.post(
-        Uri.parse("$baseUrl/auth/login"),
+        Uri.parse("$baseUrl/auth/signup"),
         headers: {
           "Content-Type": "application/json"
         },

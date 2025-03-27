@@ -1,57 +1,57 @@
+import 'package:final_project/components/home/item_details.dart';
 import 'package:flutter/material.dart';
 
 /// Type of post (for lost item or for found item). Passed as argument
 /// to the constructor of [PostType].
-enum PostType {lost, found}
+enum PostType { lost, found }
 
 /// Details of a post.
-/// 
+///
 /// This class groups together attributes of a post, similar to a C `struct`.
-/// 
+///
 /// #### Public members:
-/// 
+///
 /// * `postType` – An instance of [PostType] indicating whether the post is
 ///                for a lost item or for a found item.
-/// 
+///
 /// * `id` – The unique identifier assigned to the post in the database.
-/// 
+///
 /// * `title` – The title given to the post.
-/// 
+///
 /// * `status` – ?
-/// 
+///
 /// * `regDate` – The date of creation of the post.
-/// 
+///
 /// * `foundDate` – ?
-/// 
+///
 /// * `itemImage` – An optional image of the article concerned.
 final class Post {
-  const Post({
-    required this.postType,
-    required this.id,
-    required this.title,
-    this.status = '',
-    required this.regDate,
-    this.img
-  });
+  const Post(
+      {required this.postType,
+      required this.id,
+      required this.title,
+      this.status = '',
+      required this.regDate,
+      this.img});
 
   /// An instance of [PostType] indicating whether the post is
   /// for a lost item or for a found item.
   final PostType postType;
 
   /// The unique identifier assigned to the post in the database.
-  final int       id;
+  final int id;
 
   /// The title given to the post.
-  final String    title;
+  final String title;
 
   /// ?
-  final String    status;
+  final String status;
 
   /// The date of creation of the post.
-  final DateTime  regDate;
+  final DateTime regDate;
 
   /// An optional image of the article concerned.
-  final Image?    img;
+  final Image? img;
 }
 
 /// Style constant for transparency of [ItemBox]
@@ -63,25 +63,31 @@ const double kItemBoxOpacity = 0.7;
 const double kItemBoxBorderRadius = 20.0;
 
 /// A card displaying details of a post in brief.
-/// 
+///
 /// Inherits from [StatelessWidget].
 class ItemBox extends StatelessWidget {
   const ItemBox({super.key, required this.post});
 
   final Post post;
-  
-  PostType  get postType  => post.postType;
-  int       get id        => post.id;
-  String    get title     => post.title;
-  String    get status    => post.status;
-  DateTime  get regDate   => post.regDate;
-  final DateTime? foundDate = null;     // ?
-  Image?    get itemImage => post.img;
+
+  PostType get postType => post.postType;
+  int get id => post.id;
+  String get title => post.title;
+  String get status => post.status;
+  DateTime get regDate => post.regDate;
+  final DateTime? foundDate = null; // ?
+  Image? get itemImage => post.img;
 
   @override
   Widget build(BuildContext context) {
     // Determine color based on status text
-    final Color statusColor = postType == PostType.found ? Colors.green : Colors.red;
+    final Color statusColor =
+        postType == PostType.found ? Colors.green : Colors.red;
+
+    // function to add chat for the post in user's chat list
+    void handleItemDetails() {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetails(itemId: id, postOwnerId: 1,post:post)));
+    }
 
     return Container(
       // Box takes full available width
@@ -153,9 +159,7 @@ class ItemBox extends StatelessWidget {
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: () {
-                    // TODO: Handle chat logic
-                  },
+                  onPressed: handleItemDetails,
                   child: const Text('View post'),
                 ),
               ],

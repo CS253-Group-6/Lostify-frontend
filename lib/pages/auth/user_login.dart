@@ -25,6 +25,7 @@ class _LoginState extends State<Login> {
   void handleSubmit() async{
     if(_loginKey.currentState!.validate()){
       context.read<UserProvider>().setEmail(newEmail: _emailController.text);
+      
       var loginDetails = {
         "email": _emailController.text,
         "password": _passwordController.text
@@ -35,7 +36,7 @@ class _LoginState extends State<Login> {
       // }else{
       //   Navigator.of(context).pushReplacementNamed('/');
       // }
-      Navigator.of(context).pushReplacementNamed('/home');
+      Navigator.of(context).pushReplacementNamed('/create-profile');
     }
 
   }
@@ -49,6 +50,7 @@ class _LoginState extends State<Login> {
             minHeight: MediaQuery.of(context).size.height,
           ),
           decoration: BoxDecoration(
+            // ignore: deprecated_member_use
             color: Color(0xFF45BBDD).withOpacity(0.4),
             image: DecorationImage(
                 image: AssetImage("assets/images/Admin Login.png"),

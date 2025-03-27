@@ -1,4 +1,6 @@
 import "dart:io";
+import "/providers/profile_provider.dart";
+
 import "/components/auth/custom_auth_button.dart";
 import "/components/profile/profile_form_input.dart";
 import "/pages/auth/confirmation_code.dart";
@@ -8,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import "package:provider/provider.dart";
 
 class ProfileForm extends StatefulWidget {
-
   const ProfileForm({super.key});
 
   @override
@@ -16,7 +17,6 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
-
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
@@ -25,47 +25,49 @@ class _ProfileFormState extends State<ProfileForm> {
   final TextEditingController _designationController = TextEditingController();
   final TextEditingController _rollNoController = TextEditingController();
 
-  void handleSubmit() async{
-    if(_formKey.currentState!.validate()){
+  void handleSubmit() async {
+    if (_formKey.currentState!.validate()) {
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
       var profileData = {
         "name": _nameController.text,
-        "email" : context.watch<UserProvider>().email,
+        "email": userProvider.email,
         "phone_number": _phoneController.text,
         "address": _addressController.text,
         "designation": _designationController.text,
         "roll_number": _rollNoController.text
       };
-
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ConfirmationCode()));
+      context.read<ProfileProvider>().setProfile(
+          name: _nameController.text,
+          email: userProvider.email,
+          id: 1);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => ConfirmationCode()));
     }
-
   }
+
   File? _image;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-
-
     // if (!status.isGranted) {
-      try {
-        final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-        if (pickedFile != null) {
-          setState(() {
-            _image = File(pickedFile.path);
-            print(_image);
-          });
-
-        }
-      } catch (e) {
-        print("Error picking image: $e");
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+          print(_image);
+        });
       }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
     // } else {
     //   print("Permission denied");
     // }
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -76,9 +78,7 @@ class _ProfileFormState extends State<ProfileForm> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/images/Admin Login.png"),
-                    fit: BoxFit.cover
-                )
-            ),
+                    fit: BoxFit.cover)),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -90,28 +90,63 @@ class _ProfileFormState extends State<ProfileForm> {
                         child: Text(
                           "Create Profile",
                           style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold
-                          ),
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 24,),
+                  SizedBox(
+                    height: 24,
+                  ),
                   Form(
                       key: _formKey,
                       child: Column(
                         children: [
-                          ProfileFormInput(label: "Name", hintText: "Enter Name", controller: _nameController,validate: true,),
-                          SizedBox(height: 8,),
-                          ProfileFormInput(label: "Phone Number", hintText: "Enter Contact number", controller: _phoneController,validate: true,),
-                          SizedBox(height: 8,),
-                          ProfileFormInput(label: "Campus address", hintText: "Enter campus address", controller: _addressController,validate: true,),
-                          SizedBox(height: 8,),
-                          ProfileFormInput(label: "Designation", hintText: "Enter Designation", controller: _designationController,validate: false,),
-                          SizedBox(height: 8,),
-                          ProfileFormInput(label: "PF/Roll No.", hintText: "Enter PF/Roll number", controller: _rollNoController,validate: false,),
-                          SizedBox(height: 8,),
+                          ProfileFormInput(
+                            label: "Name",
+                            hintText: "Enter Name",
+                            controller: _nameController,
+                            validate: true,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          ProfileFormInput(
+                            label: "Phone Number",
+                            hintText: "Enter Contact number",
+                            controller: _phoneController,
+                            validate: true,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          ProfileFormInput(
+                            label: "Campus address",
+                            hintText: "Enter campus address",
+                            controller: _addressController,
+                            validate: true,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          ProfileFormInput(
+                            label: "Designation",
+                            hintText: "Enter Designation",
+                            controller: _designationController,
+                            validate: false,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          ProfileFormInput(
+                            label: "PF/Roll No.",
+                            hintText: "Enter PF/Roll number",
+                            controller: _rollNoController,
+                            validate: false,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
                           Column(
                             children: [
                               Align(
@@ -123,16 +158,18 @@ class _ProfileFormState extends State<ProfileForm> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 8,),
+                              SizedBox(
+                                height: 8,
+                              ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _image != null
-                                        ? Text("Selected File: ${_image!.path.split('/').last}")
+                                        ? Text(
+                                            "Selected File: ${_image!.path.split('/').last}")
                                         : Text("No file selected"),
-          
                                     SizedBox(height: 20),
                                     ElevatedButton(
                                       onPressed: _pickImage,
@@ -141,22 +178,21 @@ class _ProfileFormState extends State<ProfileForm> {
                                           foregroundColor: Colors.white,
                                           backgroundColor: Color(0xFF32ADE6),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(4.0),
-                                          )
-                                      ),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
+                                          )),
                                     ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-          
-          
-                          SizedBox(height: 50,),
+                          SizedBox(
+                            height: 50,
+                          ),
                           Custombutton(text: "Get OTP", onClick: handleSubmit)
                         ],
-                      )
-                  ),
+                      )),
                 ],
               ),
             ),

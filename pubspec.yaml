@@ -39,6 +39,13 @@ dependencies:
   http:
   provider:
   intl: ^0.20.2
+  firebase_core: ^3.12.1
+  cloud_firestore: ^5.6.5
+  firebase_storage: ^12.4.4
+  uuid: ^4.5.1
+  path_provider: ^2.1.5
+  firebase_messaging: ^15.2.4
+  crypto:
 
 dev_dependencies:
   flutter_test:

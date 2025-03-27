@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1044065897268",
+    "project_id": "lostify-808f6",
+    "storage_bucket": "lostify-808f6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044065897268:android:e18c956250aea839293361",
+        "android_client_info": {
+          "package_name": "com.example.final_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA18w3skEMm3IGoX79n59AkHEWcF72PD6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
