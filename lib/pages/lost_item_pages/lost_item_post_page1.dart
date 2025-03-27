@@ -1,8 +1,10 @@
 import 'dart:io';
-import '/components/lost_items/uploadImage.dart';
+import 'package:final_project/components/lost_items/uploadImage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/form_data_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'lost_item_post_page2.dart';
 
 class LostAnItem1 extends StatefulWidget {
   const LostAnItem1({super.key});
@@ -12,161 +14,125 @@ class LostAnItem1 extends StatefulWidget {
 }
 
 class _LostAnItem1State extends State<LostAnItem1> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
   File? _image;
-  void _setImage(File image){
-    setState(() {
-      _image = image;
-    });
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Padding(
-            padding: const EdgeInsets.only(left: 50),
-            child: Text(
-              "Lost An Item",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.only(left: 60),
+          child: Text(
+            "Lost An Item",
+            style: TextStyle(
+              color: Colors.white,
+
             ),
           ),
-          backgroundColor: Colors.lightBlue[300],
-          leading: IconButton(onPressed: () {
-            Navigator.pushNamed(context, '/lost_an_item/page2');},
-            icon: Icon(Icons.arrow_back)),
-            ),
-            body: Container(
-            decoration: BoxDecoration(
-            image: DecorationImage(
-            image: AssetImage('assets/bg1.png'),
-            fit: BoxFit.cover,
-            ),
-            ),
-            padding: EdgeInsets.all(20),
-            child: Column(
+        ),
+        backgroundColor: Colors.blue,
+        leading: IconButton(onPressed: () {
+          Navigator.pushNamed(context, '/lost_an_item/page2');},
+            icon: Icon(Icons.arrow_back,color: Colors.white)),
+      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/new_background.png"), // Updated image path
+            fit: BoxFit.cover, // Ensures the image covers the screen
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            SizedBox(
-            height: 30,
-            ),
-            Padding(
-            padding: const EdgeInsets.only(left: 25),
-            child: Align(
-            alignment: Alignment.centerLeft,
-                    child: const Text(
-                      "Add Title and Description",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+
+
+              Text("Add Title and Description", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+              const SizedBox(height: 10),
+
+              TextField(
+                controller: titleController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: "Title",
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey, // Change hint text color
+                    fontSize: 15, // Change hint text size
+                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              TextField(
+                controller: descriptionController,
+                maxLines: 5,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: "Add the details of your lost item",
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey, // Change hint text color
+                    fontSize: 15, // Change hint text size
+                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
+                ),
+              ),
+              Text("Upload Image", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+              const SizedBox(height: 10),
+
+              GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  width: double.infinity,
+                  height: 250,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: _image != null
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.file(_image!, fit: BoxFit.cover),
+                  )
+                      : Center(
+                    child: Icon(Icons.image, size: 50, color: Colors.grey),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                    controller: _titleController,
-                    keyboardType: TextInputType.name,
-                    // autofocus: true,
-                    autocorrect: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      // label: Text("Title"),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue, width: 2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 3),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      hintText: 'Enter Title',
-                    ),
-                  ),
+              ),
+              const SizedBox(height: 50),
+
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LostAnItem2()));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  minimumSize: Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                    controller: _descriptionController,
-                    keyboardType: TextInputType.multiline,
-                    // autofocus: true,
-                    autocorrect: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      // labelText: "Add Description...",
-                      labelStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight:
-                            FontWeight.bold,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue, width: 2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 3),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      hintText: 'Add the details of your lost item',
-                    ),
-                    maxLines: 5,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25, top: 5, bottom: 5),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: const Text(
-                      "Upload Image",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 5),
-                    child: ImageUploadBox(onImageSelected: _setImage,),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                FilledButton(
-                  onPressed: () {
-                    Map<String, dynamic> formData = {
-                      'Title': _titleController.text,
-                      'Description': _descriptionController.text,
-                      'Image': _image,
-                    };
-                    Provider.of<FormDataProvider>(context, listen: false)
-                        .updateData(formData);
-                    Navigator.pushNamed(context, '/lost_an_item/page2');
-                  },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.blueAccent[700],
-                    foregroundColor: Colors.white,
-                    minimumSize: Size(300, 45),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: Text(
-                    'Next',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ],
-            )));
+                child: Text("Next", style: TextStyle(fontSize: 18, color: Colors.white)),
+              ),
+            ],
+          ),
+        ),
+      ),);
   }
 }

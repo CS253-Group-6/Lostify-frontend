@@ -6,26 +6,27 @@ import 'package:flutter/material.dart';
 
 import '../../components/home/action_button.dart';
 import '../../components/home/expandable_fab.dart';
+import '../search_page.dart';
 import 'tabs.dart';
 
 /// Home page of the application.
-/// 
+///
 /// -----
 /// #### Description:
-/// 
+///
 /// The homepage has three main components: the app bar, display area for
 /// three tabs, and a floating button to create a new post.
-/// 
+///
 /// The app bar ([AppBar]) consists of:
-/// 
+///
 /// * The app name (_Lostify_).
-/// 
+///
 /// * A [TabBar] containing the names of the three tabs (_All_, _Lost_,
 ///   _Found_) as [Text] widgets.
-/// 
+///
 /// The contents of the tab display area ([TabBarView]) are decided by the
 /// widget loaded by the selected tab.
-/// 
+///
 /// The floating button ([ExpandableFab]) expands into two [Row]s
 /// when clicked, each of which consists of an [ActionButton] and
 /// [Text] succintly stating the action corresponding to the button.
@@ -40,22 +41,47 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   /// List of tab titles.
-  final List<Widget> _tabs = const [Tab(text: 'All'), Tab(text: 'Lost'), Tab(text: 'Found')];
+  final List<Widget> _tabs = const [
+    Tab(
+      text: 'Lost',
+    ),
+    Tab(text: 'Found')
+  ];
 
   /// List of widgets corresponding to tabs in [_tabs].
-  final List<Widget> _widgets = const [AllItemsTab(), LostItemsTab(), FoundItemsTab()];
+  final List<Widget> _widgets = const [LostItemsTab(), FoundItemsTab()];
 
   var _isFabExpanded = false;
 
   @override
   Widget build(BuildContext context) {
+    /// User role
+    final int role = 0; // Replace with context.watch().user.role;
+
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].
     final w = AppBar(
       title: const Text('Lostify'),
       bottom: TabBar(tabs: _tabs),
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.blue,
       elevation: 0,
+      actions: [
+        IconButton(
+          icon: const Icon(
+            CupertinoIcons.search,
+            size: 30,
+          ),
+          onPressed: () {
+            // Navigate to the search page when the search icon is tapped
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SearchPage()), // Replace SearchPage with your actual search page widget
+            );
+          },
+        ),
+      ],
     );
 
     // Tab controller
@@ -90,8 +116,10 @@ class _HomePageState extends State<HomePage> {
                   // Overlay blur effect when the FAB is expanded
                   if (_isFabExpanded)
                     Container(
-                      color: Colors.white.withValues(alpha: 0.5), // Brighten the background
-                      child: const SizedBox.expand(), // Make sure this covers the entire screen
+                      color: Colors.white
+                          .withValues(alpha: 0.5), // Brighten the background
+                      child: const SizedBox
+                          .expand(), // Make sure this covers the entire screen
                     ),
                 ],
               ),
@@ -100,9 +128,15 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  const DrawerHeader(
+                  DrawerHeader(
                     decoration: BoxDecoration(color: Colors.blue),
-                    child: Text('Dashboard'),
+                    child: Center(
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundImage: AssetImage(
+                            'assets/images/profile_picture.png'), // Replace with your image asset path
+                      ),
+                    ),
                   ),
                   ListTile(
                     title: const Text('Your lost items'),
@@ -112,6 +146,11 @@ class _HomePageState extends State<HomePage> {
                     title: const Text('Your found items'),
                     onTap: () {},
                   ),
+                  if (role == 1)
+                    ListTile(
+                      title: const Text('Reported Items'),
+                      onTap: () {},
+                    ),
                   ListTile(
                     title: const Text('Messages'),
                     onTap: () {
@@ -119,21 +158,17 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   ListTile(
-                    title: const Text('Settings'),
+                    title: const Text('Edit Profile'),
                     onTap: () {},
                   ),
                   ListTile(
                     title: const Text('Logout'),
                     onTap: () {},
                   ),
-                  ListTile(
-                    title: const Text('Help'),
-                    onTap: () {},
-                  ),
-                  
                 ],
               ),
             ),
+
             // Tab contents
             body: Stack(
               children: [
@@ -150,8 +185,10 @@ class _HomePageState extends State<HomePage> {
                 // Overlay blur effect when the FAB is expanded
                 if (_isFabExpanded)
                   Container(
-                    color: Colors.white.withValues(alpha: 0.5), // Brighten the background
-                    child: const SizedBox.expand(), // Make sure this covers the entire screen
+                    color: Colors.white
+                        .withValues(alpha: 0.5), // Brighten the background
+                    child: const SizedBox
+                        .expand(), // Make sure this covers the entire screen
                   ),
               ],
             ),
@@ -164,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                   _isFabExpanded = !_isFabExpanded;
                 });
               },
-              childWhileClosed: const Icon(Icons.add),  // Icon when closed
+              childWhileClosed: const Icon(Icons.add), // Icon when closed
               // Child buttons that appear when expanded
               children: [
                 Row(
@@ -176,9 +213,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
-                      icon: const Icon(CupertinoIcons.search),
-                      onPressed: () {}
-                    ),
+                        icon: const Icon(CupertinoIcons.search),
+                        onPressed: () {}),
                   ],
                 ),
                 Row(

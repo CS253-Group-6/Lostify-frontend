@@ -1,6 +1,8 @@
 import 'package:final_project/components/home/item_details.dart';
 import 'package:flutter/material.dart';
 
+import '../../pages/home_page/item_details_page.dart';
+
 /// Type of post (for lost item or for found item). Passed as argument
 /// to the constructor of [PostType].
 enum PostType { lost, found }
@@ -22,17 +24,20 @@ enum PostType { lost, found }
 ///
 /// * `regDate` – The date of creation of the post.
 ///
-/// * `foundDate` – ?
+/// * `description` – Description of the post.
 ///
 /// * `itemImage` – An optional image of the article concerned.
 final class Post {
-  const Post(
-      {required this.postType,
-      required this.id,
-      required this.title,
-      this.status = '',
-      required this.regDate,
-      this.img});
+  Post({
+    required this.postType,
+    required this.id,
+    required this.title,
+    this.status = '',
+    required this.regDate,
+    this.description = '',
+    this.imageProvider,
+    this.address = '',
+  });
 
   /// An instance of [PostType] indicating whether the post is
   /// for a lost item or for a found item.
@@ -50,8 +55,14 @@ final class Post {
   /// The date of creation of the post.
   final DateTime regDate;
 
+  /// Description of the post.
+  final String description;
+
   /// An optional image of the article concerned.
-  final Image? img;
+  final ImageProvider? imageProvider;
+
+  /// Address associated with the post.
+  final String address;
 }
 
 /// Style constant for transparency of [ItemBox]
@@ -75,8 +86,8 @@ class ItemBox extends StatelessWidget {
   String get title => post.title;
   String get status => post.status;
   DateTime get regDate => post.regDate;
-  final DateTime? foundDate = null; // ?
-  Image? get itemImage => post.img;
+  DateTime? get foundDate => null; // Placeholder
+  ImageProvider? get itemImage => post.imageProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -90,16 +101,12 @@ class ItemBox extends StatelessWidget {
     }
 
     return Container(
-      // Box takes full available width
       width: double.infinity,
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        // Semi-transparent white background
         color: Colors.white.withValues(alpha: kItemBoxOpacity),
-        // Rounded corners
         borderRadius: BorderRadius.circular(kItemBoxBorderRadius),
-        // Optional box shadow for depth
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade300,
@@ -108,7 +115,6 @@ class ItemBox extends StatelessWidget {
           ),
         ],
       ),
-      // Layout: image on the left, text on the right
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -116,7 +122,12 @@ class ItemBox extends StatelessWidget {
           if (itemImage != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: itemImage,
+              child: Image(
+                image: itemImage!,
+                fit: BoxFit.contain,
+                height: 80,
+                width: 80,
+              ),
             )
           else
             Container(
@@ -129,7 +140,6 @@ class ItemBox extends StatelessWidget {
               ),
             ),
           const SizedBox(width: 16),
-          // Expanded column with text and "Open Chat" button
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,18 +159,18 @@ class ItemBox extends StatelessWidget {
                   style: TextStyle(color: statusColor),
                 ),
                 const SizedBox(height: 4),
-                Text('Registered on: ${dateAsString(regDate)}'),
+                Text('Registered Date: ${dateAsString(regDate)}'),
                 const SizedBox(height: 4),
-                Text('Found on: ${dateAsString(foundDate)}'),
+                Text('Found Date: ${dateAsString(foundDate)}'),
                 const SizedBox(height: 8),
-                // "Open Chat" button with a black background and white text
+                // "View Post" button navigates to ItemDetailsPage
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                   ),
                   onPressed: handleItemDetails,
-                  child: const Text('View post'),
+                  child: const Text('View'),
                 ),
               ],
             ),

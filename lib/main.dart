@@ -8,24 +8,25 @@ import 'package:firebase_core/firebase_core.dart';
 import '/components/home/item_details.dart';
 import '/pages/chat/chat_list.dart';
 import '/pages/chat/chat_screen.dart';
-
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '/pages/lost_item_pages/lost_item_post_page1.dart';
 import '/pages/lost_item_pages/lost_item_post_page2.dart';
+import 'pages/auth/admin_login.dart';
+import 'pages/auth/confirmation_code.dart';
 import 'pages/auth/reset_password_page.dart';
-import 'providers/user_provider.dart';
-import 'package:flutter/material.dart';
 import 'pages/auth/signup.dart';
 import 'pages/auth/user_login.dart';
-import 'pages/auth/admin_login.dart';
-import 'pages/profile_pages/profileform_page.dart';
-import 'pages/auth/confirmation_code.dart';
-import 'package:provider/provider.dart';
 import 'pages/found_item_pages/found_item_page1.dart';
-import 'pages/lost_found_post_list/found_item.dart';
-import 'pages/lost_found_post_list/lost_item.dart';
 import 'pages/found_item_pages/found_item_page2.dart';
 import 'pages/found_item_pages/found_item_page3.dart';
 import 'pages/home_page/homepage.dart';
+import 'pages/lost_found_post_list/found_item.dart';
+import 'pages/lost_found_post_list/lost_item.dart';
+import 'pages/profile_pages/profileform_page.dart';
+import 'pages/search_page.dart';
+import 'providers/user_provider.dart';
+import 'pages/home_page/home_interface.dart';
 
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
         // '/profile-dashboard' : (context) => , // profile_dashboard page
 
         // home pages
-        // '/': (context) => , // home interface
+        '/homeInterface': (context) => HomeInterface(), // home interface
         '/home': (context) => HomePage(), // home page
         '/item-details': (context) => ItemDetails(
               itemId: 0,
@@ -98,7 +99,7 @@ class MyApp extends StatelessWidget {
         // others
         // '/about' : (context) => , // about us page
         // '/notifications' : (context) => , //notifications
-        // '/search' : (context) => , //search_page
+        '/search': (context) => SearchPage(), //search_page
       },
     );
   }

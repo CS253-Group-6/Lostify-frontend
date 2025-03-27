@@ -7,6 +7,7 @@ import 'package:final_project/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class ItemDetails extends StatefulWidget {
   final int itemId, postOwnerId;
@@ -96,9 +97,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                           borderRadius: BorderRadius.circular(18),
                         ),
                         clipBehavior: Clip.hardEdge,
-                        child: widget.post.img != null
-                            ? (widget.post.img)
-                            : Image.asset('assets/images/items.png'),
+                        child:  Image.asset('assets/images/items.png'),
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
@@ -109,7 +108,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         ),
                       ),
                       Text(
-                        "This a nice and detailed description of the product posted",
+                        widget.post.description,
                         style: TextStyle(
                             fontSize: 18, color: Colors.grey.shade600),
                       ),
@@ -129,7 +128,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               children: [
                                 Icon(Icons.date_range),
                                 Text(
-                                  "5 May",
+                                  DateFormat('MMMM d, y').format(widget.post.regDate),
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],
@@ -138,7 +137,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               children: [
                                 Icon(Icons.watch_later_outlined),
                                 Text(
-                                  "7:55 PM",
+                                  DateFormat('h:mm a').format(widget.post.regDate),
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],
@@ -147,7 +146,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               children: [
                                 Icon(Icons.location_on),
                                 Text(
-                                  "Auditorium",
+                                  widget.post.address,
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],

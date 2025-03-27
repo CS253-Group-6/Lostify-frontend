@@ -191,7 +191,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blue,
         title: Row(
           children: [
             CircleAvatar(
@@ -207,7 +207,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 backgroundColor: Colors.redAccent,
                 foregroundColor: Colors.white,
               ),
-              child: Text("Close Chat"),
+              child: Text("Close"),
             )
           ],
         ),
@@ -220,7 +220,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   .collection("chatroom")
                   .doc(widget.chatDetails['chatRoomId'])
                   .collection("chats")
-                  .orderBy("time", descending: true)
+                  .orderBy("time", descending: false)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -293,9 +293,9 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      hintText: 'Write a message...',
+                      hintText: '  Write a message...',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                   ),
