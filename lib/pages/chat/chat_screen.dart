@@ -60,7 +60,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _uploadImage() async {
+  Future<void> _uploadImage(String type) async {
     try {
       // set state to uploading image
       setState(() {
@@ -68,7 +68,12 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       });
 
       // get the image in XFile format
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      XFile? image;
+      if(type == "gallery"){
+        image = await _picker.pickImage(source: ImageSource.gallery);
+      }else{
+        image = await _picker.pickImage(source: ImageSource.camera);
+      }
 
       if (image != null) {
         // generate unique id for each image of some random string
@@ -286,14 +291,15 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.attach_file),
-                  onPressed: _uploadImage,
+                  icon: Icon(Icons.image),
+                  onPressed: () => _uploadImage("gallery"),
                 ),
                 Expanded(
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      hintText: '  Write a message...',
+                      contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                      hintText: 'Write a message...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -308,7 +314,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   icon: _isUploading
                       ? CircularProgressIndicator()
                       : Icon(Icons.camera_alt),
-                  onPressed: _isUploading ? null : _uploadImage,
+                  onPressed: _isUploading ? null : () => _uploadImage("camera"),
                 ),
               ],
             ),
