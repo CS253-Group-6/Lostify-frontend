@@ -35,7 +35,8 @@ final class Post {
     required this.regDate,
     this.description = '',
     this.imageProvider,
-    this.address = '',
+    this.address1 = '',
+    this.address2 = '',
   });
 
   /// An instance of [PostType] indicating whether the post is
@@ -60,8 +61,11 @@ final class Post {
   /// An optional image of the article concerned.
   final ImageProvider? imageProvider;
 
-  /// Address associated with the post.
-  final String address;
+  /// Cooarse Address associated with the post.
+  final String address1;
+
+  /// Detailed Address associated with the post.
+  final String address2;
 }
 
 /// Style constant for transparency of [ItemBox]
@@ -96,7 +100,11 @@ class ItemBox extends StatelessWidget {
 
     // function to add chat for the post in user's chat list
     void handleItemDetails() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetailsPage(itemId: id, postOwnerId: 1,post:post)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ItemDetailsPage(itemId: id, postOwnerId: 1, post: post)));
     }
 
     return Container(
