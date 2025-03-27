@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 class Item{
   String id = '';
@@ -5,8 +6,18 @@ class Item{
   File image;
   bool isFound = false;
 
-  Item({required this.title,required this.description,required this.location,
-  required this.date,required this.time,required this.image,required this.isFound});
+  Item({
+    required this.title,
+    required this.description,
+    required this.location,
+    required this.date,
+    required this.time,
+    required this.image,
+    required this.isFound,
+  });
+  void found(){
+    isFound = true;
+  }
   Map<String, dynamic> toJson() {
     return {
       "title": title,
@@ -14,8 +25,20 @@ class Item{
       "location": location,
       "date": date,
       "time": time,
-      "image": image,
+      "image": base64Encode(image.readAsBytesSync()), // Convert file to Base64
       "isFound": isFound,
     };
+  }
+
+  static Item fromJson(Map<String, dynamic> json) {
+    return Item(
+      title: json['title'],
+      description: json['description'],
+      location: json['location'],
+      date: json['date'],
+      time: json['time'],
+      image: File.fromRawPath(base64Decode(json['image'])), // Convert Base64 back to File
+      isFound: json['isFound'],
+    );
   }
 }
