@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -37,6 +36,7 @@ class _ChatPageState extends State<ChatPage> {
 
   final TextEditingController _controller = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -50,10 +50,11 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
-  // Clears the chat and closes the page.
+  /// Clears the chat messages and closes this page.
   void _closeChat() {
     setState(() {
       _messages.clear();
@@ -61,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
     Navigator.pop(context);
   }
 
-  // Sends a text message or image if provided.
+  /// Sends a text or image message.
   void _sendMessage({String? text, File? image}) {
     if ((text != null && text.trim().isNotEmpty) || image != null) {
       setState(() {
@@ -73,16 +74,17 @@ class _ChatPageState extends State<ChatPage> {
         });
       });
       _controller.clear();
+      _scrollToBottom();
     }
   }
 
-  // Uses image_picker to select an image from the gallery and sends it.
+  /// Uses image_picker to select an image from the gallery and shows confirmation dialog.
   Future<void> _insertMedia() async {
     try {
       final XFile? pickedFile =
       await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
-        _sendMessage(image: File(pickedFile.path));
+        await _showImageConfirmation(File(pickedFile.path));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("No image selected.")),
@@ -95,13 +97,13 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  // Uses image_picker to capture an image using the camera and sends it.
+  /// Uses image_picker to capture an image from the camera and shows confirmation dialog.
   Future<void> _openCamera() async {
     try {
       final XFile? pickedFile =
       await _picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
-        _sendMessage(image: File(pickedFile.path));
+        await _showImageConfirmation(File(pickedFile.path));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("No image captured.")),
@@ -114,12 +116,56 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  // Returns the current time in HH:mm format.
+  /// Shows a dialog (with a white background) to confirm or discard sending the image.
+  Future<void> _showImageConfirmation(File file) async {
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          content: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.file(file, fit: BoxFit.cover),
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close, color: Colors.red, size: 30),
+              onPressed: () => Navigator.pop(ctx, false),
+            ),
+            const SizedBox(width: 40),
+            IconButton(
+              icon: const Icon(Icons.check, color: Colors.green, size: 30),
+              onPressed: () => Navigator.pop(ctx, true),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirm == true) {
+      _sendMessage(image: file);
+    }
+  }
+
+  /// Returns the current time in HH:mm format.
   String _getCurrentTime() {
     final now = DateTime.now();
     final hours = now.hour.toString().padLeft(2, '0');
     final minutes = now.minute.toString().padLeft(2, '0');
     return "$hours:$minutes";
+  }
+
+  /// Scrolls the ListView to the bottom.
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   @override
@@ -135,7 +181,7 @@ class _ChatPageState extends State<ChatPage> {
         title: const Text("Chat", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         actions: [
-          // A small red "Close Chat" button on the right
+          // A small red "Close" button on the right
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: ElevatedButton(
@@ -155,6 +201,7 @@ class _ChatPageState extends State<ChatPage> {
           // Chat messages area
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               itemCount: _messages.length,
               itemBuilder: (context, index) {
@@ -168,26 +215,26 @@ class _ChatPageState extends State<ChatPage> {
               },
             ),
           ),
-          // Bottom input row with media, text field, send, and camera icons
+          // Bottom input row
           _buildMessageInput(),
         ],
       ),
     );
   }
 
-  // Builds the message input row.
+  /// Builds the bottom input row: media icon, text field, send, and camera.
   Widget _buildMessageInput() {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
-          // Media insertion icon on left.
+          // Media insertion icon
           IconButton(
             icon: const Icon(Icons.insert_photo, color: Colors.blue),
             onPressed: _insertMedia,
           ),
-          // Expanded text field.
+          // Expanded text field
           Expanded(
             child: TextField(
               controller: _controller,
@@ -200,12 +247,12 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
           ),
-          // Send icon button.
+          // Send icon button
           IconButton(
             icon: const Icon(Icons.send, color: Colors.blue),
             onPressed: () => _sendMessage(text: _controller.text),
           ),
-          // Camera icon on right.
+          // Camera icon
           IconButton(
             icon: const Icon(Icons.camera_alt, color: Colors.blue),
             onPressed: _openCamera,
@@ -215,14 +262,14 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  // Builds a chat message bubble with improved UI.
+  /// Builds a chat message bubble with an optional image and text,
+  /// displaying the timestamp on the left for sender messages and on the right for receiver messages.
   Widget _buildMessageBubble({
     String? text,
     File? image,
     required bool isUser,
     required String time,
   }) {
-    // Bubble widget with new constraints and style.
     final bubble = ConstrainedBox(
       constraints: BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width * 0.5,
@@ -244,13 +291,16 @@ class _ChatPageState extends State<ChatPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (image != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  image,
-                  width: double.infinity,
-                  height: 150,
-                  fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () => _showSentImagePreview(image),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.file(
+                    image,
+                    width: double.infinity,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             if (text != null)
@@ -267,8 +317,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
 
-    // For sender messages, show the time on the left of the bubble.
-    // For receiver messages, show the time on the right.
+    // For sender messages, the timestamp appears to the left; for receiver messages, to the right.
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -290,7 +339,27 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  // Timestamp style.
+  /// Shows a preview dialog for a sent image.
+  Future<void> _showSentImagePreview(File imageFile) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          insetPadding: const EdgeInsets.all(20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.file(imageFile, fit: BoxFit.cover),
+          ),
+        );
+      },
+    );
+  }
+
+  /// Timestamp style.
   TextStyle _timeStyle() {
     return const TextStyle(fontSize: 12, color: Colors.grey);
   }
