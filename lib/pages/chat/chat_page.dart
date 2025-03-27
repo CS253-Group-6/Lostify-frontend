@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // For Clipboard
 import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
@@ -41,7 +42,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    // Listener to update UI based on text field changes.
+    // Listen to text changes to update UI (e.g., toggle icons).
     _controller.addListener(() {
       setState(() {});
     });
@@ -116,7 +117,7 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  /// Shows a dialog (with a white background) to confirm or discard sending the image.
+  /// Shows a dialog (white background) to confirm or discard sending the image.
   Future<void> _showImageConfirmation(File file) async {
     final bool? confirm = await showDialog<bool>(
       context: context,
@@ -270,6 +271,24 @@ class _ChatPageState extends State<ChatPage> {
     required bool isUser,
     required String time,
   }) {
+    // Only add a long-press context menu if there's text
+    final bubbleGestureDetector = (text != null && text.trim().isNotEmpty)
+        ? GestureDetector(
+      onLongPress: () => _showTextCopyMenu(text),
+      child: _buildBubbleLayout(isUser: isUser, time: time, text: text, image: image),
+    )
+        : _buildBubbleLayout(isUser: isUser, time: time, text: text, image: image);
+
+    return bubbleGestureDetector;
+  }
+
+  /// The bubble layout is extracted so we can wrap it in a (conditional) GestureDetector above.
+  Widget _buildBubbleLayout({
+    required bool isUser,
+    required String time,
+    String? text,
+    File? image,
+  }) {
     final bubble = ConstrainedBox(
       constraints: BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width * 0.5,
@@ -317,7 +336,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
 
-    // For sender messages, the timestamp appears to the left; for receiver messages, to the right.
+    // For sender messages, time on left; for receiver messages, time on right.
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -353,6 +372,32 @@ class _ChatPageState extends State<ChatPage> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.file(imageFile, fit: BoxFit.cover),
+          ),
+        );
+      },
+    );
+  }
+
+  /// Shows a bottom sheet with "Copy text" for text messages only.
+  void _showTextCopyMenu(String text) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.copy),
+                title: const Text("Copy text"),
+                onTap: () {
+                  Navigator.pop(ctx); // close bottom sheet
+                  Clipboard.setData(ClipboardData(text: text));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Text copied to clipboard")),
+                  );
+                },
+              ),
+            ],
           ),
         );
       },
