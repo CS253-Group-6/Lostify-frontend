@@ -1,13 +1,7 @@
 import 'package:final_project/services/chat_api.dart';
-<<<<<<< HEAD
 import '../../components/home/item_box.dart';
 import 'package:flutter/material.dart';
 
-=======
-import 'package:flutter/material.dart';
-
-import '../../components/home/item_box.dart';
->>>>>>> dba698992e15b222c3dc47c9c82f67923dd5b397
 
 class ItemDetailsPage extends StatelessWidget {
   final Post post;

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-
-=======
 import 'package:cloud_firestore/cloud_firestore.dart';
->>>>>>> dba698992e15b222c3dc47c9c82f67923dd5b397
 import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/chat_model.dart';
 import 'package:final_project/pages/chat/chat_screen.dart';

@@ -78,7 +78,6 @@ class _LostAnItem1State extends State<LostAnItem1> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
                   ),
                 ),
-<<<<<<< HEAD
                 const SizedBox(height: 20),
             
                 TextField(
@@ -95,26 +94,6 @@ class _LostAnItem1State extends State<LostAnItem1> {
                     ),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
                   ),
-=======
-              ),
-              const SizedBox(height: 50),
-
-              ElevatedButton(
-                onPressed: () {
-                  Map<String, dynamic> formData = {
-                      'Title': _titleController.text,
-                      'Description': _descriptionController.text,
-                      'Image': _image,
-                    };
-                  Navigator.push(context,MaterialPageRoute(
-                      builder: (context) => LostAnItem2(formdata: formData),
-                    ),);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
->>>>>>> dba698992e15b222c3dc47c9c82f67923dd5b397
                 ),
                 Text("Upload Image", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
                 const SizedBox(height: 10),

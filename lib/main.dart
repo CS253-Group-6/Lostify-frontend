@@ -6,6 +6,7 @@ import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/post.dart' as ModelsPost;
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import '/components/home/item_details.dart';
 import '/pages/chat/chat_list.dart';
 import '/pages/chat/chat_screen.dart';
@@ -35,7 +36,9 @@ final navigatorKey = GlobalKey<NavigatorState>();
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await NotificationsApi().initialise();
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.initialize("0bc29172-c5dd-4a63-8473-910ffe28c289");
+  OneSignal.Notifications.requestPermission(true);
   runApp(
     MultiProvider(
       providers: [
@@ -53,7 +56,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/home-interface',
+      initialRoute: '/signup',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes

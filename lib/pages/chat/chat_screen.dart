@@ -9,7 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-
 class ChatScreen extends StatefulWidget {
   final ChatDetails chatDetails;
   ChatScreen({super.key, required this.chatDetails});
@@ -31,31 +30,29 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       setState(() {
         _isUploading = true;
       });
-        String imageURL = await UploadHandler.handleUpload(_picker, type);
+      String imageURL = await UploadHandler.handleUpload(_picker, type);
 
-        final imageMessage = {
-          'senderId': widget.chatDetails.senderId,
-          'text': imageURL,
-          'type': 'image',
-          'time': DateFormat('HH:mm').format(DateTime.now()),
-        };
-        print(imageMessage);
-        await FirebaseFirestore.instance
-            .collection("chatroom")
-            .doc(widget.chatDetails.chatRoomId)
-            .collection("chats")
-            .add(imageMessage);
-      }
-      catch (e) {
+      final imageMessage = {
+        'senderId': widget.chatDetails.senderId,
+        'text': imageURL,
+        'type': 'image',
+        'time': DateFormat('HH:mm').format(DateTime.now()),
+      };
+      print(imageMessage);
+      await FirebaseFirestore.instance
+          .collection("chatroom")
+          .doc(widget.chatDetails.chatRoomId)
+          .collection("chats")
+          .add(imageMessage);
+    } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Error sending image: $e")));
     } finally {
       setState(() {
         _isUploading = false;
       });
-      }
     }
-  
+  }
 
   @override
   void dispose() {
@@ -78,7 +75,8 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             Text("${context.watch<ProfileProvider>().name}"),
             Spacer(),
             ElevatedButton(
-              onPressed: () async => await ChatServices.deleteChat(context, widget.chatDetails),
+              onPressed: () async =>
+                  await ChatServices.deleteChat(context, widget.chatDetails),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
                 foregroundColor: Colors.white,
@@ -182,7 +180,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   onPressed: _isUploading
                       ? null
                       : () => ChatServices.sendMessage(
-                          _messageController, widget.chatDetails),
+                          context, _messageController, widget.chatDetails),
                   icon: Icon(Icons.send),
                 ),
                 IconButton(
@@ -198,5 +196,4 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       ),
     );
   }
-
 }
