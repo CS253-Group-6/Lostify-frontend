@@ -53,6 +53,21 @@ class _LostAnItem2State extends State<LostAnItem2> {
     }
   }
 
+  void handleLostItemPost(){
+    // handle post logic here
+    // get the details of both pages in json format
+
+    // use ItemApi service to make api call (Use try-catch)
+
+    // if success
+    // show success message
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted successfully!!")));
+    Navigator.pushNamed(context, '/home');
+
+    // if error
+    // show error message in Scaffold messenger
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,9 +220,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
           const SizedBox(height: 210),
           // Next Button
           ElevatedButton(
-            onPressed: () {
-              // Handle next navigation
-            },
+            onPressed: handleLostItemPost,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
               minimumSize: Size(double.infinity, 50),

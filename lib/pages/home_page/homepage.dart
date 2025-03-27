@@ -140,11 +140,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     title: const Text('Your lost items'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/lost-items');
+                    },
                   ),
                   ListTile(
                     title: const Text('Your found items'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/found-items');
+                    },
                   ),
                   if (role == 1)
                     ListTile(
@@ -214,7 +218,9 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
                         icon: const Icon(CupertinoIcons.search),
-                        onPressed: () {}),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/lost/post/1');
+                        }),
                   ],
                 ),
                 Row(
@@ -227,7 +233,9 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
                       icon: const Icon(CupertinoIcons.speaker_1_fill),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/found/post/1');
+                      },
                     ),
                   ],
                 ),

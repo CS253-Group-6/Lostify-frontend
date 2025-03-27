@@ -43,6 +43,20 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
     }
   }
 
+  // handle the Found item post
+  void handleFoundItemPost(){
+    // get details of all foundpages in json format
+
+    // make api call with correct data to backend using services class(use try-catch)
+
+    // if success
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted successfully!!")));
+    Navigator.pushNamed(context, '/home');
+
+    // if error show ScaffoldMessenger with error message
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -231,9 +245,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
 
               // Next Button
               ElevatedButton(
-                onPressed: () {
-                  // Handle next navigation
-                },
+                onPressed: handleFoundItemPost,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   minimumSize: Size(double.infinity, 50),

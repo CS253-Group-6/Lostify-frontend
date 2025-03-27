@@ -11,4 +11,7 @@ class User{
       "password": password,
     };
   }
+  void setIsAdmin(){
+    isAdmin = true;
+  }
 }

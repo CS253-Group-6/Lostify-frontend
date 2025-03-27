@@ -63,20 +63,20 @@ class HomeInterface extends StatelessWidget {
                   CustomButton(
                     text: "Admin Login",
                     onPressed: () {
-                      Navigator.pushNamed(context, '/admin_login');
+                      Navigator.pushNamed(context, '/admin/login');
                     },
                   ),
                   SizedBox(height: 20),
                   CustomButton(
                     text: "User Login",
                     onPressed: () {
-                      Navigator.pushNamed(context, '/user_login');
+                      Navigator.pushNamed(context, '/user/login');
                     },
                   ),
                   SizedBox(height: 30),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/register');
+                      Navigator.pushNamed(context, '/signup');
                     },
                     child: Text(
                       "Not a member? Register now",
@@ -118,7 +118,7 @@ class HomeInterface extends StatelessWidget {
 // Placeholder Pages for Navigation Testing
 class PlaceholderPage extends StatelessWidget {
   final String title;
-  const PlaceholderPage({required this.title});
+  const PlaceholderPage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class CustomButton extends StatelessWidget {
   final double height;
   final double fontSize;
 
-  const CustomButton({
+  const CustomButton({super.key, 
     required this.text,
     required this.onPressed,
     this.width = 350,

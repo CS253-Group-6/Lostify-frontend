@@ -1,14 +1,15 @@
-import 'dart:io';
+<<<<<<< HEAD
 
+=======
+import 'package:cloud_firestore/cloud_firestore.dart';
+>>>>>>> dba698992e15b222c3dc47c9c82f67923dd5b397
 import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/chat_model.dart';
-import 'package:final_project/pages/chat/chat_list.dart';
 import 'package:final_project/pages/chat/chat_screen.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ItemDetails extends StatefulWidget {
   final int itemId, postOwnerId;
@@ -152,7 +153,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               size: 16, color: Colors.grey),
                           const SizedBox(width: 4),
                           Text(
-                            widget.post.address,
+                            widget.post.address1,
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.grey),
                           ),

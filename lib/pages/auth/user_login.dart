@@ -36,9 +36,11 @@ class _LoginState extends State<Login> {
       // }else{
       //   Navigator.of(context).pushReplacementNamed('/');
       // }
-      Navigator.of(context).pushReplacementNamed('/create-profile');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Logged in Successfully!"))
+      );
+      Navigator.of(context).pushReplacementNamed('/home');
     }
-
   }
   @override
   Widget build(BuildContext context) {
