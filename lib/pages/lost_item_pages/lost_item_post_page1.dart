@@ -122,8 +122,8 @@ class _LostAnItem1State extends State<LostAnItem1> {
               ElevatedButton(
                 onPressed: () {
                   Map<String, dynamic> formData = {
-                      'Title': _titleController.text,
-                      'Description': _descriptionController.text,
+                      'Title':titleController.text,
+                      'Description': descriptionController.text,
                       'Image': _image,
                     };
                     Provider.of<FormDataProvider>(context, listen: false)

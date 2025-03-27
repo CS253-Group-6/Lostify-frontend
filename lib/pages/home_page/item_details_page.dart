@@ -13,16 +13,40 @@ import 'package:intl/intl.dart';
 class ItemDetailsPage extends StatelessWidget {
   final Post post;
   final int itemId, postOwnerId;
+  final String? extraProperty;
 
   ItemDetailsPage(
       {super.key,
       required this.itemId,
       required this.postOwnerId,
-      required this.post});
+      required this.post,
+      this.extraProperty});
 
   
   @override
   Widget build(BuildContext context) {
+    void deletePost(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Delete Post"),
+          content: const Text("Are you sure you want to delete this post?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                //onDelete(); // Calls the delete function passed from parent
+                Navigator.pop(context);
+              },
+              child: const Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(post.title), // Display the title of the item
@@ -119,6 +143,19 @@ class ItemDetailsPage extends StatelessWidget {
             ),
             const Spacer(),
             // Action buttons (e.g., Report, Share, Chat)
+            if(extraProperty != null)
+              ElevatedButton(
+                onPressed: () {
+                  deletePost(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  minimumSize: Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: Text("Delete", style: TextStyle(fontSize: 18, color: Colors.white)),
+              ),
+            if(extraProperty == null)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

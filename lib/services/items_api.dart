@@ -22,19 +22,19 @@ class AuthApi{
   }
 
   // FoundItem api call
-  static Future<Map<String,dynamic>> founditem(Item item) async{
-    item.found();
-    final response = await http.post(
-      Uri.parse("$baseUrl/foundAnItem/page3"),
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: jsonEncode(item.toJson())
-    );
-    if (response.statusCode == 200 || response.statusCode == 401) {
-      return jsonDecode(response.body);//check status codes
-    }
-
-    return {"message": "Unexpected error", "statusCode": 500};
-  }
+  // static Future<Map<String,dynamic>> founditem(Item item) async{
+  //   item.found();
+  //   final response = await http.post(
+  //     Uri.parse("$baseUrl/foundAnItem/page3"),
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: jsonEncode(item.toJson())
+  //   );
+  //   if (response.statusCode == 200 || response.statusCode == 401) {
+  //     return jsonDecode(response.body);//check status codes
+  //   }
+  //
+  //   return {"message": "Unexpected error", "statusCode": 500};
+  // }
 }

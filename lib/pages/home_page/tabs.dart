@@ -13,6 +13,7 @@ class LostItemsTab extends StatelessWidget {
           postType: PostType.lost,
           id: 8,
           title: 'Hercules cycle',
+
           regDate: DateTime(2025, 03, 13),
           description: ' ',
           imageProvider: const NetworkImage(
