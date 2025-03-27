@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:final_project/components/lost_items/uploadImage.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../providers/form_data_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'lost_item_post_page2.dart';
 
@@ -126,9 +124,9 @@ class _LostAnItem1State extends State<LostAnItem1> {
                       'Description': _descriptionController.text,
                       'Image': _image,
                     };
-                    Provider.of<FormDataProvider>(context, listen: false)
-                        .updateData(formData);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LostAnItem2()));
+                  Navigator.push(context,MaterialPageRoute(
+                      builder: (context) => LostAnItem2(formdata: formData),
+                    ),);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
