@@ -1,14 +1,7 @@
-import 'dart:io';
 import 'package:final_project/services/chat_api.dart';
+import 'package:flutter/material.dart';
 
 import '../../components/home/item_box.dart';
-import '../chat/chat_list.dart';
-import '../chat/chat_screen.dart';
-import '../../providers/profile_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 class ItemDetailsPage extends StatelessWidget {
   final Post post;
@@ -20,7 +13,6 @@ class ItemDetailsPage extends StatelessWidget {
       required this.postOwnerId,
       required this.post});
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +97,7 @@ class ItemDetailsPage extends StatelessWidget {
               children: [
                 const Icon(Icons.location_pin, size: 16),
                 const SizedBox(width: 8),
-                Text('Location: ${post.address}'),
+                Text('Location: ${post.address1}'),
               ],
             ),
             const SizedBox(height: 16),
@@ -142,7 +134,7 @@ class ItemDetailsPage extends StatelessWidget {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    ChatServices.addChat(context,itemId,postOwnerId);
+                    ChatServices.addChat(context, itemId, postOwnerId);
                   },
                   icon: const Icon(Icons.chat_bubble_outline),
                   label: const Text('Chat'),

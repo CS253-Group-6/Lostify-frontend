@@ -18,7 +18,7 @@ class LostItemsTab extends StatelessWidget {
           imageProvider: const NetworkImage(
             'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
           ),
-          address: 'Hall 5'),
+          address1: 'Hall 5'),
       Post(
         postType: PostType.found,
         id: 9,
@@ -88,7 +88,7 @@ class FoundItemsTab extends StatelessWidget {
           imageProvider: const NetworkImage(
             'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
           ),
-          address: 'Hall 5'),
+          address1: 'Hall 5'),
       Post(
         postType: PostType.found,
         id: 9,
