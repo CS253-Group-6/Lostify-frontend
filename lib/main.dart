@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/models/chat_model.dart';
+import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
 import 'package:final_project/services/notifications_api.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:final_project/components/home/item_box.dart';
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
         // '/profile-dashboard' : (context) => , // profile_dashboard page
 
         // home pages
-        '/home-interface': (context) => HomeInterface(), // home interface
+        '/homeInterface': (context) => HomeInterface(), // home interface
         '/home': (context) => HomePage(), // home page
         '/item-details': (context) => ItemDetails(
               itemId: 0,
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
         // '/about' : (context) => , // about us page
         // '/notifications' : (context) => , //notifications
         '/search': (context) => SearchPage(), //search_page
+        '/report': (context) => ReportedItemPage(), //reported_items_page
       },
     );
   }

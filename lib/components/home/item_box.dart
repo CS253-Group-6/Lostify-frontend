@@ -1,3 +1,4 @@
+import 'package:final_project/components/home/item_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../pages/home_page/item_details_page.dart';
@@ -33,16 +34,16 @@ final class Post {
     required this.title,
     this.status = '',
     required this.regDate,
+    this.reports = 0,
     this.description = '',
     this.imageProvider,
-    this.address1 = '',
-    this.address2 = '',
+    this.address = '',
   });
 
   /// An instance of [PostType] indicating whether the post is
   /// for a lost item or for a found item.
   final PostType postType;
-
+  final int reports;
   /// The unique identifier assigned to the post in the database.
   final int id;
 
@@ -61,11 +62,8 @@ final class Post {
   /// An optional image of the article concerned.
   final ImageProvider? imageProvider;
 
-  /// Cooarse Address associated with the post.
-  final String address1;
-
-  /// Detailed Address associated with the post.
-  final String address2;
+  /// Address associated with the post.
+  final String address;
 }
 
 /// Style constant for transparency of [ItemBox]
@@ -80,10 +78,12 @@ const double kItemBoxBorderRadius = 20.0;
 ///
 /// Inherits from [StatelessWidget].
 class ItemBox extends StatelessWidget {
-  const ItemBox({super.key, required this.post});
+  const ItemBox({super.key, required this.post, this.extraProperty });
 
   final Post post;
+  final String? extraProperty;
 
+  int get reports => post.reports;
   PostType get postType => post.postType;
   int get id => post.id;
   String get title => post.title;
@@ -92,19 +92,40 @@ class ItemBox extends StatelessWidget {
   DateTime? get foundDate => null; // Placeholder
   ImageProvider? get itemImage => post.imageProvider;
 
+
   @override
   Widget build(BuildContext context) {
     // Determine color based on status text
+
     final Color statusColor =
         postType == PostType.found ? Colors.green : Colors.red;
 
     // function to add chat for the post in user's chat list
     void handleItemDetails() {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  ItemDetailsPage(itemId: id, postOwnerId: 1, post: post)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetailsPage(itemId: id, postOwnerId: 1,post:post,extraProperty: extraProperty,)));
+    }
+
+    void deletePost(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Delete Post"),
+          content: const Text("Are you sure you want to delete this post?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                //onDelete(); // Calls the delete function passed from parent
+                Navigator.pop(context);
+              },
+              child: const Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        ),
+      );
     }
 
     return Container(
@@ -159,6 +180,15 @@ class ItemBox extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
+                if (extraProperty != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      'Reports: $reports',
+                      style: const TextStyle(fontWeight: FontWeight.bold,fontSize :16
+                          ,color: Colors.blue),
+                    ),
+                  ),
                 const SizedBox(height: 4),
                 // Status text with dynamic color
                 Text(
@@ -166,11 +196,16 @@ class ItemBox extends StatelessWidget {
                   style: TextStyle(color: statusColor),
                 ),
                 const SizedBox(height: 4),
-                Text('Registered Date: ${dateAsString(regDate)}'),
-                const SizedBox(height: 4),
-                Text('Found Date: ${dateAsString(foundDate)}'),
-                const SizedBox(height: 8),
+                if(extraProperty == null)
+                  Text('Registered Date: ${dateAsString(regDate)}'),
+                  const SizedBox(height: 4),
+                if(extraProperty == null)
+                  Text('Found Date: ${dateAsString(foundDate)}'),
+                  const SizedBox(height: 8),
+
                 // "View Post" button navigates to ItemDetailsPage
+    Row(
+    children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -179,6 +214,13 @@ class ItemBox extends StatelessWidget {
                   onPressed: handleItemDetails,
                   child: const Text('View'),
                 ),
+                // <-- Added delete callback
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.redAccent),
+                  tooltip: "Delete Post",
+                    onPressed: () => deletePost(context)
+                ),
+                ],),
               ],
             ),
           ),

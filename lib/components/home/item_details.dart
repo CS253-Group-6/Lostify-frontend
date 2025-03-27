@@ -149,7 +149,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               size: 16, color: Colors.grey),
                           const SizedBox(width: 4),
                           Text(
-                            widget.post.address1,
+                            widget.post.address,
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.grey),
                           ),
