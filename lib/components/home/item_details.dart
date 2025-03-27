@@ -1,8 +1,6 @@
-import 'dart:io';
 
 import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/chat_model.dart';
-import 'package:final_project/pages/chat/chat_list.dart';
 import 'package:final_project/pages/chat/chat_screen.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:flutter/material.dart';

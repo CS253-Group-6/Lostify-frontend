@@ -1,4 +1,6 @@
 import "dart:io";
+import "package:final_project/models/profile_model.dart";
+
 import "/providers/profile_provider.dart";
 
 import "/components/auth/custom_auth_button.dart";
@@ -28,14 +30,22 @@ class _ProfileFormState extends State<ProfileForm> {
   void handleSubmit() async {
     if (_formKey.currentState!.validate()) {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
-      var profileData = {
-        "name": _nameController.text,
-        "email": userProvider.email,
-        "phone_number": _phoneController.text,
-        "address": _addressController.text,
-        "designation": _designationController.text,
-        "roll_number": _rollNoController.text
-      };
+      // var profileData = {
+      //   "name": _nameController.text,
+      //   "email": userProvider.email,
+      //   "phone_number": _phoneController.text,
+      //   "address": _addressController.text,
+      //   "designation": _designationController.text,
+      //   "roll_number": _rollNoController.text
+      // };
+      ProfileModel profileData = ProfileModel(
+        name: _nameController.text, 
+        email: userProvider.email, 
+        address: _addressController.text,
+        designation: _designationController.text,
+        rollNumber: _rollNoController.text,
+        phoneNumber: _phoneController.text
+        );
       context.read<ProfileProvider>().setProfile(
           name: _nameController.text,
           email: userProvider.email,
@@ -61,9 +71,6 @@ class _ProfileFormState extends State<ProfileForm> {
     } catch (e) {
       print("Error picking image: $e");
     }
-    // } else {
-    //   print("Permission denied");
-    // }
   }
 
   @override

@@ -1,14 +1,7 @@
-import 'dart:io';
 import 'package:final_project/services/chat_api.dart';
-
 import '../../components/home/item_box.dart';
-import '../chat/chat_list.dart';
-import '../chat/chat_screen.dart';
-import '../../providers/profile_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
+
 
 class ItemDetailsPage extends StatelessWidget {
   final Post post;

@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/home',
+      initialRoute: '/home-interface',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
         // '/profile-dashboard' : (context) => , // profile_dashboard page
 
         // home pages
-        '/homeInterface': (context) => HomeInterface(), // home interface
+        '/home-interface': (context) => HomeInterface(), // home interface
         '/home': (context) => HomePage(), // home page
         '/item-details': (context) => ItemDetails(
               itemId: 0,

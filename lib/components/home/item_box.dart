@@ -1,4 +1,3 @@
-import 'package:final_project/components/home/item_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../pages/home_page/item_details_page.dart';

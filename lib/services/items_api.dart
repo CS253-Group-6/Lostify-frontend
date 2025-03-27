@@ -23,7 +23,7 @@ class AuthApi{
 
   // FoundItem api call
   static Future<Map<String,dynamic>> founditem(Item item) async{
-    item.found();
+    // item.found();
     final response = await http.post(
       Uri.parse("$baseUrl/foundAnItem/page3"),
       headers: {
