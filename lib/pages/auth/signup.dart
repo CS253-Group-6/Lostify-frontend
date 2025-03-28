@@ -25,7 +25,7 @@ class _SignUpState extends State<SignUp> {
 
   void handleSubmit() async {
     if (_formKey.currentState!.validate()) {
-      context.read<UserProvider>().setEmail(newEmail: _emailController.text);
+      context.read<UserProvider>().setUserName(newUsername: _usernameController.text);
 
       User user = User(
           username: _usernameController.text,

@@ -13,7 +13,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final _emailController = TextEditingController();
 
   void handleResetPassword(){
-
+    Navigator.pushReplacementNamed(context, '/user/login');
   }
   @override
   Widget build(BuildContext context) {

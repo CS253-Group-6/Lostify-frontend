@@ -32,7 +32,6 @@ class _ProfileFormState extends State<ProfileForm> {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
       // var profileData = {
       //   "name": _nameController.text,
-      //   "email": userProvider.email,
       //   "phone_number": _phoneController.text,
       //   "address": _addressController.text,
       //   "designation": _designationController.text,
@@ -40,7 +39,6 @@ class _ProfileFormState extends State<ProfileForm> {
       // };
       ProfileModel profileData = ProfileModel(
         name: _nameController.text, 
-        email: userProvider.email, 
         address: _addressController.text,
         designation: _designationController.text,
         rollNumber: _rollNoController.text,
@@ -48,7 +46,6 @@ class _ProfileFormState extends State<ProfileForm> {
         );
       context.read<ProfileProvider>().setProfile(
           name: _nameController.text,
-          email: userProvider.email,
           id: 1);
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => ConfirmationCode()));

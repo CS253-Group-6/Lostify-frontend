@@ -14,16 +14,16 @@ class AdminLogin extends StatefulWidget {
 }
 
 class _AdminLoginState extends State<AdminLogin> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   final _adminKey = GlobalKey<FormState>();
 
   void handleSubmit() async{
     if(_adminKey.currentState!.validate()){
-      context.read<UserProvider>().setEmail(newEmail: _emailController.text);
+      context.read<UserProvider>().setUserName(newUsername: _usernameController.text);
       var adminLoginDetails = {
-        "email": _emailController.text,
+        "username": _usernameController.text,
         "password": _passwordController.text
       };
       // Map<String,dynamic> response = await AuthApi.login(loginDetails);
@@ -85,7 +85,7 @@ class _AdminLoginState extends State<AdminLogin> {
                             key: _adminKey,
                             child: Column(
                               children: [
-                                Input(textController: _emailController,hintText: "Enter email",showEyeIcon: false,),
+                                Input(textController: _usernameController,hintText: "Enter your IITK username",showEyeIcon: false,),
                                 SizedBox(height: 16,),
                             
                                 Input(textController: _passwordController,hintText: "Enter Password",showEyeIcon: true,),

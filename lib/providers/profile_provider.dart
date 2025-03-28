@@ -3,7 +3,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class ProfileProvider extends ChangeNotifier {
   String name;
-  String email, phoneNumber, address, designation, rollNumber;
+  String phoneNumber, address, designation, rollNumber;
   int id;
   String? _playerId;
   
@@ -25,7 +25,6 @@ class ProfileProvider extends ChangeNotifier {
 
   ProfileProvider(
       {this.name = '',
-      this.email = '',
       this.address = '',
       this.designation = '',
       this.phoneNumber = '',
@@ -39,13 +38,11 @@ class ProfileProvider extends ChangeNotifier {
 
   void setProfile(
       {required String name,
-      required String email,
       String address = '',
       String designation = '',
       String phoneNumber = '',
       int id = 0}) async {
     this.name = name;
-    this.email = email;
     this.address = address;
     _fetchAndSavePlayerId();
     notifyListeners();

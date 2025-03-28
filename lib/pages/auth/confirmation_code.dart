@@ -28,7 +28,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
   }
 
   void handleSubmit(){
-    Navigator.of(context).pushNamed('/home');
+    Navigator.of(context).pushReplacementNamed('/home');
   }
 
   @override

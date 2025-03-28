@@ -16,7 +16,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _loginKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   void handleReset(){
@@ -24,10 +24,10 @@ class _LoginState extends State<Login> {
   }
   void handleSubmit() async{
     if(_loginKey.currentState!.validate()){
-      context.read<UserProvider>().setEmail(newEmail: _emailController.text);
+      context.read<UserProvider>().setUserName(newUsername: _usernameController.text);
       
       var loginDetails = {
-        "email": _emailController.text,
+        "username": _usernameController.text,
         "password": _passwordController.text
       };
       // Map<String,dynamic> response = await AuthApi.login(loginDetails);
@@ -93,7 +93,7 @@ class _LoginState extends State<Login> {
                             key: _loginKey,
                             child: Column(
                               children: [
-                                Input(textController: _emailController,hintText: "Enter email",showEyeIcon: false,),
+                                Input(textController: _usernameController,hintText: "Enter your IITK username",showEyeIcon: false,),
                                 SizedBox(height: 16,),
 
                                 Input(textController: _passwordController,hintText: "Enter Password",showEyeIcon: true,),

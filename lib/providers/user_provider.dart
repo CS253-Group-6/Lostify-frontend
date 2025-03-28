@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier{
-  String email;
+  String username;
   int id;
-  UserProvider({this.email = '',this.id = 0});
+  UserProvider({this.username = '',this.id = 0});
 
-  void setEmail({required String newEmail}) async{
-    email = newEmail;
+  void setUserName({required String newUsername}) async{
+    username = newUsername;
     notifyListeners();
   }
   void setId({required int id}) async{
