@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/signup',
+      initialRoute: '/home',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes
@@ -92,7 +92,7 @@ class MyApp extends StatelessWidget {
 
         // // lost item routes
         '/lost/post/1': (context) => LostAnItem1(), //lost postpage 1
-        '/lost/post/2': (context) => LostAnItem2(), //lost postpage 2
+        // '/lost/post/2': (context) => LostAnItem2(), //lost postpage 2
         '/lost-items': (context) => LostItem(), // lost_page
 
         // found items routes

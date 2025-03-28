@@ -2,7 +2,7 @@ import 'dart:convert';
 import '/models/item_model.dart';
 import 'package:http/http.dart' as http;
 
-class AuthApi{
+class ItemsApi{
   static const String baseUrl = "http://127.0.0.1:5000";
 
   // LostItem api call

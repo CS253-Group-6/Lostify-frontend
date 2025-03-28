@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/chat_model.dart';
+import 'package:final_project/pages/chat/chat_page.dart';
 import 'package:final_project/pages/chat/chat_screen.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:flutter/material.dart';

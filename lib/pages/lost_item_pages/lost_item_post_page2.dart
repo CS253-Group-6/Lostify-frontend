@@ -1,3 +1,5 @@
+import 'package:final_project/models/item_model.dart';
+import 'package:final_project/services/items_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/form_data_provider.dart';
@@ -54,19 +56,19 @@ class _LostAnItem2State extends State<LostAnItem2> {
     }
   }
 
-  void handleLostItemPost(Item item){
+  void handleLostItemPost(Item item)async{
     try{
       Map<String,dynamic> response = await ItemsApi.lostitem(item);
       if(response['statusCode'] == 200){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted successfully!!")));
         Navigator.of(context).pushNamed('/home');
       }else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted successfully!!")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted failed!!")));
         Navigator.pushNamed(context, '/home');
         //Navigator.of(context).pushReplacementNamed('/home');
       }
-    }catch(Exception e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted successfully!!")));
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted failed!!")));
       Navigator.pushNamed(context, '/home');
     }
     
@@ -132,6 +134,12 @@ class _LostAnItem2State extends State<LostAnItem2> {
           const SizedBox(height: 10),
           DropdownButtonFormField<String>(
             value: _location,
+            validator: (value){
+              if (value == null || value.isEmpty) {
+                return 'Please select a location';
+              }
+              return null;
+            },
             items: _dropdownItems.map((String item) {
               return DropdownMenuItem<String>(
                 value: item,
@@ -186,6 +194,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
             ),
             readOnly: true,
             onTap: () => _selectDate(context),
+            
           ),
           const SizedBox(height: 30),
           Padding(
@@ -229,9 +238,9 @@ class _LostAnItem2State extends State<LostAnItem2> {
               Item item = Item(
                 title: formData['title'],
                 description: formData['description'],
-                location: _location,
-                date: _selectedDate,
-                time: _selectedTime,
+                location: _location!,
+                date: _selectedDate != null ? DateFormat('yyyy-MM-dd').format(_selectedDate!) : '',
+                time: _selectedTime != null ? _selectedTime!.format(context) : '',
                 image: formData['image'],
                 isFound: false,
               );

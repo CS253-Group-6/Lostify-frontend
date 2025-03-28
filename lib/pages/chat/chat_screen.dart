@@ -19,6 +19,7 @@ class ChatScreen extends StatefulWidget {
 
 class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   // for sending images in chat
   final ImagePicker _picker = ImagePicker(); // pick an image
@@ -52,6 +53,18 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         _isUploading = false;
       });
     }
+  }
+  /// Scrolls the ListView to the bottom.
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   @override
@@ -128,19 +141,24 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                               Text(message['text']!,
                                   style: TextStyle(fontSize: 16))
                             else if (message['type'] == 'image')
-                              Image.network(
-                                message['text']!,
-                                width: 200,
-                                height: 200,
-                                fit: BoxFit.cover,
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return CircularProgressIndicator();
+                              GestureDetector(
+                                onTap: () {
+                                  _showSentImagePreview(message['text']);
                                 },
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Text('Error loading image');
-                                },
+                                child: Image.network(
+                                  message['text']!,
+                                  width: 200,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return CircularProgressIndicator();
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Text('Error loading image');
+                                  },
+                                ),
                               ),
                             SizedBox(height: 5),
                             Text(message['time']!,
@@ -179,8 +197,11 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 IconButton(
                   onPressed: _isUploading
                       ? null
-                      : () => ChatServices.sendMessage(
+                      : () => {
+                        ChatServices.sendMessage(
                           context, _messageController, widget.chatDetails),
+                          _scrollToBottom()
+                          },
                   icon: Icon(Icons.send),
                 ),
                 IconButton(
@@ -194,6 +215,25 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           ),
         ],
       ),
+    );
+  }
+  /// Shows a preview dialog for a sent image.
+  Future<void> _showSentImagePreview(String imageFile) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          insetPadding: const EdgeInsets.all(20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.network(imageFile, fit: BoxFit.cover),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:final_project/services/chat_api.dart';
 import '../../components/home/item_box.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ class ItemDetailsPage extends StatelessWidget {
   final int itemId, postOwnerId;
   final String? extraProperty;
 
-  ItemDetailsPage(
+  const ItemDetailsPage(
       {super.key,
       required this.itemId,
       required this.postOwnerId,

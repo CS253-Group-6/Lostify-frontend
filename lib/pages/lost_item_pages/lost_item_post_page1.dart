@@ -128,7 +128,7 @@ class _LostAnItem1State extends State<LostAnItem1> {
                     };
                     Provider.of<FormDataProvider>(context, listen: false)
                         .updateData(formData);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LostAnItem2()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LostAnItem2(formdata: formData)));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,

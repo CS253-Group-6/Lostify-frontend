@@ -1,8 +1,10 @@
 import 'dart:ui';
+import 'package:final_project/models/chat_model.dart';
+import 'package:final_project/pages/chat/chat_page.dart';
+import 'package:final_project/pages/home_page/item_details_page.dart';
 import 'package:flutter/material.dart';
 import '/components/lost_items/lost_item_box.dart';
 import '/models/post.dart';
-import '/pages/lost_found_post_list/chat_page.dart';
 
 class LostItem extends StatefulWidget {
   const LostItem({Key? key}) : super(key: key);
@@ -67,8 +69,8 @@ class _LostItemState extends State<LostItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Lost Items', style: TextStyle(color: Colors
-            .white)),
+        title: const Text('Your Lost Items',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,
@@ -119,10 +121,7 @@ class _LostItemState extends State<LostItem> {
             ),
             // Details card
             Positioned(
-              top: MediaQuery
-                  .of(context)
-                  .padding
-                  .top + kToolbarHeight + 10,
+              top: MediaQuery.of(context).padding.top + kToolbarHeight + 10,
               left: 16,
               right: 16,
               bottom: 16,
@@ -143,7 +142,8 @@ class _LostItemState extends State<LostItem> {
 
   Widget _buildItemDetails(Post post) {
     // Hard-coded example info
-    const String itemDescription = "This is a detailed description of the item. Condition, features, any identifying marks, etc.";
+    const String itemDescription =
+        "This is a detailed description of the item. Condition, features, any identifying marks, etc.";
     const String itemTime = "07:55 PM";
     const String itemDate = "05 Sept 2025";
     const String itemPlace = "College ground, New SAC, IIT Kanpur";
@@ -187,15 +187,15 @@ class _LostItemState extends State<LostItem> {
               borderRadius: BorderRadius.circular(12),
               child: post.imageUrl!.startsWith('http')
                   ? Image.network(
-                post.imageUrl!,
-                height: 120,
-                fit: BoxFit.contain,
-              )
+                      post.imageUrl!,
+                      height: 120,
+                      fit: BoxFit.contain,
+                    )
                   : Image.asset(
-                post.imageUrl!,
-                height: 120,
-                fit: BoxFit.contain,
-              ),
+                      post.imageUrl!,
+                      height: 120,
+                      fit: BoxFit.contain,
+                    ),
             )
           else
             Container(

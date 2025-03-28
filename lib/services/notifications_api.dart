@@ -1,8 +1,5 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:final_project/main.dart';
 import 'package:http/http.dart' as http;
 
 class NotificationsApi {

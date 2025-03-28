@@ -24,7 +24,9 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
           title: const Text('Messages'),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
         body: StreamBuilder(
