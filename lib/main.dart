@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/models/chat_model.dart';
+import 'package:final_project/models/user_model.dart';
 import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
 import 'package:final_project/services/notifications_api.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -30,7 +31,6 @@ import 'pages/profile_pages/profileform_page.dart';
 import 'pages/search_page.dart';
 import 'providers/user_provider.dart';
 import 'pages/home_page/home_interface.dart';
-
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -68,7 +68,12 @@ class MyApp extends StatelessWidget {
         '/reset-password': (context) => ResetPasswordPage(),
 
         // profile routes
-        '/create-profile': (context) => ProfileForm(),
+        '/create-profile': (context) => ProfileForm(
+              user: User(
+                  username: "vinay23",
+                  email: "vinay23@iitk.ac.in",
+                  password: "password"),
+            ),
         // '/profile-dashboard' : (context) => , // profile_dashboard page
 
         // home pages
@@ -77,7 +82,12 @@ class MyApp extends StatelessWidget {
         '/item-details': (context) => ItemDetails(
               itemId: 0,
               postOwnerId: 0,
-              post: Post(postType: PostType.lost, id: 0, title: 'title', status: 'status', regDate: DateTime.now()),
+              post: Post(
+                  postType: PostType.lost,
+                  id: 0,
+                  title: 'title',
+                  status: 'status',
+                  regDate: DateTime.now()),
             ),
 
         // // lost item routes
@@ -94,7 +104,8 @@ class MyApp extends StatelessWidget {
         // chat pages
         '/chat-list': (context) => ChatList(),
         '/chat-screen': (context) => ChatScreen(
-              chatDetails: ChatDetails(senderId: 1, recieverId: 1, itemId: 1, chatRoomId: '8_9'),
+              chatDetails: ChatDetails(
+                  senderId: 1, recieverId: 1, itemId: 1, chatRoomId: '8_9'),
             ),
         // others
         // '/about' : (context) => , // about us page

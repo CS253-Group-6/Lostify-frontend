@@ -8,4 +8,14 @@ class ProfileModel {
       this.designation = '',
       this.phoneNumber = '',
       this.rollNumber = ''});
+
+  Map<String,dynamic> toJson(){
+    return {
+      'name': name,
+      'address': address,
+      'designation': designation,
+      'phoneNumber': phoneNumber,
+      'rollNumber': rollNumber
+    };
+  }
 }

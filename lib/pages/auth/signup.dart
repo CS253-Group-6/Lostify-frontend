@@ -1,3 +1,5 @@
+import "package:final_project/pages/profile_pages/profileform_page.dart";
+
 import "/components/auth/custom_auth_button.dart";
 import "/models/user_model.dart";
 import "/providers/user_provider.dart";
@@ -46,7 +48,7 @@ class _SignUpState extends State<SignUp> {
       //       SnackBar(content: Text("Error signing up ${response['message']}")));
       //   Navigator.of(context).pushReplacementNamed('/');
       // }
-      Navigator.of(context).pushNamed('/create-profile');
+      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileForm(user:user)));
     }
   }
 

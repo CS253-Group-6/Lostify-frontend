@@ -1,5 +1,7 @@
 import "dart:io";
 import "package:final_project/models/profile_model.dart";
+import "package:final_project/models/user_model.dart";
+import "package:final_project/services/auth_api.dart";
 
 import "/providers/profile_provider.dart";
 
@@ -12,7 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import "package:provider/provider.dart";
 
 class ProfileForm extends StatefulWidget {
-  const ProfileForm({super.key});
+  final User user;
+  const ProfileForm({super.key,required this.user});
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -30,13 +33,6 @@ class _ProfileFormState extends State<ProfileForm> {
   void handleSubmit() async {
     if (_formKey.currentState!.validate()) {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
-      // var profileData = {
-      //   "name": _nameController.text,
-      //   "phone_number": _phoneController.text,
-      //   "address": _addressController.text,
-      //   "designation": _designationController.text,
-      //   "roll_number": _rollNoController.text
-      // };
       ProfileModel profileData = ProfileModel(
         name: _nameController.text, 
         address: _addressController.text,
@@ -44,6 +40,18 @@ class _ProfileFormState extends State<ProfileForm> {
         rollNumber: _rollNoController.text,
         phoneNumber: _phoneController.text
         );
+
+      var signUpDetails = {
+        "username": widget.user.username,
+        "password": widget.user.password,
+        "profile": profileData.toJson(),
+      };
+      var response = await AuthApi.signUp(signUpDetails);
+      if (response['statusCode'] == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Signup successful!!")));
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['message'])));
+      }
       context.read<ProfileProvider>().setProfile(
           name: _nameController.text,
           id: 1);
