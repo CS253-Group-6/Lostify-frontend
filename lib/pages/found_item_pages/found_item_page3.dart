@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:final_project/components/location/location.dart';
 
 class FoundItemPage3 extends StatefulWidget {
   @override
@@ -12,8 +13,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
 
-  // Sample dropdown options
-  List<String> locations = ["Library", "Cafeteria", "Park", "Classroom", "Gym"];
+
 
   // Opens the DatePicker
   Future<void> _pickDate(BuildContext context) async {
@@ -81,7 +81,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
             fit: BoxFit.cover,
           ),
         ),
-
+          child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
           child: Column(
@@ -101,31 +101,12 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                 ),
               ),
               const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: selectedFoundLocation,
-                hint: Text( // Placeholder text
-                  "Location",
-                  style: TextStyle(fontSize: 15,color: Colors.grey),
-                ),
-                items: locations.map((String location) {
-                  return DropdownMenuItem<String>(
-                    value: location,
-                    child: Text(location),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
+              LocationDropdown(
+                onLocationSelected: (String? newValue) {
                   setState(() {
                     selectedFoundLocation = newValue;
                   });
                 },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
               ),
               const SizedBox(height: 30),
 
@@ -215,31 +196,12 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                 ),
               ),
               const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: selectedPresentLocation,
-                hint: Text( // Placeholder text
-                  "Present Location",
-                  style: TextStyle(fontSize: 15,color: Colors.grey),
-                ),
-                items: locations.map((String location) {
-                  return DropdownMenuItem<String>(
-                    value: location,
-                    child: Text(location),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
+              LocationDropdown(
+                onLocationSelected: (String? newValue) {
                   setState(() {
                     selectedPresentLocation = newValue;
                   });
                 },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
               ),
               const SizedBox(height: 240),
 
@@ -260,7 +222,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
               ),
             ],
           ),
-        ),
+        ),),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/form_data_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:final_project/components/location/location.dart';
 
 class LostAnItem2 extends StatefulWidget {
   final Map<String,dynamic> formdata;
@@ -19,10 +20,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   String? _location;
-  final List<String> _dropdownItems = [
-    'Hall 1', 'Hall 2', 'Hall 3', 'Hall 4', 'Hall 5', 'Hall 6', 'Hall 7', 'Hall 8', 'Hall 9', 'Hall 10',
-    'Hall 11', 'Hall 12', 'Hall 13', 'Hall 14', 'RM', 'LHC', 'CC', 'Library', 'IME'
-  ];
+
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
@@ -101,6 +99,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
             fit: BoxFit.cover,
           ),
         ),
+        child: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Column(children: [
           SizedBox(height: 10),
@@ -132,35 +131,12 @@ class _LostAnItem2State extends State<LostAnItem2> {
             ),
           ),
           const SizedBox(height: 10),
-          DropdownButtonFormField<String>(
-            value: _location,
-            validator: (value){
-              if (value == null || value.isEmpty) {
-                return 'Please select a location';
-              }
-              return null;
-            },
-            items: _dropdownItems.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item, style: TextStyle(color: Colors.black)),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
+          LocationDropdown(
+            onLocationSelected: (String? newValue) {
               setState(() {
                 _location = newValue;
               });
             },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'Location where you lost it',
-              hintStyle: TextStyle(color: Colors.grey),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(15),
-              ),
-            ),
           ),
           SizedBox(height: 20),
           Padding(
@@ -260,7 +236,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
           ),
         ]
         ),
-      ),
+      ),),
     );
   }
 }

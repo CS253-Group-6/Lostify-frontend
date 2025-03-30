@@ -21,9 +21,9 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueAccent,
-          title: const Text('Messages'),
+          title: const Text('Messages',style: TextStyle(color: Colors.white)),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back,color: Colors.white),
             onPressed: () {
               Navigator.pop(context);
             },

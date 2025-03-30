@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../components/location/location.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _SearchPageState extends State<SearchPage> {
   DateTime? selectedDate2;
 
   // Sample dropdown options
-  List<String> locations = ["Library", "Cafeteria", "Park", "Classroom", "Gym"];
+  //List<String> locations = ["Library", "Cafeteria", "Park", "Classroom", "Gym"];
 
   Future<void> _pickStartDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -72,6 +73,7 @@ class _SearchPageState extends State<SearchPage> {
             fit: BoxFit.cover,
           ),
         ),
+    child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
           child: Column(
@@ -87,32 +89,15 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: selectedSearchLocation,
-                hint: Text(
-                  "Select expected lost places",
-                  style: TextStyle(fontSize: 15, color: Colors.grey),
-                ),
-                items: locations.map((String location) {
-                  return DropdownMenuItem<String>(
-                    value: location,
-                    child: Text(location),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
+              LocationDropdown(
+                onLocationSelected: (String? newValue) {
                   setState(() {
                     selectedSearchLocation = newValue;
                   });
                 },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
               ),
+
+
               const SizedBox(height: 30),
 
               // Date and time of loss
@@ -222,7 +207,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ],
           ),
-        ),
+        ),),
       ),
     );
   }

@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _tabs = const [
     Tab(
       text: 'Lost',
+
     ),
     Tab(text: 'Found')
   ];
@@ -61,16 +62,26 @@ class _HomePageState extends State<HomePage> {
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].
     final w = AppBar(
-      title: const Text('Lostify'),
+      title: const Text('Lostify',style: TextStyle(color: Colors.white)),
       bottom: TabBar(tabs: _tabs),
       backgroundColor: Colors.blue,
       elevation: 0,
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: const Icon(Icons.menu), // Adds the hamburger menu icon
+          color: Colors.white,
+          onPressed: () {
+            Scaffold.of(context).openDrawer(); // Opens the drawer
+          },
+        ),
+      ),
       actions: [
         IconButton(
           icon: const Icon(
             CupertinoIcons.search,
             size: 30,
           ),
+          color: Colors.white,
           onPressed: () {
             // Navigate to the search page when the search icon is tapped
             Navigator.push(

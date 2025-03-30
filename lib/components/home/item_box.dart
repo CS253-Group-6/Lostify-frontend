@@ -215,6 +215,7 @@ class ItemBox extends StatelessWidget {
                   child: const Text('View'),
                 ),
                 // <-- Added delete callback
+      if(extraProperty!= null)
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.redAccent),
                   tooltip: "Delete Post",

@@ -86,7 +86,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
             ),
             SizedBox(width: 10),
-            Text("${context.watch<ProfileProvider>().name}"),
+            Text("${context.watch<ProfileProvider>().name}",style: TextStyle(color: Colors.white)),
             Spacer(),
             ElevatedButton(
               onPressed: () async =>

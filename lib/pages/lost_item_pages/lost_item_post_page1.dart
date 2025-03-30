@@ -54,6 +54,7 @@ class _LostAnItem1State extends State<LostAnItem1> {
             fit: BoxFit.cover, // Ensures the image covers the screen
           ),
         ),
+        child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
           child: Column(
@@ -139,7 +140,7 @@ class _LostAnItem1State extends State<LostAnItem1> {
               ),
             ],
           ),
-        ),
+        ),),
       ),);
   }
 }
