@@ -1,7 +1,10 @@
 // lib/components/lost_items/lost_item_box.dart
 
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 
+=======
+>>>>>>> ea9182a61c41feadae7d9e7b3a915b331a529870
 import '../../models/post.dart';
 
 const double kItemBoxOpacity = 0.7;
