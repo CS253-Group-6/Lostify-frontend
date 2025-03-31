@@ -39,24 +39,33 @@ class _ProfileFormState extends State<ProfileForm> {
         designation: _designationController.text,
         rollNumber: _rollNoController.text,
         phoneNumber: _phoneController.text
-        );
+      );
 
       var signUpDetails = {
         "username": widget.user.username,
         "password": widget.user.password,
         "profile": profileData.toJson(),
       };
+
       var response = await AuthApi.signUp(signUpDetails);
+
       if (response['statusCode'] == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Signup successful!!")));
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['message'])));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Signup successful!!")
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(response['message'])
+        ));
       }
+
       context.read<ProfileProvider>().setProfile(
-          name: _nameController.text,
-          id: 1);
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => ConfirmationCode()));
+        name: _nameController.text,
+        id: 1,
+      );
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const ConfirmationCode(),
+      ));
     }
   }
 
@@ -95,116 +104,97 @@ class _ProfileFormState extends State<ProfileForm> {
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
-                  Column(
+                  const Column(
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Create Profile",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 24,
-                  ),
+                  const SizedBox(height: 24),
                   Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          ProfileFormInput(
-                            label: "Name",
-                            hintText: "Enter Name",
-                            controller: _nameController,
-                            validate: true,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          ProfileFormInput(
-                            label: "Phone Number",
-                            hintText: "Enter Contact number",
-                            controller: _phoneController,
-                            validate: true,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          ProfileFormInput(
-                            label: "Campus address",
-                            hintText: "Enter campus address",
-                            controller: _addressController,
-                            validate: true,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          ProfileFormInput(
-                            label: "Designation",
-                            hintText: "Enter Designation",
-                            controller: _designationController,
-                            validate: false,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          ProfileFormInput(
-                            label: "PF/Roll No.",
-                            hintText: "Enter PF/Roll number",
-                            controller: _rollNoController,
-                            validate: false,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Upload Profile pic",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        ProfileFormInput(
+                          label: "Name",
+                          hintText: "Enter Name",
+                          controller: _nameController,
+                          validate: true,
+                        ),
+                        const SizedBox(height: 8),
+                        ProfileFormInput(
+                          label: "Phone Number",
+                          hintText: "Enter Contact number",
+                          controller: _phoneController,
+                          validate: true,
+                        ),
+                        const SizedBox(height: 8),
+                        ProfileFormInput(
+                          label: "Campus address",
+                          hintText: "Enter campus address",
+                          controller: _addressController,
+                          validate: true,
+                        ),
+                        const SizedBox(height: 8),
+                        ProfileFormInput(
+                          label: "Designation",
+                          hintText: "Enter Designation",
+                          controller: _designationController,
+                          validate: false,
+                        ),
+                        const SizedBox(height: 8),
+                        ProfileFormInput(
+                          label: "PF/Roll No.",
+                          hintText: "Enter PF/Roll number",
+                          controller: _rollNoController,
+                          validate: false,
+                        ),
+                        const SizedBox(height: 8),
+                        Column(
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Upload Profile pic",
+                                style: TextStyle(fontWeight: FontWeight.w500),
                               ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _image != null
-                                        ? Text(
-                                            "Selected File: ${_image!.path.split('/').last}")
-                                        : Text("No file selected"),
-                                    SizedBox(height: 20),
-                                    ElevatedButton(
-                                      onPressed: _pickImage,
-                                      child: Text("Choose File"),
-                                      style: ElevatedButton.styleFrom(
-                                          foregroundColor: Colors.white,
-                                          backgroundColor: Color(0xFF32ADE6),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(4.0),
-                                          )),
+                            ),
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _image != null
+                                      ? Text("Selected File: ${_image!.path.split('/').last}")
+                                      : const Text("No file selected"),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: _pickImage,
+                                    style: ElevatedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: const Color(0xFF32ADE6),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4.0),
+                                      ),
                                     ),
-                                  ],
-                                ),
+                                    child: const Text("Choose File"),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Custombutton(text: "Get OTP", onClick: handleSubmit)
-                        ],
-                      )),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 50),
+                        Custombutton(text: "Get OTP", onClick: handleSubmit),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
