@@ -12,19 +12,17 @@ class HomeInterface extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                "assets/images/Login_bg.png"), // Check pubspec.yaml for proper asset declaration
+            image: AssetImage("assets/images/Login_bg.png"), // Check pubspec.yaml for proper asset declaration
             fit: BoxFit.fill,
           ),
         ),
         child: Stack(
-          children: [
+          children: <Positioned>[
             // Positioned App Name and Tagline (above the buttons)
             Positioned(
-              top: screenHeight *
-                  0.42, // Adjust this value to move the texts higher or lower
+              top: screenHeight * 0.42, // Adjust this value to move the texts higher or lower
               left: 0,
               right: 0,
               child: Column(
@@ -38,9 +36,9 @@ class HomeInterface extends StatelessWidget {
                       color: Colors.blue.shade500,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Discover Connect Reclaim",
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Discover • Connect • Reclaim",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -54,8 +52,7 @@ class HomeInterface extends StatelessWidget {
 
             // Lowered Buttons
             Positioned(
-              top: screenHeight *
-                  0.65, // Responsive vertical positioning for buttons
+              top: screenHeight * 0.65, // Responsive vertical positioning for buttons
               left: 0,
               right: 0,
               child: Column(
@@ -66,19 +63,19 @@ class HomeInterface extends StatelessWidget {
                       Navigator.pushNamed(context, '/admin/login');
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomButton(
                     text: "User Login",
                     onPressed: () {
                       Navigator.pushNamed(context, '/user/login');
                     },
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/signup');
                     },
-                    child: Text(
+                    child: const Text(
                       "Not a member? Register now",
                       style: TextStyle(
                         fontSize: 18,
@@ -127,7 +124,7 @@ class PlaceholderPage extends StatelessWidget {
       body: Center(
         child: Text(
           "This is the $title page",
-          style: TextStyle(fontSize: 24),
+          style: const TextStyle(fontSize: 24),
         ),
       ),
     );
@@ -142,7 +139,8 @@ class CustomButton extends StatelessWidget {
   final double height;
   final double fontSize;
 
-  const CustomButton({super.key, 
+  const CustomButton({
+    super.key, 
     required this.text,
     required this.onPressed,
     this.width = 350,

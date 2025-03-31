@@ -10,16 +10,17 @@ class LostItemsTab extends StatelessWidget {
     List<Post> items = [
       // Replace with `context<lostItemsProvider>.watch().itemList`
       Post(
-          postType: PostType.lost,
-          id: 8,
-          title: 'Hercules cycle',
+        postType: PostType.lost,
+        id: 8,
+        title: 'Hercules cycle',
 
-          regDate: DateTime(2025, 03, 13),
-          description: ' ',
-          imageProvider: const NetworkImage(
-            'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-          ),
-          address: 'Hall 5'),
+        regDate: DateTime(2025, 03, 13),
+        description: ' ',
+        imageProvider: const NetworkImage(
+          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+        ),
+        address: 'Hall 5'
+      ),
       Post(
         postType: PostType.found,
         id: 9,
@@ -80,16 +81,17 @@ class FoundItemsTab extends StatelessWidget {
     List<Post> items = [
       // Replace with `context<foundItemsProvider>.watch().itemList`
       Post(
-          postType: PostType.lost,
-          id: 8,
-          title: 'Hercules cycle',
-          regDate: DateTime(2025, 03, 13),
-          description:
-              'I lost my cycle pls find it pls pls pls I\'ll give u Anirudh\'s gf for a night',
-          imageProvider: const NetworkImage(
-            'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-          ),
-          address: 'Hall 5'),
+        postType: PostType.lost,
+        id: 8,
+        title: 'Hercules cycle',
+        regDate: DateTime(2025, 03, 13),
+        description:
+            'I lost my cycle pls find it pls pls pls I\'ll give u Anirudh\'s gf for a night',
+        imageProvider: const NetworkImage(
+          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+        ),
+        address: 'Hall 5'
+      ),
       Post(
         postType: PostType.found,
         id: 9,

@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+
 import 'found_item_page2.dart';
 
 class FoundItemPage1 extends StatefulWidget {
+  const FoundItemPage1({super.key});
+
   @override
-  _FoundItemPage1State createState() => _FoundItemPage1State();
+  State<FoundItemPage1> createState() => _FoundItemPage1State();
 }
 
 class _FoundItemPage1State extends State<FoundItemPage1> {
@@ -36,7 +40,7 @@ class _FoundItemPage1State extends State<FoundItemPage1> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/new_background.png"), // Updated image path
             fit: BoxFit.cover, // Ensures the image covers the screen
@@ -47,43 +51,51 @@ class _FoundItemPage1State extends State<FoundItemPage1> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-
-
-              Text("Upload Image", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+              const Text(
+                "Upload Image",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black
+                ),
+              ),
               const SizedBox(height: 10),
-
               GestureDetector(
                 onTap: _pickImage,
                 child: Container(
                   width: double.infinity,
                   height: 250,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: _image != null
                       ? ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.file(_image!, fit: BoxFit.cover),
-                  )
-                      : Center(
-                    child: Icon(Icons.image, size: 50, color: Colors.grey),
-                  ),
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.file(_image!, fit: BoxFit.cover),
+                      )
+                      : const Center(
+                        child: Icon(Icons.image, size: 50, color: Colors.grey),
+                      ),
                 ),
               ),
               const SizedBox(height: 270),
-
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FoundItemPage2()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FoundItemPage2())
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
-                child: Text("Next", style: TextStyle(fontSize: 18, color: Colors.white)),
+                child: const Text(
+                  "Next",
+                  style: TextStyle(fontSize: 18, color: Colors.white)
+                ),
               ),
             ],
           ),
