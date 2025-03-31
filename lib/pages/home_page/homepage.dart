@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].
     final w = AppBar(
-      title: const Text('Lostify',style: TextStyle(color: Colors.white)),
+      title: const Text('Lostify', style: TextStyle(color: Colors.white)),
       bottom: TabBar(tabs: _tabs),
       backgroundColor: Colors.blue,
       elevation: 0,
@@ -121,8 +121,10 @@ class _HomePageState extends State<HomePage> {
                   // Overlay blur effect when the FAB is expanded
                   if (_isFabExpanded)
                     Container(
-                      color: Colors.white.withValues(alpha: 0.5), // Brighten the background
-                      child: const SizedBox.expand(), // Make sure this covers the entire screen
+                      color: Colors.white
+                          .withValues(alpha: 0.5), // Brighten the background
+                      child: const SizedBox
+                          .expand(), // Make sure this covers the entire screen
                     ),
                 ],
               ),
@@ -131,13 +133,27 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  const DrawerHeader(
-                    decoration: BoxDecoration(color: Colors.blue),
-                    child: Center(
-                      child: CircleAvatar(
-                        radius: 60,
-                        backgroundImage: AssetImage('assets/images/profile_picture.png'), // Replace with your image asset path
-                      ),
+                  // Remove 'const' here if you plan to show a dynamic name.
+                  DrawerHeader(
+                    decoration: const BoxDecoration(color: Colors.blue),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircleAvatar(
+                          radius: 45,
+                          backgroundImage:
+                              AssetImage('assets/images/profile_picture.png'),
+                        ),
+                        const SizedBox(height: 10),
+                        // Replace 'John Doe' with the actual name or a variable holding it.
+                        Text(
+                          'John Doe',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   ListTile(
@@ -160,7 +176,10 @@ class _HomePageState extends State<HomePage> {
                   ListTile(
                     title: const Text('Messages'),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatList()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ChatList()),
+                      );
                     },
                   ),
                   ListTile(
@@ -174,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            // Tab contents
+
             body: Stack(
               children: [
                 // TabBarView wrapped with a blur effect
@@ -190,8 +209,10 @@ class _HomePageState extends State<HomePage> {
                 // Overlay blur effect when the FAB is expanded
                 if (_isFabExpanded)
                   Container(
-                    color: Colors.white.withValues(alpha: 0.5), // Brighten the background
-                    child: const SizedBox.expand(), // Make sure this covers the entire screen
+                    color: Colors.white
+                        .withValues(alpha: 0.5), // Brighten the background
+                    child: const SizedBox
+                        .expand(), // Make sure this covers the entire screen
                   ),
               ],
             ),
@@ -206,7 +227,7 @@ class _HomePageState extends State<HomePage> {
               },
               childWhileClosed: const Icon(Icons.add), // Icon when closed
               // Child buttons that appear when expanded
-              children: <Row> [
+              children: <Row>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -216,11 +237,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
-                      icon: const Icon(CupertinoIcons.search),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/lost/post/1');
-                      }
-                    ),
+                        icon: const Icon(CupertinoIcons.search),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/lost/post/1');
+                        }),
                   ],
                 ),
                 Row(
