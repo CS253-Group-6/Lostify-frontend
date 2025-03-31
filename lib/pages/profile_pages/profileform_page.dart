@@ -15,7 +15,7 @@ import "../../services/auth_api.dart";
 
 class ProfileForm extends StatefulWidget {
   final User user;
-  const ProfileForm({super.key,required this.user});
+  const ProfileForm({super.key, required this.user});
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -34,14 +34,13 @@ class _ProfileFormState extends State<ProfileForm> {
     if (_formKey.currentState!.validate()) {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
       ProfileModel profileData = ProfileModel(
-        name: _nameController.text, 
-        address: _addressController.text,
-        designation: _designationController.text,
-        rollNumber: _rollNoController.text,
-        phoneNumber: _phoneController.text
-      );
+          name: _nameController.text,
+          address: _addressController.text,
+          designation: _designationController.text,
+          rollNumber: _rollNoController.text,
+          phoneNumber: _phoneController.text);
 
-      var signUpDetails = {
+    Map<String,dynamic> signUpDetails = {
         "username": widget.user.username,
         "password": widget.user.password,
         "profile": profileData.toJson(),
@@ -60,12 +59,11 @@ class _ProfileFormState extends State<ProfileForm> {
       }
 
       context.read<ProfileProvider>().setProfile(
-        name: _nameController.text,
-        id: 1,
-      );
+            name: _nameController.text,
+          );
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const ConfirmationCode(),
-      ));
+        builder: (context) => ConfirmationCode(signUpDetails: signUpDetails))
+      );
     }
   }
 

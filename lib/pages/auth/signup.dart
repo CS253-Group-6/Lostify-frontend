@@ -1,3 +1,4 @@
+import "package:final_project/services/auth_api.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 
@@ -34,23 +35,23 @@ class _SignUpState extends State<SignUp> {
         password: _passwordController.text,
       );
 
-      // Map<String, dynamic> response = await AuthApi.signUp(user);
-      // if (response['statusCode'] == 200) {
-      //   ScaffoldMessenger.of(context)
-      //       .showSnackBar(SnackBar(content: Text("Registered Successfully!")));
-      //   Navigator.of(context).pushNamed('/create-profile', arguments: {
-      //     'username': _usernameController.text,
-      //     'email': _emailController.text,
-      //     'password': _passwordController.text
-      //   });
-      // } else {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //       SnackBar(content: Text("Error signing up ${response['message']}")));
-      //   Navigator.of(context).pushReplacementNamed('/');
-      // }
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => ProfileForm(user: user))
-      );
+      Map<String, dynamic> response = await AuthApi.signUp(user.toJson());
+      
+      if (response['statusCode'] == 200) {
+        
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Registered Successfully!")));
+        Navigator.of(context).pushNamed('/create-profile', arguments: {
+          'username': _usernameController.text,
+          'email': _emailController.text,
+          'password': _passwordController.text
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Error signing up ${response['message']}")));
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileForm(user:user)));
     }
   }
 

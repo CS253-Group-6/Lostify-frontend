@@ -25,12 +25,14 @@ class _AdminLoginState extends State<AdminLogin> {
         "username": _usernameController.text,
         "password": _passwordController.text
       };
+      
       // Map<String,dynamic> response = await AuthApi.login(loginDetails);
       // if (response['statusCode'] == 200) {
       //   Navigator.of(context).pushReplacementNamed('/');
       // } else {
       //   Navigator.of(context).pushReplacementNamed('/');
       // }
+
       Navigator.of(context).pushReplacementNamed('/home');
     }
   }
