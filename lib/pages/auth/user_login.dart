@@ -1,13 +1,12 @@
 import 'package:final_project/providers/profile_provider.dart';
+import 'package:final_project/services/auth_api.dart';
 import 'package:final_project/services/profile_api.dart';
-
-import '/components/auth/custom_auth_button.dart';
-import '/components/auth/auth_input.dart';
-import '/pages/profile_pages/profileform_page.dart';
-import '/providers/user_provider.dart';
-import '/services/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/auth/auth_input.dart';
+import '../../components/auth/custom_auth_button.dart';
+import '../../providers/user_provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -26,12 +25,10 @@ class _LoginState extends State<Login> {
     Navigator.of(context).pushNamed('/reset-password');
   }
 
-  void handleSubmit() async {
-    if (_loginKey.currentState!.validate()) {
-      context
-          .read<UserProvider>()
-          .setUserName(newUsername: _usernameController.text);
-
+  void handleSubmit() async{
+    if(_loginKey.currentState!.validate()){
+      context.read<UserProvider>().setUserName(newUsername: _usernameController.text);
+      
       var loginDetails = {
         "username": _usernameController.text,
         "password": _passwordController.text
@@ -72,22 +69,21 @@ class _LoginState extends State<Login> {
       Navigator.of(context).pushReplacementNamed('/home');
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Container(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
-          ),
+          constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
           decoration: BoxDecoration(
-              // ignore: deprecated_member_use
-              color: Color(0xFF45BBDD).withOpacity(0.4),
-              image: DecorationImage(
-                  image: AssetImage("assets/images/Admin Login.png"),
-                  fit: BoxFit.cover)),
+            color: Color(0xFF45BBDD).withValues(alpha: 0.4),
+            image: const DecorationImage(
+              image: AssetImage("assets/images/Admin Login.png"),
+              fit: BoxFit.cover
+            )
+          ),
           child: Column(
             children: [
               Image.asset(
@@ -98,14 +94,15 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 51,
               ),
+              const SizedBox(height: 51),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 40),
+                margin: const EdgeInsets.symmetric(vertical: 40),
                 child: Column(
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                      margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
-                      child: Text(
+                      margin: const EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
+                      child: const Text(
                         "Welcome User!",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -114,13 +111,11 @@ class _LoginState extends State<Login> {
                         textAlign: TextAlign.start,
                       ),
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
+                    const SizedBox(height: 24),
                     Center(
                       child: IntrinsicHeight(
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 30),
+                          margin: const EdgeInsets.symmetric(horizontal: 30),
                           width: double.infinity,
                           child: Form(
                             key: _loginKey,
@@ -131,23 +126,19 @@ class _LoginState extends State<Login> {
                                   hintText: "Enter your IITK username",
                                   showEyeIcon: false,
                                 ),
-                                SizedBox(
-                                  height: 16,
-                                ),
+                                const SizedBox(height: 16),
                                 Input(
                                   textController: _passwordController,
                                   hintText: "Enter Password",
                                   showEyeIcon: true,
                                 ),
-                                SizedBox(
-                                  height: 16,
-                                ),
+                                const SizedBox(height: 16),
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   // margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
                                   child: GestureDetector(
                                     onTap: handleReset,
-                                    child: Text(
+                                    child: const Text(
                                       "Forgot password?",
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
@@ -158,13 +149,11 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 24,
-                                ),
+                                const SizedBox(height: 24),
                                 Custombutton(
                                   text: "Login",
                                   onClick: handleSubmit,
-                                )
+                                ),
                               ],
                             ),
                           ),

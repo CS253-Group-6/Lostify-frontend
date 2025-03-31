@@ -1,14 +1,13 @@
-import 'package:final_project/models/item_model.dart';
-import 'package:final_project/services/items_api.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../providers/form_data_provider.dart';
 import 'package:intl/intl.dart';
-import 'package:final_project/components/location/location.dart';
+
+import '../../components/location/location.dart';
+import '../../models/item_model.dart';
+import '../../services/items_api.dart';
 
 class LostAnItem2 extends StatefulWidget {
   final Map<String,dynamic> formdata;
-  const LostAnItem2({super.key,required this.formdata});
+  const LostAnItem2({super.key, required this.formdata});
 
   @override
   State<LostAnItem2> createState() => _LostAnItem2State();
@@ -54,19 +53,25 @@ class _LostAnItem2State extends State<LostAnItem2> {
     }
   }
 
-  void handleLostItemPost(Item item)async{
-    try{
+  void handleLostItemPost(Item item) async {
+    try {
       Map<String,dynamic> response = await ItemsApi.lostitem(item);
-      if(response['statusCode'] == 200){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted successfully!!")));
+      if (response['statusCode'] == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Item posted successfully!!")
+        ));
         Navigator.of(context).pushNamed('/home');
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted failed!!")));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Item posted failed!!")
+        ));
         Navigator.pushNamed(context, '/home');
-        //Navigator.of(context).pushReplacementNamed('/home');
+        // Navigator.of(context).pushReplacementNamed('/home');
       }
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted failed!!")));
+    } catch(e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Item posted failed!!"))
+      );
       Navigator.pushNamed(context, '/home');
     }
     
@@ -93,7 +98,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/background.png'),
             fit: BoxFit.cover,
@@ -102,12 +107,12 @@ class _LostAnItem2State extends State<LostAnItem2> {
         child: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Column(children: [
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.only(left: 15),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: const Text(
+              child: Text(
                 "Add Location, Date and Time",
                 style: TextStyle(
                   fontSize: 20,
@@ -116,12 +121,12 @@ class _LostAnItem2State extends State<LostAnItem2> {
               ),
             ),
           ),
-          SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
+          const SizedBox(height: 30),
+          const Padding(
+            padding: EdgeInsets.only(left: 15),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: const Text(
+              child: Text(
                 "Location",
                 style: TextStyle(
                   fontSize: 16,
@@ -138,12 +143,12 @@ class _LostAnItem2State extends State<LostAnItem2> {
               });
             },
           ),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
+          const SizedBox(height: 20),
+          const Padding(
+            padding: EdgeInsets.only(left: 15),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: const Text(
+              child: Text(
                 "Date",
                 style: TextStyle(
                   fontSize: 16,
@@ -161,23 +166,22 @@ class _LostAnItem2State extends State<LostAnItem2> {
               filled: true,
               fillColor: Colors.white,
               hintText: 'Select Date',
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: const TextStyle(color: Colors.grey),
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(15),
               ),
-              suffixIcon: Icon(Icons.calendar_today, color: Colors.grey),
+              suffixIcon: const Icon(Icons.calendar_today, color: Colors.grey),
             ),
             readOnly: true,
             onTap: () => _selectDate(context),
-            
           ),
           const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
+          const Padding(
+            padding: EdgeInsets.only(left: 15),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: const Text(
+              child: Text(
                 "Time",
                 style: TextStyle(
                   fontSize: 16,
@@ -190,17 +194,17 @@ class _LostAnItem2State extends State<LostAnItem2> {
           TextField(
             focusNode: _focusNode2,
             controller: _timeController,
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
               hintText: 'Select Time',
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: const TextStyle(color: Colors.grey),
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(15),
               ),
-              suffixIcon: Icon(Icons.access_time, color: Colors.grey),
+              suffixIcon: const Icon(Icons.access_time, color: Colors.grey),
             ),
             readOnly: true,
             onTap: () => _selectTime(context),
@@ -224,12 +228,12 @@ class _LostAnItem2State extends State<LostAnItem2> {
               },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              minimumSize: Size(double.infinity, 50),
+              minimumSize: const Size(double.infinity, 50),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
+            child: const Text(
               "Post",
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),

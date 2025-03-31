@@ -1,21 +1,20 @@
-
-import 'package:final_project/services/chat_api.dart';
-import '../../components/home/item_box.dart';
 import 'package:flutter/material.dart';
 
+import '../../components/home/item_box.dart';
+import '../../services/chat_api.dart';
 
 class ItemDetailsPage extends StatelessWidget {
   final Post post;
   final int itemId, postOwnerId;
   final String? extraProperty;
 
-  const ItemDetailsPage(
-      {super.key,
-      required this.itemId,
-      required this.postOwnerId,
-      required this.post,
-      this.extraProperty});
-
+  const ItemDetailsPage({
+    super.key,
+    required this.itemId,
+    required this.postOwnerId,
+    required this.post,
+    this.extraProperty
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,7 @@ class ItemDetailsPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                //onDelete(); // Calls the delete function passed from parent
+                // onDelete(); // Calls the delete function passed from parent
                 Navigator.pop(context);
               },
               child: const Text("Delete", style: TextStyle(color: Colors.red)),
@@ -41,6 +40,7 @@ class ItemDetailsPage extends StatelessWidget {
         ),
       );
     }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(post.title), // Display the title of the item
@@ -137,49 +137,49 @@ class ItemDetailsPage extends StatelessWidget {
             ),
             const Spacer(),
             // Action buttons (e.g., Report, Share, Chat)
-            if(extraProperty != null)
+            if (extraProperty != null)
               ElevatedButton(
                 onPressed: () {
                   deletePost(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
-                child: Text("Delete", style: TextStyle(fontSize: 18, color: Colors.white)),
+                child: const Text("Delete", style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
-            if(extraProperty == null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${post.title} reported!')),
-                    );
-                  },
-                  icon: const Icon(Icons.report),
-                  label: const Text('Report'),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Shared ${post.title}!')),
-                    );
-                  },
-                  icon: const Icon(Icons.share),
-                  label: const Text('Share'),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    ChatServices.addChat(context,itemId,postOwnerId);
-                  },
-                  icon: const Icon(Icons.chat_bubble_outline),
-                  label: const Text('Chat'),
-                ),
-              ],
-            )
+            if (extraProperty == null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${post.title} reported!')),
+                      );
+                    },
+                    icon: const Icon(Icons.report),
+                    label: const Text('Report'),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Shared ${post.title}!')),
+                      );
+                    },
+                    icon: const Icon(Icons.share),
+                    label: const Text('Share'),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      ChatServices.addChat(context,itemId,postOwnerId);
+                    },
+                    icon: const Icon(Icons.chat_bubble_outline),
+                    label: const Text('Chat'),
+                  ),
+                ],
+              )
           ],
         ),
       ),

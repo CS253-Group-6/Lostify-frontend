@@ -1,13 +1,13 @@
 import 'dart:ui';
-import 'package:final_project/models/chat_model.dart';
-import 'package:final_project/pages/chat/chat_page.dart';
-import 'package:final_project/pages/home_page/item_details_page.dart';
+
 import 'package:flutter/material.dart';
-import '/components/lost_items/lost_item_box.dart';
-import '/models/post.dart';
+
+import '../../components/lost_items/lost_item_box.dart';
+import '../../models/post.dart';
+import '../../pages/chat/chat_page.dart';
 
 class LostItem extends StatefulWidget {
-  const LostItem({Key? key}) : super(key: key);
+  const LostItem({super.key});
 
   @override
   State<LostItem> createState() => _LostItemState();

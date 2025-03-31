@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+
 class Item{
   String id = '';
-  String title,description,location,date,time;
+  String title, description, location, date, time;
   File image;
   bool isFound = false;
 
@@ -15,9 +16,11 @@ class Item{
     required this.image,
     required this.isFound,
   });
+
   void found(){
     isFound = true;
   }
+  
   Map<String, dynamic> toJson() {
     return {
       "title": title,

@@ -1,6 +1,7 @@
 // lib/components/lost_items/lost_item_box.dart
 
 import 'package:flutter/material.dart';
+
 import '../../models/post.dart';
 
 const double kItemBoxOpacity = 0.7;
@@ -20,7 +21,7 @@ class LostItemBox extends StatelessWidget {
   final VoidCallback onViewDetails;
 
   String _formatDate(DateTime? date) =>
-      date != null ? date.toString().split(' ')[0] : 'NA';
+    date != null ? date.toString().split(' ')[0] : 'NA';
 
   Widget _buildImage() {
     if (post.imageUrl != null && post.imageUrl!.isNotEmpty) {
@@ -58,7 +59,7 @@ class LostItemBox extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(kItemBoxOpacity),
+        color: Colors.white.withValues(alpha: kItemBoxOpacity),
         borderRadius: BorderRadius.circular(kItemBoxBorderRadius),
         boxShadow: [
           BoxShadow(

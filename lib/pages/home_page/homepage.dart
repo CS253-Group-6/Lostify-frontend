@@ -1,11 +1,11 @@
 import 'dart:ui';
 
-import 'package:final_project/pages/chat/chat_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/home/action_button.dart';
 import '../../components/home/expandable_fab.dart';
+import '../chat/chat_list.dart';
 import '../search_page.dart';
 import 'tabs.dart';
 
@@ -41,13 +41,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   /// List of tab titles.
-  final List<Widget> _tabs = const [
-    Tab(
-      text: 'Lost',
-
-    ),
-    Tab(text: 'Found')
-  ];
+  final List<Widget> _tabs = const [Tab(text: 'Lost'), Tab(text: 'Found')];
 
   /// List of widgets corresponding to tabs in [_tabs].
   final List<Widget> _widgets = const [LostItemsTab(), FoundItemsTab()];
@@ -87,8 +81,8 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      SearchPage()), // Replace SearchPage with your actual search page widget
+                builder: (context) => SearchPage(),
+              ), // Replace SearchPage with your actual search page widget
             );
           },
         ),
@@ -127,10 +121,8 @@ class _HomePageState extends State<HomePage> {
                   // Overlay blur effect when the FAB is expanded
                   if (_isFabExpanded)
                     Container(
-                      color: Colors.white
-                          .withValues(alpha: 0.5), // Brighten the background
-                      child: const SizedBox
-                          .expand(), // Make sure this covers the entire screen
+                      color: Colors.white.withValues(alpha: 0.5), // Brighten the background
+                      child: const SizedBox.expand(), // Make sure this covers the entire screen
                     ),
                 ],
               ),
@@ -139,13 +131,12 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  DrawerHeader(
+                  const DrawerHeader(
                     decoration: BoxDecoration(color: Colors.blue),
                     child: Center(
                       child: CircleAvatar(
                         radius: 60,
-                        backgroundImage: AssetImage(
-                            'assets/images/profile_picture.png'), // Replace with your image asset path
+                        backgroundImage: AssetImage('assets/images/profile_picture.png'), // Replace with your image asset path
                       ),
                     ),
                   ),
@@ -183,7 +174,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
             // Tab contents
             body: Stack(
               children: [
@@ -200,10 +190,8 @@ class _HomePageState extends State<HomePage> {
                 // Overlay blur effect when the FAB is expanded
                 if (_isFabExpanded)
                   Container(
-                    color: Colors.white
-                        .withValues(alpha: 0.5), // Brighten the background
-                    child: const SizedBox
-                        .expand(), // Make sure this covers the entire screen
+                    color: Colors.white.withValues(alpha: 0.5), // Brighten the background
+                    child: const SizedBox.expand(), // Make sure this covers the entire screen
                   ),
               ],
             ),
@@ -218,7 +206,7 @@ class _HomePageState extends State<HomePage> {
               },
               childWhileClosed: const Icon(Icons.add), // Icon when closed
               // Child buttons that appear when expanded
-              children: [
+              children: <Row> [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -228,10 +216,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
-                        icon: const Icon(CupertinoIcons.search),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/lost/post/1');
-                        }),
+                      icon: const Icon(CupertinoIcons.search),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/lost/post/1');
+                      }
+                    ),
                   ],
                 ),
                 Row(

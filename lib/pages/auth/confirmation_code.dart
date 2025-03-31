@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:final_project/models/user_model.dart';
-import 'package:final_project/services/auth_api.dart';
-
-import '/components/auth/custom_auth_button.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/auth/custom_auth_button.dart';
+import '../../services/auth_api.dart';
 
 class ConfirmationCode extends StatefulWidget {
   final Map<String,dynamic> signUpDetails;
@@ -60,16 +59,15 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     super.dispose();
   }
 
-  void _onChanged(String value,int index){
-    if(value.isNotEmpty){
-      if(index < 3){
-        FocusScope.of(context).requestFocus(_focusNodes[index+1]);
-      }else{
+  void _onChanged(String value, int index) {
+    if (value.isNotEmpty) {
+      if (index < 3) {
+        FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+      } else {
         _focusNodes[index].unfocus();
       }
-    }
-    else if(index > 0 && _controllers[index].text == ''){
-      FocusScope.of(context).requestFocus(_focusNodes[index-1]);
+    } else if (index > 0 && _controllers[index].text == '') {
+      FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
     }
   }
 
@@ -113,10 +111,10 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Color(0xFF45BBDD).withOpacity(0.4),
+            color: Color(0xFF45BBDD).withValues(alpha: 0.4),
             image: DecorationImage(
-                image: AssetImage("assets/images/Admin Login.png"),
-                fit: BoxFit.cover
+              image: AssetImage("assets/images/Admin Login.png"),
+              fit: BoxFit.cover
             )
         ),
         child: Center(
@@ -132,28 +130,28 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                      "Enter Confirmation code",
-                      style: TextStyle(
+                        "Enter confirmation code",
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 25
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4,),
-                    Align(
-                      alignment: Alignment.center,
+                      SizedBox(height: 4),
+                      Align(
+                        alignment: Alignment.center,
                         child: Text(
-                          "Enter the 4 digit verification code sent to your registered email.",
+                          "Enter the 6 digit verification code sent to your registered email.",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              color: Color(0xFF71727A),
-                              fontSize: 14
+                            color: Color(0xFF71727A),
+                            fontSize: 14
                           ),
                         )
-                    ),
+                      ),
                     ]
                     ),
                   ),
-                  SizedBox(height: 40,),
+                  SizedBox(height: 40),
                   Column(
                     children: [
                       Row(
@@ -174,8 +172,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                               border: OutlineInputBorder(),
                             ),
                           ),
-                        ),
-                        ),
+                        )),
                       ),
                       SizedBox(height: 5,),
                       GestureDetector(
@@ -194,12 +191,14 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                       ),
                     ],
                   ),
-
-                  SizedBox(height: 100,),
+                  SizedBox(height: 100),
                   Container(
-                      width: 300,
-                      height: 40,
-                      child: Custombutton(text: "Continue",onClick: handleSubmit,)
+                    width: 300,
+                    height: 40,
+                    child: Custombutton(
+                      text: "Continue",
+                      onClick: handleSubmit,
+                    )
                   ),
                 ],
               ),

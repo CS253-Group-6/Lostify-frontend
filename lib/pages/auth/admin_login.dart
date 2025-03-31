@@ -1,10 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '/providers/user_provider.dart';
-
-import '/components/auth/custom_auth_button.dart';
-import '/components/auth/auth_input.dart';
-import 'package:flutter/material.dart';
+import '../../components/auth/auth_input.dart';
+import '../../components/auth/custom_auth_button.dart';
+import '../../providers/user_provider.dart';
 
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
@@ -28,9 +27,9 @@ class _AdminLoginState extends State<AdminLogin> {
       };
       
       // Map<String,dynamic> response = await AuthApi.login(loginDetails);
-      // if(response['statusCode'] == 200){
+      // if (response['statusCode'] == 200) {
       //   Navigator.of(context).pushReplacementNamed('/');
-      // }else{
+      // } else {
       //   Navigator.of(context).pushReplacementNamed('/');
       // }
 
@@ -47,11 +46,11 @@ class _AdminLoginState extends State<AdminLogin> {
             minHeight: MediaQuery.of(context).size.height,
           ),
           decoration: BoxDecoration(
-              color: Color(0xFF45BBDD).withOpacity(0.4),
-              image: DecorationImage(
-                  image: AssetImage("assets/images/Admin Login.png"),
-                  fit: BoxFit.cover
-              )
+            color: Color(0xFF45BBDD).withValues(alpha: 0.4),
+            image: DecorationImage(
+              image: AssetImage("assets/images/Admin Login.png"),
+              fit: BoxFit.cover,
+            )
           ),
           child: Column(
             children: [
@@ -60,7 +59,7 @@ class _AdminLoginState extends State<AdminLogin> {
                 width: 452,
                 height: 271,
               ),
-              SizedBox(height: 51,),
+              SizedBox(height: 51),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 40),
                 child: Column(
@@ -77,7 +76,7 @@ class _AdminLoginState extends State<AdminLogin> {
                         textAlign: TextAlign.start,
                       ),
                     ),
-                    SizedBox(height: 24,),
+                    SizedBox(height: 24),
                     Center(
                       child: IntrinsicHeight(
                         child: Container(
@@ -87,11 +86,18 @@ class _AdminLoginState extends State<AdminLogin> {
                             key: _adminKey,
                             child: Column(
                               children: [
-                                Input(textController: _usernameController,hintText: "Enter your IITK username",showEyeIcon: false,),
-                                SizedBox(height: 16,),
-                            
-                                Input(textController: _passwordController,hintText: "Enter Password",showEyeIcon: true,),
-                                SizedBox(height: 16,),
+                                Input(
+                                  textController: _usernameController,
+                                  hintText: "Enter your IITK username",
+                                  showEyeIcon: false,
+                                ),
+                                SizedBox(height: 16),
+                                Input(
+                                  textController: _passwordController,
+                                  hintText: "Enter Password",
+                                  showEyeIcon: true,
+                                ),
+                                SizedBox(height: 16),
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   // margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
@@ -105,10 +111,12 @@ class _AdminLoginState extends State<AdminLogin> {
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
-                                SizedBox(height: 24,),
+                                SizedBox(height: 24),
                                 //TODO: add custom button
-                                Custombutton(text: "Login",onClick: handleSubmit,)
-                            
+                                Custombutton(
+                                  text: "Login",
+                                  onClick: handleSubmit,
+                                )
                               ],
                             ),
                           ),
