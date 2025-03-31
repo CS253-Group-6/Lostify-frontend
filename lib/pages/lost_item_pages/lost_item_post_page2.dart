@@ -228,12 +228,12 @@ class _LostAnItem2State extends State<LostAnItem2> {
               },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              minimumSize: Size(double.infinity, 50),
+              minimumSize: const Size(double.infinity, 50),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
+            child: const Text(
               "Post",
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
