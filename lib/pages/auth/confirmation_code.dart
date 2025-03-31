@@ -1,8 +1,14 @@
+import 'dart:async';
+
+import 'package:final_project/models/user_model.dart';
+import 'package:final_project/services/auth_api.dart';
+
 import '/components/auth/custom_auth_button.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmationCode extends StatefulWidget {
-  const ConfirmationCode({super.key});
+  final Map<String,dynamic> signUpDetails;
+  const ConfirmationCode({super.key,required this.signUpDetails});
 
   @override
   State<ConfirmationCode> createState() => _ConfirmationCodeState();
@@ -13,6 +19,46 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
   List.generate(4, (index) => TextEditingController());
   final List<FocusNode> _focusNodes =
   List.generate(4, (index) => FocusNode());
+   bool _isResendEnabled = false; // To track if the resend button is enabled
+  int _resendCountdown = 30; // Countdown timer in seconds
+  Timer? _timer;
+
+  void _startResendTimer() {
+    setState(() {
+      _isResendEnabled = false;
+      _resendCountdown = 30; // Reset the countdown to 30 seconds
+    });
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_resendCountdown > 0) {
+          _resendCountdown--;
+        } else {
+          _isResendEnabled = true;
+          timer.cancel(); // Stop the timer when countdown reaches 0
+        }
+      });
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    _startResendTimer(); // Start the timer when the page loads
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancel the timer when the widget is disposed
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
 
   void _onChanged(String value,int index){
     if(value.isNotEmpty){
@@ -27,8 +73,38 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     }
   }
 
-  void handleSubmit(){
+  void handleSubmit() async{
+    // code to handle form submission
+    var otpData = {
+      'username': widget.signUpDetails['username'],
+      'otp': _controllers.map((e) => e.text).join(),
+    };
+    
+    
+      Map<String,dynamic> response = await AuthApi.verifyOtp(otpData);
+      if (response['statusCode'] == 200) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Verified Successfully!")));
+        Navigator.of(context).pushNamed('/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Error verifying otp ${response['message']}")));
+      }
+
+
     Navigator.of(context).pushReplacementNamed('/home');
+  }
+
+  void handleResendOtp() async{
+    // code to handle resend otp
+    if(_isResendEnabled){
+      var response_signup = await AuthApi.signUp(widget.signUpDetails);
+      if(response_signup['statusCode'] == 200){
+        // code to handle successful response
+        _isResendEnabled = false;
+        _startResendTimer();
+      }
+    }
   }
 
   @override
@@ -102,14 +178,17 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                         ),
                       ),
                       SizedBox(height: 5,),
-                      FractionallySizedBox(
-                        alignment: Alignment.centerRight,
-                        widthFactor: 0.85,
-                        child: Text(
-                          "Resend OTP?",
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            color: Color(0xFF006FFD),
+                      GestureDetector(
+                        onTap: handleResendOtp,
+                        child: FractionallySizedBox(
+                          alignment: Alignment.centerRight,
+                          widthFactor: 0.85,
+                          child: Text(
+                            "Resend OTP?",
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: _isResendEnabled?Color(0xFF006FFD):Colors.grey[500],
+                            ),
                           ),
                         ),
                       ),

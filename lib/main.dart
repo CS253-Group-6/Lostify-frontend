@@ -40,6 +40,7 @@ Future main() async {
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
   OneSignal.initialize("0bc29172-c5dd-4a63-8473-910ffe28c289");
   OneSignal.Notifications.requestPermission(true);
+
   runApp(
     MultiProvider(
       providers: [
@@ -57,14 +58,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/home',
+      initialRoute: '/signup',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes
         '/user/login': (context) => Login(),
         '/signup': (context) => SignUp(),
         '/admin/login': (context) => AdminLogin(),
-        '/confirm-code': (context) => ConfirmationCode(),
+        '/confirm-code': (context) => ConfirmationCode(signUpDetails: {},),
         '/reset-password': (context) => ResetPasswordPage(),
 
         // profile routes

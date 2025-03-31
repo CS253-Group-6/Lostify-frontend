@@ -10,7 +10,7 @@ class AuthApi {
   static Future<Map<String, dynamic>> signUp(
       Map<String, dynamic> userDetails) async {
     try {
-      final response = await http.post(Uri.parse("$baseUrl/auth/signup"),
+      final response = await http.post(Uri.parse("$baseUrl/auth/signup/get_otp"),
           headers: {"Content-Type": "application/json"},
           body: {jsonEncode(userDetails)});
       return jsonDecode(response.body);
@@ -31,4 +31,21 @@ class AuthApi {
       return {"message": "Unexpected error: $e", "statusCode": 500};
     }
   }
+
+  // otp verification
+  static Future<Map<String, dynamic>> verifyOtp(Map<String, dynamic> otpData) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/signup/verify_otp'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(otpData),
+        );
+        return jsonDecode(response.body);
+    } catch (e) {
+      return {"message": "Unexpected error: $e", "statusCode": 500};
+    }
+  }
+
+  // logout user
 }
+

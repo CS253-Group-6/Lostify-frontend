@@ -15,7 +15,7 @@ import "package:provider/provider.dart";
 
 class ProfileForm extends StatefulWidget {
   final User user;
-  const ProfileForm({super.key,required this.user});
+  const ProfileForm({super.key, required this.user});
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -34,29 +34,31 @@ class _ProfileFormState extends State<ProfileForm> {
     if (_formKey.currentState!.validate()) {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
       ProfileModel profileData = ProfileModel(
-        name: _nameController.text, 
-        address: _addressController.text,
-        designation: _designationController.text,
-        rollNumber: _rollNoController.text,
-        phoneNumber: _phoneController.text
-        );
-
-      var signUpDetails = {
+          name: _nameController.text,
+          address: _addressController.text,
+          designation: _designationController.text,
+          rollNumber: _rollNoController.text,
+          phoneNumber: _phoneController.text);
+      Map<String,dynamic> signUpDetails = {
         "username": widget.user.username,
         "password": widget.user.password,
         "profile": profileData.toJson(),
       };
       var response = await AuthApi.signUp(signUpDetails);
+
       if (response['statusCode'] == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Signup successful!!")));
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['message'])));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Signup successful!!")));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(response['message'])));
       }
       context.read<ProfileProvider>().setProfile(
-          name: _nameController.text,
-          id: 1);
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => ConfirmationCode()));
+            name: _nameController.text,
+          );
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ConfirmationCode(
+              signUpDetails:signUpDetails)));
     }
   }
 
