@@ -1,21 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/chat_model.dart';
 import 'package:final_project/models/user_model.dart';
 import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
-import 'package:final_project/services/notifications_api.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:final_project/components/home/item_box.dart';
-import 'package:final_project/models/post.dart' as ModelsPost;
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:provider/provider.dart';
+
 import '/components/home/item_details.dart';
 import '/pages/chat/chat_list.dart';
 import '/pages/chat/chat_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '/pages/lost_item_pages/lost_item_post_page1.dart';
-import '/pages/lost_item_pages/lost_item_post_page2.dart';
 import 'pages/auth/admin_login.dart';
 import 'pages/auth/confirmation_code.dart';
 import 'pages/auth/reset_password_page.dart';
@@ -24,13 +20,13 @@ import 'pages/auth/user_login.dart';
 import 'pages/found_item_pages/found_item_page1.dart';
 import 'pages/found_item_pages/found_item_page2.dart';
 import 'pages/found_item_pages/found_item_page3.dart';
+import 'pages/home_page/home_interface.dart';
 import 'pages/home_page/homepage.dart';
 import 'pages/lost_found_post_list/found_item.dart';
 import 'pages/lost_found_post_list/lost_item.dart';
 import 'pages/profile_pages/profileform_page.dart';
 import 'pages/search_page.dart';
 import 'providers/user_provider.dart';
-import 'pages/home_page/home_interface.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -58,14 +54,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/signup',
+      initialRoute: '/home',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes
         '/user/login': (context) => Login(),
         '/signup': (context) => SignUp(),
         '/admin/login': (context) => AdminLogin(),
-        '/confirm-code': (context) => ConfirmationCode(signUpDetails: {},),
+        '/confirm-code': (context) => ConfirmationCode(
+              signUpDetails: {},
+            ),
         '/reset-password': (context) => ResetPasswordPage(),
 
         // profile routes
