@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/components/home/item_box.dart';
-import 'package:final_project/models/chat_model.dart';
-import 'package:final_project/pages/chat/chat_page.dart';
-import 'package:final_project/pages/chat/chat_screen.dart';
-import 'package:final_project/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/home/item_box.dart';
+import '../../models/chat_model.dart';
+import '../../pages/chat/chat_screen.dart';
+import '../../providers/profile_provider.dart';
 
 class ItemDetails extends StatefulWidget {
   final int itemId, postOwnerId;

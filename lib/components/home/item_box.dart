@@ -1,4 +1,3 @@
-import 'package:final_project/components/home/item_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../pages/home_page/item_details_page.dart';
@@ -204,24 +203,25 @@ class ItemBox extends StatelessWidget {
                   const SizedBox(height: 8),
 
                 // "View Post" button navigates to ItemDetailsPage
-    Row(
-    children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: handleItemDetails,
-                  child: const Text('View'),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: handleItemDetails,
+                      child: const Text('View'),
+                    ),
+                    // <-- Added delete callback
+                    if(extraProperty!= null)
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.redAccent),
+                        tooltip: "Delete Post",
+                          onPressed: () => deletePost(context)
+                      ),
+                  ],
                 ),
-                // <-- Added delete callback
-      if(extraProperty!= null)
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.redAccent),
-                  tooltip: "Delete Post",
-                    onPressed: () => deletePost(context)
-                ),
-                ],),
               ],
             ),
           ),

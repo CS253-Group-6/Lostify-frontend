@@ -1,9 +1,11 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 class ImageUploadBox extends StatefulWidget {
-  final Function(File) onImageSelected;//this is a callback fn
+  final Function(File) onImageSelected; // this is a callback fn
   const ImageUploadBox({super.key,required this.onImageSelected});
 
   @override

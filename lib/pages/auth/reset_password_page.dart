@@ -1,6 +1,7 @@
-import '/components/auth/auth_input.dart';
-import '/components/auth/custom_auth_button.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/auth/auth_input.dart';
+import '../../components/auth/custom_auth_button.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});
@@ -25,10 +26,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             minHeight: MediaQuery.of(context).size.height,
           ),
           decoration: BoxDecoration(
-              color: Color(0xFF45BBDD).withOpacity(0.4),
-              image: DecorationImage(
-                  image: AssetImage("assets/images/Admin Login.png"),
-                  fit: BoxFit.cover
+              color: Color(0xFF45BBDD).withValues(alpha: 0.4),
+              image: const DecorationImage(
+                image: AssetImage("assets/images/Admin Login.png"),
+                fit: BoxFit.cover
               )
           ),
           child: Column(
@@ -38,15 +39,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 width: 452,
                 height: 271,
               ),
-              SizedBox(height: 51,),
+              const SizedBox(height: 51),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 40),
+                margin: const EdgeInsets.symmetric(vertical: 40),
                 child: Column(
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                      margin: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
-                      child: Text(
+                      margin: const EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
+                      child: const Text(
                         "Reset your password!",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -55,18 +56,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         textAlign: TextAlign.start,
                       ),
                     ),
-                    SizedBox(height: 24,),
+                    const SizedBox(height: 24),
                     Center(
                       child: IntrinsicHeight(
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 30),
+                          margin: const EdgeInsets.symmetric(horizontal: 30),
                           width: double.infinity,
                           child: Column(
                             children: [
-                              Input(textController: _emailController,hintText: "Enter email",showEyeIcon: false,),
-                              SizedBox(height: 24,),
-
-                              Custombutton(text: "Reset Password",onClick: handleResetPassword,)
+                              Input(
+                                textController: _emailController,
+                                hintText: "Enter email",
+                                showEyeIcon: false,
+                              ),
+                              const SizedBox(height: 24),
+                              Custombutton(
+                                text: "Reset Password",
+                                onClick: handleResetPassword,
+                              ),
                             ],
                           ),
                         ),

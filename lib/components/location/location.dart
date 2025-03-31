@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class LocationDropdown extends StatefulWidget {
   final Function(String?) onLocationSelected;
 
-  const LocationDropdown({Key? key, required this.onLocationSelected}) : super(key: key);
+  const LocationDropdown({super.key, required this.onLocationSelected});
 
   @override
-  _LocationDropdownState createState() => _LocationDropdownState();
+  State<LocationDropdown> createState() => _LocationDropdownState();
 }
 
 class _LocationDropdownState extends State<LocationDropdown> {
