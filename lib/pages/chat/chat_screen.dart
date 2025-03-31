@@ -1,17 +1,19 @@
 import 'dart:async';
-import 'package:final_project/models/chat_model.dart';
-import 'package:final_project/providers/profile_provider.dart';
-import 'package:final_project/services/chat_api.dart';
-import 'package:final_project/utils/upload_handler.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/chat_model.dart';
+import '../../providers/profile_provider.dart';
+import '../../services/chat_api.dart';
+import '../../utils/upload_handler.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatDetails chatDetails;
-  ChatScreen({super.key, required this.chatDetails});
+  const ChatScreen({super.key, required this.chatDetails});
 
   @override
   ChatScreenState createState() => ChatScreenState();
@@ -81,13 +83,16 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         backgroundColor: Colors.blue,
         title: Row(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               backgroundImage: NetworkImage(
-                  'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
+                'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
             ),
-            SizedBox(width: 10),
-            Text("${context.watch<ProfileProvider>().name}",style: TextStyle(color: Colors.white)),
-            Spacer(),
+            const SizedBox(width: 10),
+            Text(
+              context.watch<ProfileProvider>().name,
+              style: TextStyle(color: Colors.white)
+            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () async =>
                   await ChatServices.deleteChat(context, widget.chatDetails),
@@ -95,7 +100,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 backgroundColor: Colors.redAccent,
                 foregroundColor: Colors.white,
               ),
-              child: Text("Close"),
+              child: const Text("Close"),
             )
           ],
         ),
@@ -110,25 +115,23 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   .collection("chats")
                   .orderBy("time", descending: false)
                   .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
-                  return Center(child: Text("No messages yet."));
+                  return const Center(child: Text("No messages yet."));
                 }
+
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     final message = snapshot.data!.docs[index];
-                    final isMe = message['senderId'] ==
-                        context.watch<ProfileProvider>().id;
+                    final isMe
+                      = message['senderId'] == context.watch<ProfileProvider>().id;
 
                     return Align(
-                      alignment:
-                          isMe ? Alignment.centerRight : Alignment.centerLeft,
+                      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                       child: Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        padding: EdgeInsets.all(10),
+                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: isMe ? Colors.blue[100] : Colors.grey[200],
                           borderRadius: BorderRadius.circular(10),
@@ -139,8 +142,10 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                               : CrossAxisAlignment.start,
                           children: [
                             if (message['type'] == 'text')
-                              Text(message['text']!,
-                                  style: TextStyle(fontSize: 16))
+                              Text(
+                                message['text']!,
+                                style: const TextStyle(fontSize: 16),
+                              )
                             else if (message['type'] == 'image')
                               GestureDetector(
                                 onTap: () {
@@ -151,20 +156,20 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                   width: 200,
                                   height: 200,
                                   fit: BoxFit.cover,
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
+                                  loadingBuilder: (context, child, loadingProgress) {
                                     if (loadingProgress == null) return child;
-                                    return CircularProgressIndicator();
+                                    return const CircularProgressIndicator();
                                   },
                                   errorBuilder: (context, error, stackTrace) {
-                                    return Text('Error loading image');
+                                    return const Text('Error loading image');
                                   },
                                 ),
                               ),
-                            SizedBox(height: 5),
-                            Text(message['time']!,
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.grey)),
+                            const SizedBox(height: 5),
+                            Text(
+                              message['time']!,
+                              style: const TextStyle(fontSize: 12, color: Colors.grey)
+                            ),
                           ],
                         ),
                       ),
@@ -179,36 +184,36 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.image),
+                  icon: const Icon(Icons.image),
                   onPressed: () => _uploadImage("gallery"),
                 ),
                 Expanded(
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                       hintText: 'Write a message...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                     ),
                   ),
                 ),
                 IconButton(
                   onPressed: _isUploading
                       ? null
-                      : () => {
+                      : () {
                         ChatServices.sendMessage(
-                          context, _messageController, widget.chatDetails),
-                          _scrollToBottom()
-                          },
-                  icon: Icon(Icons.send),
+                          context,
+                          _messageController,
+                          widget.chatDetails,
+                        );
+                        _scrollToBottom();
+                      },
+                  icon: const Icon(Icons.send),
                 ),
                 IconButton(
                   icon: _isUploading
-                      ? CircularProgressIndicator()
-                      : Icon(Icons.camera_alt),
+                      ? const CircularProgressIndicator()
+                      : const Icon(Icons.camera_alt),
                   onPressed: _isUploading ? null : () => _uploadImage("camera"),
                 ),
               ],
@@ -219,7 +224,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     );
   }
   /// Shows a preview dialog for a sent image.
-  Future<void> _showSentImagePreview(String imageFile) async {
+  Future<void> _showSentImagePreview(final String imageFile) async {
     await showDialog(
       context: context,
       builder: (ctx) {
