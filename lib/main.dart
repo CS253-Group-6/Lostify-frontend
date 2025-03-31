@@ -106,6 +106,7 @@ class MyApp extends StatelessWidget {
               chatDetails: ChatDetails(
                   senderId: 1, recieverId: 1, itemId: 1, chatRoomId: '8_9'),
             ),
+        // edit profile page
         // others
         // '/about' : (context) => , // about us page
         // '/notifications' : (context) => , //notifications
