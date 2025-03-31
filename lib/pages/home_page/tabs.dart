@@ -8,19 +8,17 @@ class LostItemsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Post> items = [
-      // Replace with `context<lostItemsProvider>.watch().itemList`
+      // Replace with context.watch<LostItemsProvider>().itemList in a real app.
       Post(
-        postType: PostType.lost,
-        id: 8,
-        title: 'Hercules cycle',
-
-        regDate: DateTime(2025, 03, 13),
-        description: ' ',
-        imageProvider: const NetworkImage(
-          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-        ),
-        address: 'Hall 5'
-      ),
+          postType: PostType.lost,
+          id: 8,
+          title: 'Hercules cycle',
+          regDate: DateTime(2025, 03, 13),
+          description: ' ',
+          imageProvider: const NetworkImage(
+            'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+          ),
+          address: 'Hall 5'),
       Post(
         postType: PostType.found,
         id: 9,
@@ -53,6 +51,10 @@ class LostItemsTab extends StatelessWidget {
       ),
     ];
 
+    // Filter for lost items only
+    List<Post> lostItems =
+        items.where((post) => post.postType == PostType.lost).toList();
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -62,7 +64,7 @@ class LostItemsTab extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          for (var post in items)
+          for (var post in lostItems)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ItemBox(post: post),
@@ -79,19 +81,18 @@ class FoundItemsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Post> items = [
-      // Replace with `context<foundItemsProvider>.watch().itemList`
+      // Replace with context.watch<FoundItemsProvider>().itemList in a real app.
       Post(
-        postType: PostType.lost,
-        id: 8,
-        title: 'Hercules cycle',
-        regDate: DateTime(2025, 03, 13),
-        description:
-            'I lost my cycle pls find it pls pls pls I\'ll give u Anirudh\'s gf for a night',
-        imageProvider: const NetworkImage(
-          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-        ),
-        address: 'Hall 5'
-      ),
+          postType: PostType.lost,
+          id: 8,
+          title: 'Hercules cycle',
+          regDate: DateTime(2025, 03, 13),
+          description:
+              'I lost my cycle pls find it pls pls pls I\'ll give u Anirudh\'s gf for a night',
+          imageProvider: const NetworkImage(
+            'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+          ),
+          address: 'Hall 5'),
       Post(
         postType: PostType.found,
         id: 9,
@@ -124,6 +125,10 @@ class FoundItemsTab extends StatelessWidget {
       ),
     ];
 
+    // Filter for found items only
+    List<Post> foundItems =
+        items.where((post) => post.postType == PostType.found).toList();
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -133,7 +138,11 @@ class FoundItemsTab extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          for (var post in items) ItemBox(post: post),
+          for (var post in foundItems)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ItemBox(post: post),
+            ),
         ],
       ),
     );
