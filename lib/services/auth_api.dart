@@ -10,7 +10,8 @@ class AuthApi {
   static Future<Map<String, dynamic>> signUp(
       Map<String, dynamic> userDetails) async {
     try {
-      final response = await http.post(Uri.parse("$baseUrl/auth/signup/get_otp"),
+      final response = await http.post(
+          Uri.parse("$baseUrl/auth/signup/get_otp"),
           headers: {"Content-Type": "application/json"},
           body: {jsonEncode(userDetails)});
       return jsonDecode(response.body);
@@ -33,19 +34,56 @@ class AuthApi {
   }
 
   // otp verification
-  static Future<Map<String, dynamic>> verifyOtp(Map<String, dynamic> otpData) async {
+  static Future<Map<String, dynamic>> verifyOtp(
+      Map<String, dynamic> otpData) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/auth/signup/verify_otp'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(otpData),
-        );
-        return jsonDecode(response.body);
+      );
+      return jsonDecode(response.body);
     } catch (e) {
       return {"message": "Unexpected error: $e", "statusCode": 500};
     }
   }
 
   // logout user
-}
+  static Future<void> logout() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/auth/logout'),
+      );
+      return jsonDecode(response.body);
+    } catch (e) {
+      return;
+    }
+  }
 
+  // reset -password
+  static Future<Map<String, dynamic>> resetPassword(String username) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/auth/reset_password'),
+      );
+      return jsonDecode(response.body);
+    } catch (e) {
+      return {"message": "Unexpected error: $e", "statusCode": 500};
+    }
+  }
+
+  // change password
+  static Future<Map<String, dynamic>> changePassword(
+      Map<String, dynamic> changePasswordData) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/change_password'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(changePasswordData),
+      );
+      return jsonDecode(response.body);
+    } catch (e) {
+      return {"message": "Unexpected error: $e", "statusCode": 500};
+    }
+  }
+}
