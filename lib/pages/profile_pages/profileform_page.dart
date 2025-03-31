@@ -1,17 +1,17 @@
 import "dart:io";
-import "package:final_project/models/profile_model.dart";
-import "package:final_project/models/user_model.dart";
-import "package:final_project/services/auth_api.dart";
 
-import "/providers/profile_provider.dart";
-
-import "/components/auth/custom_auth_button.dart";
-import "/components/profile/profile_form_input.dart";
-import "/pages/auth/confirmation_code.dart";
-import "/providers/user_provider.dart";
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
 import "package:provider/provider.dart";
+
+import "../../components/auth/custom_auth_button.dart";
+import "../../components/profile/profile_form_input.dart";
+import "../../pages/auth/confirmation_code.dart";
+import "../../providers/profile_provider.dart";
+import "../../providers/user_provider.dart";
+import "../../models/profile_model.dart";
+import "../../models/user_model.dart";
+import "../../services/auth_api.dart";
 
 class ProfileForm extends StatefulWidget {
   final User user;
