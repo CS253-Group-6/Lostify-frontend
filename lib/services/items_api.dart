@@ -1,6 +1,8 @@
 import 'dart:convert';
-import '/models/item_model.dart';
+
 import 'package:http/http.dart' as http;
+
+import '../../models/item_model.dart';
 
 class ItemsApi{
   static const String baseUrl = "http://127.0.0.1:5000";
@@ -10,12 +12,12 @@ class ItemsApi{
     final response = await http.post(
         Uri.parse("$baseUrl/lostAnItem/page2"),
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       body: jsonEncode(item.toJson())
     );
     if (response.statusCode == 200 || response.statusCode == 401) {
-      return jsonDecode(response.body);//check status codes
+      return jsonDecode(response.body); // check status codes
     }
 
     return {"message": "Unexpected error", "statusCode": response.statusCode};

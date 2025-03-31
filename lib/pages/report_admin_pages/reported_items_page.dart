@@ -1,12 +1,9 @@
 import 'dart:ui';
 
-import 'package:final_project/pages/chat/chat_list.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/home/action_button.dart';
 import '../../../components/home/expandable_fab.dart';
-import '../search_page.dart';
 import 'report_tabs.dart';
 
 /// Home page of the application.

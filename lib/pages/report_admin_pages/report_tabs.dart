@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/components/home/item_box.dart';
+import '../../components/home/item_box.dart';
 
 class ItemsTab extends StatelessWidget {
   const ItemsTab({super.key});
@@ -10,16 +10,17 @@ class ItemsTab extends StatelessWidget {
     List<Post> items = [
       // Replace with `context<lostItemsProvider>.watch().itemList`
       Post(
-          postType: PostType.lost,
-          id: 8,
-          title: 'Hercules cycle',
-          reports: 1,
-          regDate: DateTime(2025, 03, 13),
-          description: ' ',
-          imageProvider: const NetworkImage(
-            'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-          ),
-          address: 'Hall 5'),
+        postType: PostType.lost,
+        id: 8,
+        title: 'Hercules cycle',
+        reports: 1,
+        regDate: DateTime(2025, 03, 13),
+        description: ' ',
+        imageProvider: const NetworkImage(
+          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+        ),
+        address: 'Hall 5',
+      ),
       Post(
         postType: PostType.found,
         id: 9,

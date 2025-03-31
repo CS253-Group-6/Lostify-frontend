@@ -38,16 +38,16 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setProfile(
-      {required String name,
-      String address = '',
-      String designation = '',
-      String phoneNumber = '',
-      int id = 0}) async {
+  void setProfile({
+    required String name,
+    String address = '',
+    String designation = '',
+    String phoneNumber = '',
+    int id = 0
+  }) async {
     this.name = name;
     this.address = address;
     _fetchAndSavePlayerId();
     notifyListeners();
   }
-  String? get PlayerId => playerId;
 }

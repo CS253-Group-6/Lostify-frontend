@@ -3,8 +3,10 @@ import 'package:intl/intl.dart';
 import '../components/location/location.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
   @override
-  _SearchPageState createState() => _SearchPageState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
@@ -48,15 +50,12 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Search Lost Items',
-              style: TextStyle(color: Colors.white),
-            ),
-            const SizedBox(width: 8),
-            const Icon(Icons.search, color: Colors.white), // Magnifier icon
+            Text('Search Lost Items', style: TextStyle(color: Colors.white)),
+            SizedBox(width: 8),
+            Icon(Icons.search, color: Colors.white), // Magnifier icon
           ],
         ),
         backgroundColor: Colors.blue,
@@ -66,21 +65,20 @@ class _SearchPageState extends State<SearchPage> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                "assets/images/new_background.png"), // Updated background image
+            image: AssetImage("assets/images/new_background.png"), // Updated background image
             fit: BoxFit.cover,
           ),
         ),
-    child: SingleChildScrollView(
+      child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Location where item was lost
-              Text(
+              const Text(
                 "Lost Place",
                 style: TextStyle(
                   fontSize: 16,
@@ -96,12 +94,9 @@ class _SearchPageState extends State<SearchPage> {
                   });
                 },
               ),
-
-
               const SizedBox(height: 30),
-
               // Date and time of loss
-              Text(
+              const Text(
                 "Expected Lost Date range",
                 style: TextStyle(
                   fontSize: 16,
@@ -117,7 +112,7 @@ class _SearchPageState extends State<SearchPage> {
                       onTap: () => _pickStartDate(context),
                       child: Container(
                         height: 50,
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15),
@@ -127,8 +122,7 @@ class _SearchPageState extends State<SearchPage> {
                           children: [
                             Text(
                               selectedDate1 != null
-                                  ? DateFormat('dd/MM/yyyy')
-                                      .format(selectedDate1!)
+                                  ? DateFormat('dd/MM/yyyy').format(selectedDate1!)
                                   : "Start Date",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -138,7 +132,7 @@ class _SearchPageState extends State<SearchPage> {
                                     : Colors.grey,
                               ),
                             ),
-                            Icon(Icons.calendar_today, color: Colors.grey),
+                            const Icon(Icons.calendar_today, color: Colors.grey),
                           ],
                         ),
                       ),
@@ -160,8 +154,7 @@ class _SearchPageState extends State<SearchPage> {
                           children: [
                             Text(
                               selectedDate2 != null
-                                  ? DateFormat('dd/MM/yyyy')
-                                      .format(selectedDate2!)
+                                  ? DateFormat('dd/MM/yyyy').format(selectedDate2!)
                                   : "End Date",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -180,7 +173,6 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
               const SizedBox(height: 270),
-
               // Search Button
               ElevatedButton(
                 onPressed: () {
@@ -188,12 +180,12 @@ class _SearchPageState extends State<SearchPage> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(

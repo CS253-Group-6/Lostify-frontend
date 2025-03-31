@@ -32,15 +32,17 @@ class _ProfileFormState extends State<ProfileForm> {
 
   void handleSubmit() async {
     if (_formKey.currentState!.validate()) {
-      var userProvider = Provider.of<UserProvider>(context, listen: false);
-      ProfileModel profileData = ProfileModel(
-          name: _nameController.text,
-          address: _addressController.text,
-          designation: _designationController.text,
-          rollNumber: _rollNoController.text,
-          phoneNumber: _phoneController.text);
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    Map<String,dynamic> signUpDetails = {
+      ProfileModel profileData = ProfileModel(
+        name: _nameController.text,
+        address: _addressController.text,
+        designation: _designationController.text,
+        rollNumber: _rollNoController.text,
+        phoneNumber: _phoneController.text
+      );
+
+      Map<String,dynamic> signUpDetails = {
         "username": widget.user.username,
         "password": widget.user.password,
         "profile": profileData.toJson(),
@@ -58,9 +60,8 @@ class _ProfileFormState extends State<ProfileForm> {
         ));
       }
 
-      context.read<ProfileProvider>().setProfile(
-            name: _nameController.text,
-          );
+      context.read<ProfileProvider>().setProfile(name: _nameController.text);
+
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ConfirmationCode(signUpDetails: signUpDetails))
       );
@@ -76,8 +77,8 @@ class _ProfileFormState extends State<ProfileForm> {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
-          _image = File(pickedFile.path);
-          print(_image);
+          final image = File(pickedFile.path);
+          print(image);
         });
       }
     } catch (e) {
@@ -94,10 +95,12 @@ class _ProfileFormState extends State<ProfileForm> {
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/Admin Login.png"),
-                    fit: BoxFit.cover)),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/Admin Login.png"),
+                fit: BoxFit.cover
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
