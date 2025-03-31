@@ -1,5 +1,6 @@
-import '../../components/auth/custom_auth_button.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/auth/custom_auth_button.dart';
 
 class ConfirmationCode extends StatefulWidget {
   const ConfirmationCode({super.key});
