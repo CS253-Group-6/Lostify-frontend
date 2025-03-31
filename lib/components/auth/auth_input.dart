@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class Input extends StatefulWidget {
   final TextEditingController textController;
   final String hintText;

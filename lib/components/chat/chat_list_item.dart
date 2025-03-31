@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/pages/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../../models/chat_model.dart';
+import '../../pages/chat/chat_screen.dart';
 
 class ChatListItem extends StatefulWidget {
   // firebase data snapshot

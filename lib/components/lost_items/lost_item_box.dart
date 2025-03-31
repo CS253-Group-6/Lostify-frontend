@@ -1,7 +1,7 @@
 // lib/components/lost_items/lost_item_box.dart
 
 import 'package:flutter/material.dart';
-import '/models/post.dart';
+import '../../models/post.dart';
 
 const double kItemBoxOpacity = 0.7;
 const double kItemBoxBorderRadius = 30.0;
@@ -11,10 +11,10 @@ const double kItemBoxBorderRadius = 30.0;
 /// on the same page (LostItem or FoundItem).
 class LostItemBox extends StatelessWidget {
   const LostItemBox({
-    Key? key,
+    super.key,
     required this.post,
     required this.onViewDetails,
-  }) : super(key: key);
+  });
 
   final Post post;
   final VoidCallback onViewDetails;
