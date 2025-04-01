@@ -69,7 +69,11 @@ class _LoginState extends State<Login> {
               id: int.parse(userId),
               address: response['address'],
               designation: response['designation'],
-              phoneNumber: response['phone']);
+              phoneNumber: response['phone'],
+              email: response['email'],
+              rollNumber: response['roll'],
+              profileImg: MemoryImage(response['image'])
+              );
 
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("Logged in Successfully!")));

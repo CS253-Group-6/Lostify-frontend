@@ -1,4 +1,3 @@
-import "package:final_project/services/auth_api.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 
@@ -6,6 +5,15 @@ import "../../components/auth/custom_auth_button.dart";
 import "../../models/user_model.dart";
 import "../../pages/profile_pages/profileform_page.dart";
 import "../../providers/user_provider.dart";
+
+/// Signup of the application.
+/// -----
+/// #### Description:
+///
+/// The signup page has 3 input text fields
+/// 1. Username
+/// 2. Email
+/// 3. Password
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -15,15 +23,18 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  // obscure password 
   bool _isObscuredpassword = true;
   bool _isObscuredConfirmPassword = true;
 
   // form key
   final _formKey = GlobalKey<FormState>();
 
+  // text editing controllers for username,email,password to get the value in the TextFormFields 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
 
   void handleSubmit() async {
     if (_formKey.currentState!.validate()) {
@@ -34,10 +45,7 @@ class _SignUpState extends State<SignUp> {
         password: _passwordController.text,
       );
 
-      context
-          .read<UserProvider>()
-          .setUserName(newUsername: _usernameController.text);
-
+      // redirect to profile form page
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Registered Successfully!")));
       Navigator.of(context).push(

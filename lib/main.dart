@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/lost-items',
+      initialRoute: '/signup',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes

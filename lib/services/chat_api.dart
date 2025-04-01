@@ -96,6 +96,7 @@ class ChatServices {
   static void notifyUser(BuildContext context,ChatDetails chatDetails) async {
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
+    print('playerId: ${profileProvider.playerId}');
     if (profileProvider.playerId != null) {
       await NotificationsApi.sendNotification(
         profileProvider.playerId!,

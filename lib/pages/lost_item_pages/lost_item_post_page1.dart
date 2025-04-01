@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/form_data_provider.dart';
+// import '../../providers/form_data_provider.dart';
 import 'lost_item_post_page2.dart';
 
 class LostAnItem1 extends StatefulWidget {
@@ -136,15 +137,15 @@ class _LostAnItem1State extends State<LostAnItem1> {
                 const SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
-                    final Map<String, dynamic> formData = {
-                      'Title':titleController.text,
-                      'Description': descriptionController.text,
-                      'Image': _image,
+                    final Map<String, dynamic> postDetails1 = {
+                      'title':titleController.text,
+                      'description': descriptionController.text,
+                      'image': _image,
                     };
-                    Provider.of<FormDataProvider>(context, listen: false).updateData(formData);
+                    // Provider.of<FormDataProvider>(context, listen: false).updateData(formData);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LostAnItem2(formdata: formData)),
+                      MaterialPageRoute(builder: (context) => LostAnItem2(postDetails1: postDetails1)),
                     );
                   },
                   style: ElevatedButton.styleFrom(

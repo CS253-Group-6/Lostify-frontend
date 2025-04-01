@@ -55,11 +55,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // get the role details from Navigator args
 
-    // final arguments = ModalRoute.of(context)!.settings.arguments as String;
+    final roleData = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
     // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
 
     /// User role
-    final int role = 0; // Replace with context.watch().user.role;
+    final int role = int.parse(roleData['user_role']); // Replace with context.watch().user.role;
 
     /// Logout
     void handleLogout() async {
@@ -69,6 +69,9 @@ class _HomePageState extends State<HomePage> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: ${response['message']}')));
+
+        // TODO: remove this navigate in failed
+        Navigator.pushReplacementNamed(context, '/user/login');
       }
     }
 

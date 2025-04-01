@@ -8,12 +8,29 @@ import "../../components/auth/custom_auth_button.dart";
 import "../../components/profile/profile_form_input.dart";
 import "../../pages/auth/confirmation_code.dart";
 import "../../providers/profile_provider.dart";
-import "../../providers/user_provider.dart";
 import "../../models/profile_model.dart";
 import "../../models/user_model.dart";
 import "../../services/auth_api.dart";
 
+
+/// Create Profile Page of the application.
+/// -----
+/// #### Description:
+///
+/// The Profile Form page has 5 input text fields
+/// 1. Name                                      --- required
+/// 2. Phone Number                              --- required
+/// 3. Campus address                            --- required
+/// 4. Designation i.e. Student / Faculty        --- optional
+/// 5. PF/Roll No. (IITK roll number)            --- optional
+/// 6. Profile Picture                           --- optional
+/// 
+
+
+
 class ProfileForm extends StatefulWidget {
+
+  // get user details from signup page
   final User user;
   const ProfileForm({super.key, required this.user});
 
@@ -22,8 +39,10 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
+
   final _formKey = GlobalKey<FormState>();
 
+  // controllers to handle the value of text in TextFormField
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -31,6 +50,7 @@ class _ProfileFormState extends State<ProfileForm> {
   final TextEditingController _rollNoController = TextEditingController();
 
   void handleSubmit() async {
+    // validate the form details filled
     if (_formKey.currentState!.validate()) {
       // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
@@ -39,36 +59,49 @@ class _ProfileFormState extends State<ProfileForm> {
           name: _nameController.text,
           address: _addressController.text,
           designation: _designationController.text,
-          rollNumber: _rollNoController.text,
-          phoneNumber: _phoneController.text);
+          rollNumber: int.parse(_rollNoController.text),
+          phoneNumber: _phoneController.text,
+          email: widget.user.email,
+          profileImage: _image
+          );
 
       // create a Json data compatible with signup api request body
       Map<String, dynamic> signUpDetails = {
         "username": widget.user.username,
         "password": widget.user.password,
-        "profile": profileData.toJson(),
+        "profile": await profileData.toJson(),
       };
+      print('signUp details:');
+      print(signUpDetails);
       // api call to signup
       var response = await AuthApi.signUp(signUpDetails);
 
       // on successfull signup
       if (response['statusCode'] == 200) {
+        // store the profile details into the provider
         context.read<ProfileProvider>().setProfile(
               name: _nameController.text,
               address: _addressController.text,
               email: widget.user.email,
               designation: _designationController.text,
               phoneNumber: _phoneController.text,
+              rollNumber: int.parse(_rollNoController.text),
+              profileImg: _image != null ? FileImage(_image!) : AssetImage('assets/images/bg1.png')
             );
 
+        // show a snack bar with success message
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Signup successful!!")));
+
+        // navigate to confirmation code page with signup details
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
                 ConfirmationCode(signUpDetails: signUpDetails)));
       } else {
+        // show a snack bar with error message
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Error signing up: ${response['message']}")));
+            // TODO: on failure do not redirect.
             Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
                 ConfirmationCode(signUpDetails: signUpDetails)));
@@ -84,8 +117,7 @@ class _ProfileFormState extends State<ProfileForm> {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
-          final image = File(pickedFile.path);
-          print(image);
+          _image = File(pickedFile.path);
         });
       }
     } catch (e) {

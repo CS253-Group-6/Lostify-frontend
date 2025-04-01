@@ -6,6 +6,7 @@ import '../../components/auth/custom_auth_button.dart';
 import '../../services/auth_api.dart';
 
 class ConfirmationCode extends StatefulWidget {
+  // get the signup details from profile form page
   final Map<String, dynamic> signUpDetails;
   const ConfirmationCode({super.key, required this.signUpDetails});
 
@@ -14,13 +15,19 @@ class ConfirmationCode extends StatefulWidget {
 }
 
 class _ConfirmationCodeState extends State<ConfirmationCode> {
+  // four text editing controllers for each text field
   final List<TextEditingController> _controllers =
       List.generate(4, (index) => TextEditingController());
+  
+  // four focus nodes
   final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
+
+  // initially resend is disabled  and after 30 sec it is enabled
   bool _isResendEnabled = false; // To track if the resend button is enabled
   int _resendCountdown = 30; // Countdown timer in seconds
   Timer? _timer;
 
+  // restart timer for 30 sec
   void _startResendTimer() {
     setState(() {
       _isResendEnabled = false;
@@ -39,12 +46,14 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     });
   }
 
+  // on loading page start timer
   @override
   void initState() {
     super.initState();
     _startResendTimer(); // Start the timer when the page loads
   }
 
+  // dispose the timer on unmounting this page
   @override
   void dispose() {
     _timer?.cancel(); // Cancel the timer when the widget is disposed
@@ -57,6 +66,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     super.dispose();
   }
 
+  // change focus from fields on change
   void _onChanged(String value, int index) {
     if (value.isNotEmpty) {
       if (index < 3) {
@@ -69,14 +79,15 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     }
   }
 
+  // on submiting the otp
   void handleSubmit() async {
-    // code to handle form submission
 
     // request data required by otp api
     var otpData = {
       'username': widget.signUpDetails['username'],
       'otp': _controllers.map((e) => e.text).join(),
     };
+    print(otpData);
     // call otp api with the data
     Map<String, dynamic> response = await AuthApi.verifyOtp(otpData);
 
@@ -88,7 +99,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
         'password': widget.signUpDetails['password'],
       });
       // if login successful
-      final cookies = loginResponse['set-cookie'];
+      final cookies = loginResponse['set-cookie']; // assuming cookie as string
       // print('Cookies: $cookies');
 
       if (cookies != null) {
@@ -106,15 +117,17 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Error verifying otp ${response['message']}")));
+      // TODO: if error donot redirect to home
       Navigator.of(context).pushNamed('/home', arguments: {
-        'user_id': int.parse('1'),
-        'user_role': '1',
+        'user_id': int.parse('0'),
+        'user_role': '0',
       });
     }
 
     // Navigator.of(context).pushReplacementNamed('/home');
   }
 
+  // resend otp after 30 sec expiry  and restart the 30 sec timer
   void handleResendOtp() async {
     // code to handle resend otp
     if (_isResendEnabled) {
