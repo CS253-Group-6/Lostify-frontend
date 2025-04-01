@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../models/post.dart';
 import '../../pages/home_page/item_details_page.dart';
 
 /// Type of post (for lost item or for found item). Passed as argument
 /// to the constructor of [PostType].
-enum PostType { lost, found }
+// enum PostType { lost, found }
 
 /// Details of a post.
 ///
@@ -26,44 +27,44 @@ enum PostType { lost, found }
 /// * `description` – Description of the post.
 ///
 /// * `itemImage` – An optional image of the article concerned.
-final class Post {
-  Post({
-    required this.postType,
-    required this.id,
-    required this.title,
-    this.status = '',
-    required this.regDate,
-    this.reports = 0,
-    this.description = '',
-    this.imageProvider,
-    this.address = '',
-  });
+// final class Post {
+//   Post({
+//     required this.postType,
+//     required this.id,
+//     required this.title,
+//     this.status = '',
+//     required this.regDate,
+//     this.reports = 0,
+//     this.description = '',
+//     this.imageProvider,
+//     this.address = '',
+//   });
 
-  /// An instance of [PostType] indicating whether the post is
-  /// for a lost item or for a found item.
-  final PostType postType;
-  final int reports;
-  /// The unique identifier assigned to the post in the database.
-  final int id;
+//   /// An instance of [PostType] indicating whether the post is
+//   /// for a lost item or for a found item.
+//   final PostType postType;
+//   final int reports;
+//   /// The unique identifier assigned to the post in the database.
+//   final int id;
 
-  /// The title given to the post.
-  final String title;
+//   /// The title given to the post.
+//   final String title;
 
-  /// ?
-  final String status;
+//   /// ?
+//   final String status;
 
-  /// The date of creation of the post.
-  final DateTime regDate;
+//   /// The date of creation of the post.
+//   final DateTime regDate;
 
-  /// Description of the post.
-  final String description;
+//   /// Description of the post.
+//   final String description;
 
-  /// An optional image of the article concerned.
-  final ImageProvider? imageProvider;
+//   /// An optional image of the article concerned.
+//   final ImageProvider? imageProvider;
 
-  /// Address associated with the post.
-  final String address;
-}
+//   /// Address associated with the post.
+//   final String address;
+// }
 
 /// Style constant for transparency of [ItemBox]
 /// instances.

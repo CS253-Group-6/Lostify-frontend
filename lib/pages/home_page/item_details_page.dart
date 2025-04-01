@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../components/home/item_box.dart';
+import '../../models/post.dart';
 import '../../services/chat_api.dart';
 
 class ItemDetailsPage extends StatelessWidget {
@@ -53,6 +54,7 @@ class ItemDetailsPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: Colors.white, 
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/home/item_box.dart';
 import '../../models/chat_model.dart';
 import '../../pages/chat/chat_screen.dart';
 import '../../providers/profile_provider.dart';
+import '../../models/post.dart';
 
 class ItemDetails extends StatefulWidget {
   final int itemId, postOwnerId;
