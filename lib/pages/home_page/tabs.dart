@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '/models/post.dart';
 import '/components/home/item_box.dart';
 
 class LostItemsTab extends StatefulWidget {

@@ -4,9 +4,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../../components/lost_items/lost_item_box.dart';
 import '../../models/post.dart';
 import '../../pages/chat/chat_page.dart';
+import '../../components/lost_items/lost_item_box.dart';
 
 class FoundItem extends StatefulWidget {
   const FoundItem({super.key});
@@ -25,7 +25,7 @@ class _FoundItemState extends State<FoundItem> {
       status: 'Returned',
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
-      imageUrl: 'assets/phone.png',
+      imageProvider: Image.asset('assets/phone.png').image,
     ),
     Post(
       postType: PostType.found,
@@ -34,7 +34,7 @@ class _FoundItemState extends State<FoundItem> {
       status: 'Not Returned',
       regDate: DateTime.parse('2025-01-02'),
       closedDate: null,
-      imageUrl: '',
+      imageProvider: Image.asset('assets/phone.png').image,
     ),
     Post(
       postType: PostType.found,
@@ -43,7 +43,7 @@ class _FoundItemState extends State<FoundItem> {
       status: 'Returned',
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
-      imageUrl: 'assets/wallet.png',
+      imageProvider: Image.asset('assets/phone.png').image,
     ),
     Post(
       postType: PostType.found,
@@ -52,7 +52,7 @@ class _FoundItemState extends State<FoundItem> {
       status: 'Not Returned',
       regDate: DateTime.parse('2025-03-11'),
       closedDate: null,
-      imageUrl: 'assets/keys.png',
+      imageProvider: Image.asset('assets/phone.png').image,
     ),
     Post(
       postType: PostType.found,
@@ -61,7 +61,7 @@ class _FoundItemState extends State<FoundItem> {
       status: 'Not Returned',
       regDate: DateTime.parse('2025-01-02'),
       closedDate: null,
-      imageUrl: '',
+      imageProvider: Image.asset('assets/phone.png').image,
     ),
     Post(
       postType: PostType.found,
@@ -70,7 +70,7 @@ class _FoundItemState extends State<FoundItem> {
       status: 'Returned',
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
-      imageUrl: '',
+      imageProvider: Image.asset('assets/phone.png').image,
     ),
   ];
 
@@ -79,6 +79,12 @@ class _FoundItemState extends State<FoundItem> {
 
   @override
   Widget build(BuildContext context) {
+    final int userId = 1; // Replace with the actual userId
+  
+    final List<Post> filteredPosts = posts.where((post) {
+      return post.creatorId == userId && post.postType == PostType.found;
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Found Items', style: TextStyle(color: Colors.white)),
@@ -103,17 +109,17 @@ class _FoundItemState extends State<FoundItem> {
             child: SafeArea(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                itemCount: posts.length,
+                itemCount: filteredPosts.length,
                 itemBuilder: (context, index) {
                   return Center(
-                    child: LostItemBox(
-                      post: posts[index],
-                      onViewDetails: () {
-                        setState(() {
-                          _showDetails = true;
-                          _selectedPost = posts[index];
-                        });
-                      },
+                    child: ItemBox(
+                      post: filteredPosts[index],
+                      // onViewDetails: () {
+                      //   setState(() {
+                      //     _showDetails = true;
+                      //     _selectedPost = filteredPosts[index];
+                      //   });
+                      // },
                     ),
                   );
                 },
@@ -191,12 +197,15 @@ class _FoundItemState extends State<FoundItem> {
           const SizedBox(height: 16),
 
           // Item image (smaller frame with rounded corners)
-          if (post.imageUrl != null && post.imageUrl!.isNotEmpty)
+          if (post.imageProvider != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: post.imageUrl!.startsWith('http')
-                  ? Image.network(post.imageUrl!, height: 120, fit: BoxFit.contain)
-                  : Image.asset(post.imageUrl!, height: 120, fit: BoxFit.contain),
+              child: Image(
+                image: post.imageProvider!,
+                fit: BoxFit.cover,
+                height: 80,
+                width: 80,
+              ),
             )
           else
             Container(

@@ -21,8 +21,11 @@ class _LostItemState extends State<LostItem> {
       title: 'Wallet',
       status: 'Missing',
       regDate: DateTime.parse('2025-01-18'),
-      closedDate: null,
-      imageUrl: 'assets/wallet.png',
+      address: 'Hall 5',
+      reports: 1,
+      description: "This is the description of item id:1",
+      imageProvider: Image.asset('assets/wallet.png').image,
+
     ),
     Post(
       postType: PostType.lost,
@@ -31,7 +34,7 @@ class _LostItemState extends State<LostItem> {
       status: 'Found',
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
-      imageUrl: 'assets/phone.png',
+      imageProvider: Image.asset('assets/phone.png').image,
     ),
     Post(
       postType: PostType.lost,
@@ -40,16 +43,17 @@ class _LostItemState extends State<LostItem> {
       status: 'Missing',
       regDate: DateTime.parse('2025-03-11'),
       closedDate: null,
-      imageUrl: 'assets/keys.png',
+      imageProvider: Image.asset('assets/keys.png').image,
     ),
     Post(
       postType: PostType.lost,
       id: 4,
       title: 'Bottle',
       status: 'Found',
+      creatorId: 1,
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
-      imageUrl: '',
+      imageProvider: null,
     ),
     Post(
       postType: PostType.lost,
@@ -58,7 +62,7 @@ class _LostItemState extends State<LostItem> {
       status: 'Found',
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
-      imageUrl: '',
+      imageProvider: null,
     ),
   ];
 
@@ -67,6 +71,12 @@ class _LostItemState extends State<LostItem> {
 
   @override
   Widget build(BuildContext context) {
+    final int userId = 1; // Replace with the actual userId
+  
+    final List<Post> filteredPosts = posts.where((post) {
+      return post.creatorId == userId && post.postType == PostType.lost;
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Lost Items',
@@ -92,17 +102,17 @@ class _LostItemState extends State<LostItem> {
             child: SafeArea(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                itemCount: posts.length,
+                itemCount: filteredPosts.length,
                 itemBuilder: (context, index) {
                   return Center(
-                    child: LostItemBox(
-                      post: posts[index],
-                      onViewDetails: () {
-                        setState(() {
-                          _showDetails = true;
-                          _selectedPost = posts[index];
-                        });
-                      },
+                    child: ItemBox(
+                      post: filteredPosts[index],
+                      // onViewDetails: () {
+                      //   setState(() {
+                      //     _showDetails = true;
+                      //     _selectedPost = filteredPosts[index];
+                      //   });
+                      // },
                     ),
                   );
                 },
@@ -182,20 +192,15 @@ class _LostItemState extends State<LostItem> {
           const SizedBox(height: 16),
 
           // Item image with smaller frame and complete image visible
-          if (post.imageUrl != null && post.imageUrl!.isNotEmpty)
+          if (post.imageProvider != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: post.imageUrl!.startsWith('http')
-                  ? Image.network(
-                      post.imageUrl!,
-                      height: 120,
-                      fit: BoxFit.contain,
-                    )
-                  : Image.asset(
-                      post.imageUrl!,
-                      height: 120,
-                      fit: BoxFit.contain,
-                    ),
+              child: Image(
+                image: post.imageProvider!,
+                fit: BoxFit.cover,
+                height: 80,
+                width: 80,
+              ),
             )
           else
             Container(
