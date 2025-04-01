@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../components/home/item_box.dart';
+import '../../models/post.dart';
+import '/components/home/item_box.dart';
 
 class ItemsTab extends StatelessWidget {
   const ItemsTab({super.key});
