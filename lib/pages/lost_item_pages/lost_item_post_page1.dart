@@ -2,9 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-
-import '../../providers/form_data_provider.dart';
 import 'lost_item_post_page2.dart';
 
 class LostAnItem1 extends StatefulWidget {
@@ -141,7 +138,6 @@ class _LostAnItem1State extends State<LostAnItem1> {
                       'Description': descriptionController.text,
                       'Image': _image,
                     };
-                    Provider.of<FormDataProvider>(context, listen: false).updateData(formData);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => LostAnItem2(formdata: formData)),
