@@ -1,0 +1,2 @@
+D:/Lostify/android/app/.cxx/Debug/453c6067/x86/CMakeFiles/edit_cache.dir
+D:/Lostify/android/app/.cxx/Debug/453c6067/x86/CMakeFiles/rebuild_cache.dir

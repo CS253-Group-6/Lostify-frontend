@@ -2,9 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
 import '../../components/lost_items/lost_item_box.dart';
 import '../../models/post.dart';
 import '../../pages/chat/chat_page.dart';
+import '../../utils/post_filter.dart';
+import '../../providers/user_provider.dart';
+
 
 class LostItem extends StatefulWidget {
   const LostItem({super.key});
@@ -50,16 +54,17 @@ class _LostItemState extends State<LostItem> {
       id: 4,
       title: 'Bottle',
       status: 'Found',
-      creatorId: 1,
+      creatorId: 0,
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
-      imageProvider: null,
+      imageProvider: Image.asset('assets/keys.png').image,
     ),
     Post(
       postType: PostType.lost,
       id: 5,
       title: 'Cycle',
       status: 'Found',
+      creatorId: 0,
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
       imageProvider: null,
@@ -71,11 +76,14 @@ class _LostItemState extends State<LostItem> {
 
   @override
   Widget build(BuildContext context) {
-    final int userId = 1; // Replace with the actual userId
-  
-    final List<Post> filteredPosts = posts.where((post) {
-      return post.creatorId == userId && post.postType == PostType.lost;
-    }).toList();
+
+    final int userId = Provider.of<UserProvider>(context).userId; 
+
+    final List<Post> filteredPosts = PostFilter.filterPosts(
+      posts: posts,
+      userId: userId,
+      postType: PostType.lost,
+    );
 
     return Scaffold(
       appBar: AppBar(

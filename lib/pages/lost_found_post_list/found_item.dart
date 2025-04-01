@@ -3,10 +3,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../../providers/user_provider.dart';
 import '../../models/post.dart';
 import '../../pages/chat/chat_page.dart';
 import '../../components/lost_items/lost_item_box.dart';
+import '../../utils/post_filter.dart';
 
 class FoundItem extends StatefulWidget {
   const FoundItem({super.key});
@@ -50,9 +52,10 @@ class _FoundItemState extends State<FoundItem> {
       id: 4,
       title: 'Keys',
       status: 'Not Returned',
+      creatorId: 0,
       regDate: DateTime.parse('2025-03-11'),
       closedDate: null,
-      imageProvider: Image.asset('assets/phone.png').image,
+      imageProvider: Image.asset('assets/keys.png').image,
     ),
     Post(
       postType: PostType.found,
@@ -60,6 +63,7 @@ class _FoundItemState extends State<FoundItem> {
       title: 'Bottle',
       status: 'Not Returned',
       regDate: DateTime.parse('2025-01-02'),
+      creatorId: 2,
       closedDate: null,
       imageProvider: Image.asset('assets/phone.png').image,
     ),
@@ -68,9 +72,10 @@ class _FoundItemState extends State<FoundItem> {
       id: 6,
       title: 'Cycle',
       status: 'Returned',
+      creatorId: 0,
       regDate: DateTime.parse('2025-01-02'),
       closedDate: DateTime.parse('2025-01-06'),
-      imageProvider: Image.asset('assets/phone.png').image,
+      imageProvider: null,
     ),
   ];
 
@@ -79,11 +84,16 @@ class _FoundItemState extends State<FoundItem> {
 
   @override
   Widget build(BuildContext context) {
-    final int userId = 1; // Replace with the actual userId
-  
-    final List<Post> filteredPosts = posts.where((post) {
-      return post.creatorId == userId && post.postType == PostType.found;
-    }).toList();
+     // Get the logged-in user's ID from UserProvider
+    final int userId = Provider.of<UserProvider>(context).userId;
+
+
+    // Use PostFilter to filter posts by userId and postType
+    final List<Post> filteredPosts = PostFilter.filterPosts(
+      posts: posts,
+      userId: userId,
+      postType: PostType.found,
+    );
 
     return Scaffold(
       appBar: AppBar(
