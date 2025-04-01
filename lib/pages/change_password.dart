@@ -1,9 +1,5 @@
-
 import 'package:flutter/material.dart';
-
 import 'package:intl/intl.dart';
-
-
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -26,14 +22,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      // Check if new password and confirm password match
       if (_newPasswordController.text != _confirmPasswordController.text) {
         setState(() {
           _passwordErrorMessage = 'Passwords do not match!';
         });
       } else {
         setState(() {
-          _passwordErrorMessage = null; // Clear the error message
+          _passwordErrorMessage = null;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Password changed successfully!')),
@@ -52,37 +47,63 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    // Custom Spacing Variables
-    double titleSpacing = screenHeight * 0.05;  // Space after "Change Password"
-    double fieldSpacing = screenHeight * 0.025; // Space between input fields
-    double buttonSpacing = screenHeight * 0.07; // Space before Submit button
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      body: SingleChildScrollView( // Ensures smooth scrolling when keyboard opens
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0 + statusBarHeight),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 4,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            toolbarHeight: 90.0,
+            leading: Padding(
+              padding: EdgeInsets.only(top: statusBarHeight),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            title: Padding(
+              padding: EdgeInsets.only(top: statusBarHeight),
+              child: Text(
+                "Change Password",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
+              ),
+            ),
+            centerTitle: true,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          height: MediaQuery.of(context).size.height, // Ensures full-screen height
+          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/Admin Login.png"),
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-
-              Center(
-                child: Text(
-                  "Change Password",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(height: 20), // Reduced spacing since we have app bar
 
               Form(
                 key: _formKey,
@@ -121,7 +142,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue.shade600,
                     shape: RoundedRectangleBorder(
@@ -132,30 +152,25 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   child: Text(
                     "Submit",
                     style: TextStyle(fontSize: 18, color: Colors.white),
-
                   ),
-
                 ),
               ),
 
-              SizedBox(height: 50), // Bottom padding
+              SizedBox(height: 50),
             ],
           ),
         ),
       ),
     );
-
   }
 
-  // Updated inputLabel function to make text bold
   Widget inputLabel(String text) {
     return Text(
       text,
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black), // Bold text
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
     );
   }
 
-  // Input field for password with validation
   Widget inputField(TextEditingController controller, String hintText) {
     return TextFormField(
       controller: controller,
