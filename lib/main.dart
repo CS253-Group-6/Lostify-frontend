@@ -1,6 +1,7 @@
 import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/chat_model.dart';
 import 'package:final_project/models/user_model.dart';
+import '../../models/post.dart';
 import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
