@@ -27,31 +27,21 @@ class _SignUpState extends State<SignUp> {
 
   void handleSubmit() async {
     if (_formKey.currentState!.validate()) {
-      context.read<UserProvider>().setUserName(newUsername: _usernameController.text);
-
+      // create an user object instance
       User user = User(
         username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
       );
 
-      Map<String, dynamic> response = await AuthApi.signUp(user.toJson());
-      
-      if (response['statusCode'] == 200) {
-        
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Registered Successfully!")));
-        Navigator.of(context).pushNamed('/create-profile', arguments: {
-          'username': _usernameController.text,
-          'email': _emailController.text,
-          'password': _passwordController.text
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Error signing up ${response['message']}")));
-        Navigator.of(context).pushReplacementNamed('/home');
-      }
-      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileForm(user:user)));
+      context
+          .read<UserProvider>()
+          .setUserName(newUsername: _usernameController.text);
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Registered Successfully!")));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => ProfileForm(user: user)));
     }
   }
 
@@ -64,9 +54,9 @@ class _SignUpState extends State<SignUp> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/Admin Login.png"),
-              fit: BoxFit.cover)),
+              image: DecorationImage(
+                  image: AssetImage("assets/images/Admin Login.png"),
+                  fit: BoxFit.cover)),
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: SingleChildScrollView(
@@ -79,9 +69,7 @@ class _SignUpState extends State<SignUp> {
                         child: Text(
                           "Sign Up",
                           style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                          ),
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Align(
@@ -113,9 +101,7 @@ class _SignUpState extends State<SignUp> {
                               // color: Colors.black.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                color: Color(0xFFC5C6CC),
-                                width: 2
-                              ),
+                                  color: Color(0xFFC5C6CC), width: 2),
                             ),
                             child: TextFormField(
                               controller: _usernameController,
@@ -172,12 +158,11 @@ class _SignUpState extends State<SignUp> {
                                     filled: true,
                                     fillColor: Colors.transparent,
                                     hintText: 'Email Address',
-                                    hintStyle: TextStyle(color: Color(0xFF8F9098)),
+                                    hintStyle:
+                                        TextStyle(color: Color(0xFF8F9098)),
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 16
-                                    ),
+                                        vertical: 12, horizontal: 16),
                                   ),
                                 ),
                               ),
@@ -220,19 +205,18 @@ class _SignUpState extends State<SignUp> {
                                     filled: true,
                                     fillColor: Colors.transparent,
                                     hintText: 'Password',
-                                    hintStyle: const TextStyle(color: Color(0xFF8F9098)),
+                                    hintStyle: const TextStyle(
+                                        color: Color(0xFF8F9098)),
                                     suffixIcon: IconButton(
                                       onPressed: () {
                                         setState(() {
                                           _isObscuredpassword =
-                                            !_isObscuredpassword;
+                                              !_isObscuredpassword;
                                         });
                                       },
-                                      icon: Icon(
-                                        _isObscuredpassword
-                                            ? Icons.visibility_off
-                                            : Icons.visibility
-                                      ),
+                                      icon: Icon(_isObscuredpassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility),
                                     ),
                                     border: InputBorder.none,
                                     contentPadding: const EdgeInsets.symmetric(
@@ -252,9 +236,7 @@ class _SignUpState extends State<SignUp> {
                                   // color: Colors.black.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: Color(0xFFC5C6CC),
-                                    width: 2
-                                  ),
+                                      color: Color(0xFFC5C6CC), width: 2),
                                 ),
                                 child: TextFormField(
                                   validator: (value) {
@@ -268,17 +250,18 @@ class _SignUpState extends State<SignUp> {
                                     filled: true,
                                     fillColor: Colors.transparent,
                                     hintText: 'Confirm Password',
-                                    hintStyle: const TextStyle(color: Color(0xFF8F9098)),
+                                    hintStyle: const TextStyle(
+                                        color: Color(0xFF8F9098)),
                                     suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _isObscuredConfirmPassword = !_isObscuredConfirmPassword;
-                                        });
-                                      },
-                                      icon: _isObscuredConfirmPassword
-                                          ? const Icon(Icons.visibility_off)
-                                          : const Icon(Icons.visibility)
-                                    ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _isObscuredConfirmPassword =
+                                                !_isObscuredConfirmPassword;
+                                          });
+                                        },
+                                        icon: _isObscuredConfirmPassword
+                                            ? const Icon(Icons.visibility_off)
+                                            : const Icon(Icons.visibility)),
                                     border: InputBorder.none,
                                     contentPadding: const EdgeInsets.symmetric(
                                       vertical: 12,

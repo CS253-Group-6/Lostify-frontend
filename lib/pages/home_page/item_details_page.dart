@@ -32,6 +32,7 @@ class ItemDetailsPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 // onDelete(); // Calls the delete function passed from parent
+                
                 Navigator.pop(context);
               },
               child: const Text("Delete", style: TextStyle(color: Colors.red)),

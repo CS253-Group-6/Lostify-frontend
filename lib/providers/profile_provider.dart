@@ -5,7 +5,9 @@ class ProfileProvider extends ChangeNotifier {
   String name;
   String phoneNumber, address, designation, rollNumber;
   int id;
+  String email;
   String? playerId;
+  ImageProvider profileImg;
   
   Future<void> _fetchAndSavePlayerId() async {
     // Fetch OneSignal player ID
@@ -30,7 +32,9 @@ class ProfileProvider extends ChangeNotifier {
       this.phoneNumber = '',
       this.rollNumber = '',
       this.id = 0,
-      this.playerId
+      this.playerId,
+      this.email = '',
+      this.profileImg = const AssetImage('assets/images/bg1.png')
       });
 
   void setName({required String name}) async {
@@ -43,6 +47,7 @@ class ProfileProvider extends ChangeNotifier {
     String address = '',
     String designation = '',
     String phoneNumber = '',
+    String email = '',
     int id = 0
   }) async {
     this.name = name;

@@ -1,3 +1,4 @@
+import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/auth/auth_input.dart';
@@ -11,11 +12,25 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
 
-  void handleResetPassword(){
-    Navigator.pushReplacementNamed(context, '/user/login');
+  void handleResetPassword() async {
+    if (_usernameController.text.isNotEmpty) {
+      final response = await AuthApi.resetPassword(_usernameController.text);
+      if (response['statusCode'] == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Password reset successfully')));
+        Navigator.pushReplacementNamed(context, '/user/login');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to reset password')));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter your username')));
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +43,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           decoration: BoxDecoration(
               color: Color(0xFF45BBDD).withValues(alpha: 0.4),
               image: const DecorationImage(
-                image: AssetImage("assets/images/Admin Login.png"),
-                fit: BoxFit.cover
-              )
-          ),
+                  image: AssetImage("assets/images/Admin Login.png"),
+                  fit: BoxFit.cover)),
           child: Column(
             children: [
               Image.asset(
@@ -65,8 +78,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           child: Column(
                             children: [
                               Input(
-                                textController: _emailController,
-                                hintText: "Enter email",
+                                textController: _usernameController,
+                                hintText: "Enter username",
                                 showEyeIcon: false,
                               ),
                               const SizedBox(height: 24),

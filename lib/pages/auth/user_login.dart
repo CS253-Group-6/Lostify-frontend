@@ -25,16 +25,24 @@ class _LoginState extends State<Login> {
     Navigator.of(context).pushNamed('/reset-password');
   }
 
-  void handleSubmit() async{
-    if(_loginKey.currentState!.validate()){
-      context.read<UserProvider>().setUserName(newUsername: _usernameController.text);
-      
+  void handleSubmit() async {
+    if (_loginKey.currentState!.validate()) {
+      // collect login details i.e username,password
       var loginDetails = {
         "username": _usernameController.text,
         "password": _passwordController.text
       };
+
+      // api call for login
       Map<String, dynamic> response = await AuthApi.login(loginDetails);
+
+      // if successfull login
       if (response['statusCode'] == 200) {
+        // set user name into userprovider
+        context
+            .read<UserProvider>()
+            .setUserName(newUsername: _usernameController.text);
+
         // Extract cookies from the response headers
         final cookies = response['set-cookie'];
         // print('Cookies: $cookies');
@@ -47,43 +55,56 @@ class _LoginState extends State<Login> {
 
           // print('User ID: $userId');
           // print('User Role: $userRole');
+
+          // save userId into UserProvier
           context.read<UserProvider>().setId(id: int.parse(userId!));
+
+          // get profile details form userId
           Map<String, dynamic> profileDetails =
               await ProfileApi.getProfileById(int.parse(userId));
+
+          // write the current logged in user's profile details into Profile Provider
           context.read<ProfileProvider>().setProfile(
               name: profileDetails['name'],
-              id: response['userid'],
+              id: int.parse(userId),
               address: response['address'],
               designation: response['designation'],
               phoneNumber: response['phone']);
+
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Logged in Successfully!")));
+          Navigator.of(context).pushReplacementNamed('/home', arguments: {
+            'user_id': userId,
+            'user_role': userRole
+          });
         } else {
           print('No cookies found in the response.');
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("No cookies found!!")));
         }
 
         // Navigator.of(context).pushReplacementNamed('/');
       } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Error logging in: ${response['message']}")));
         Navigator.of(context).pushReplacementNamed('/home');
       }
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Logged in Successfully!")));
-      Navigator.of(context).pushReplacementNamed('/home');
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Container(
-          constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+          constraints:
+              BoxConstraints(minHeight: MediaQuery.of(context).size.height),
           decoration: BoxDecoration(
-            color: Color(0xFF45BBDD).withValues(alpha: 0.4),
-            image: const DecorationImage(
-              image: AssetImage("assets/images/Admin Login.png"),
-              fit: BoxFit.cover
-            )
-          ),
+              color: Color(0xFF45BBDD).withValues(alpha: 0.4),
+              image: const DecorationImage(
+                  image: AssetImage("assets/images/Admin Login.png"),
+                  fit: BoxFit.cover)),
           child: Column(
             children: [
               Image.asset(

@@ -50,22 +50,24 @@ class AuthApi {
   }
 
   // logout user
-  static Future<void> logout() async {
+  static Future<Map<String,dynamic>> logout() async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/auth/logout'),
       );
       return jsonDecode(response.body);
     } catch (e) {
-      return;
+      return {"message": "Unexpected error: $e", "statusCode": 500};
     }
   }
 
   // reset -password
   static Future<Map<String, dynamic>> resetPassword(String username) async {
     try {
-      final response = await http.get(
+      final response = await http.post(
         Uri.parse('$baseUrl/auth/reset_password'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"username": username}),
       );
       return jsonDecode(response.body);
     } catch (e) {

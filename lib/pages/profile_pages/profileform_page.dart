@@ -32,39 +32,47 @@ class _ProfileFormState extends State<ProfileForm> {
 
   void handleSubmit() async {
     if (_formKey.currentState!.validate()) {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
+      // collect the profile details data
       ProfileModel profileData = ProfileModel(
-        name: _nameController.text,
-        address: _addressController.text,
-        designation: _designationController.text,
-        rollNumber: _rollNoController.text,
-        phoneNumber: _phoneController.text
-      );
+          name: _nameController.text,
+          address: _addressController.text,
+          designation: _designationController.text,
+          rollNumber: _rollNoController.text,
+          phoneNumber: _phoneController.text);
 
-      Map<String,dynamic> signUpDetails = {
+      // create a Json data compatible with signup api request body
+      Map<String, dynamic> signUpDetails = {
         "username": widget.user.username,
         "password": widget.user.password,
         "profile": profileData.toJson(),
       };
-
+      // api call to signup
       var response = await AuthApi.signUp(signUpDetails);
 
+      // on successfull signup
       if (response['statusCode'] == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Signup successful!!")
-        ));
+        context.read<ProfileProvider>().setProfile(
+              name: _nameController.text,
+              address: _addressController.text,
+              email: widget.user.email,
+              designation: _designationController.text,
+              phoneNumber: _phoneController.text,
+            );
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Signup successful!!")));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                ConfirmationCode(signUpDetails: signUpDetails)));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(response['message'])
-        ));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Error signing up: ${response['message']}")));
+            Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                ConfirmationCode(signUpDetails: signUpDetails)));
       }
-
-      context.read<ProfileProvider>().setProfile(name: _nameController.text);
-
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ConfirmationCode(signUpDetails: signUpDetails))
-      );
     }
   }
 
@@ -72,7 +80,6 @@ class _ProfileFormState extends State<ProfileForm> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    // if (!status.isGranted) {
     try {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
@@ -97,9 +104,8 @@ class _ProfileFormState extends State<ProfileForm> {
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/Admin Login.png"),
-                fit: BoxFit.cover
-              ),
+                  image: AssetImage("assets/images/Admin Login.png"),
+                  fit: BoxFit.cover),
             ),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
@@ -111,7 +117,8 @@ class _ProfileFormState extends State<ProfileForm> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Create Profile",
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -172,7 +179,8 @@ class _ProfileFormState extends State<ProfileForm> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   _image != null
-                                      ? Text("Selected File: ${_image!.path.split('/').last}")
+                                      ? Text(
+                                          "Selected File: ${_image!.path.split('/').last}")
                                       : const Text("No file selected"),
                                   const SizedBox(height: 20),
                                   ElevatedButton(
@@ -181,7 +189,8 @@ class _ProfileFormState extends State<ProfileForm> {
                                       foregroundColor: Colors.white,
                                       backgroundColor: const Color(0xFF32ADE6),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4.0),
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
                                       ),
                                     ),
                                     child: const Text("Choose File"),

@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -50,8 +52,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // get the role details from Navigator args
+
+    // final arguments = ModalRoute.of(context)!.settings.arguments as String;
+    // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
+
     /// User role
     final int role = 0; // Replace with context.watch().user.role;
+
+    /// Logout
+    void handleLogout() async {
+      final response = await AuthApi.logout();
+      if (response['statusCode'] == 200) {
+        Navigator.pushReplacementNamed(context, '/user/login');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${response['message']}')));
+      }
+    }
 
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].
@@ -188,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     title: const Text('Logout'),
-                    onTap: () {},
+                    onTap: handleLogout,
                   ),
                 ],
               ),

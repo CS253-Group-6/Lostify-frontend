@@ -54,26 +54,27 @@ class _LostAnItem2State extends State<LostAnItem2> {
   }
 
   void handleLostItemPost(Item item) async {
-    try {
-      Map<String,dynamic> response = await ItemsApi.lostitem(item);
-      if (response['statusCode'] == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Item posted successfully!!")
-        ));
-        Navigator.of(context).pushNamed('/home');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Item posted failed!!")
-        ));
-        Navigator.pushNamed(context, '/home');
-        // Navigator.of(context).pushReplacementNamed('/home');
-      }
-    } catch(e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Item posted failed!!"))
-      );
-      Navigator.pushNamed(context, '/home');
-    }
+    // try {
+      // Map<String,dynamic> response = await ItemsApi.postItem(item);
+    //   if (response['statusCode'] == 200) {
+    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       content: Text("Item posted successfully!!")
+    //     ));
+    //     Navigator.of(context).pushNamed('/home');
+    //   } else {
+    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       content: Text("Item posted failed!!")
+    //     ));
+    //     Navigator.pushNamed(context, '/home');
+    //     // Navigator.of(context).pushReplacementNamed('/home');
+    //   }
+    // } catch(e) {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //     content: Text("Item posted failed!!"))
+    //   );
+    //   Navigator.pushNamed(context, '/home');
+    // }
+    Navigator.pushNamed(context, '/home');
     
   }
 

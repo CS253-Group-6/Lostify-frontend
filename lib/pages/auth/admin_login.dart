@@ -1,3 +1,4 @@
+import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,14 +27,31 @@ class _AdminLoginState extends State<AdminLogin> {
         "password": _passwordController.text
       };
       
-      // Map<String,dynamic> response = await AuthApi.login(loginDetails);
-      // if (response['statusCode'] == 200) {
-      //   Navigator.of(context).pushReplacementNamed('/');
-      // } else {
-      //   Navigator.of(context).pushReplacementNamed('/');
-      // }
+      Map<String,dynamic> response = await AuthApi.login(adminLoginDetails);
+      if (response['statusCode'] == 200) {
+        // Extract cookies from the response headers
+        final cookies = response['set-cookie'];
+        // print('Cookies: $cookies');
 
-      Navigator.of(context).pushReplacementNamed('/home');
+        if (cookies != null) {
+          // Parse user_id and user_role from the cookies
+          final userId = RegExp(r'user_id=(\d+)').firstMatch(cookies)?.group(1);
+          final userRole =
+              RegExp(r'user_role=([^;]+)').firstMatch(cookies)?.group(1);
+
+          Navigator.of(context).pushReplacementNamed('/home',arguments: {
+            'user_id': int.parse(userId!),
+            'user_role': userRole
+          });
+        }else{
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid credentials')));
+        }   
+      } else {
+        // Navigator.of(context).pushReplacementNamed('/');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error logging in : ${response['message']}')));
+      }
+
+      // Navigator.of(context).pushReplacementNamed('/home');
     }
   }
   @override
@@ -112,7 +130,6 @@ class _AdminLoginState extends State<AdminLogin> {
                                   ),
                                 ),
                                 SizedBox(height: 24),
-                                //TODO: add custom button
                                 Custombutton(
                                   text: "Login",
                                   onClick: handleSubmit,

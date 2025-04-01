@@ -2,8 +2,19 @@ import 'package:flutter/material.dart';
 
 import '/components/home/item_box.dart';
 
-class LostItemsTab extends StatelessWidget {
+class LostItemsTab extends StatefulWidget {
   const LostItemsTab({super.key});
+
+  @override
+  LostItemsTabState createState() => LostItemsTabState();
+}
+
+class LostItemsTabState extends State<LostItemsTab> {
+  @override
+  void initState() {
+    super.initState();
+    // TODO: Load the lost posts
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +86,20 @@ class LostItemsTab extends StatelessWidget {
   }
 }
 
-class FoundItemsTab extends StatelessWidget {
+class FoundItemsTab extends StatefulWidget {
   const FoundItemsTab({super.key});
 
+  @override
+  State<FoundItemsTab> createState() => _FoundItemsTabState();
+}
+
+class _FoundItemsTabState extends State<FoundItemsTab> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // TODO: load the found items
+  }
   @override
   Widget build(BuildContext context) {
     List<Post> items = [
