@@ -61,6 +61,10 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Container(
         width: double.infinity,

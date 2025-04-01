@@ -44,8 +44,14 @@ class ItemDetailsPage extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text(post.title), // Display the title of the item
+        title: Text(post.title, style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -28,6 +28,8 @@ import 'pages/profile_pages/profileform_page.dart';
 import 'pages/search_page.dart';
 import 'providers/user_provider.dart';
 
+import 'pages/change_password.dart';
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 Future main() async {
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/signup',
+      initialRoute: '/home',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes
@@ -112,6 +114,7 @@ class MyApp extends StatelessWidget {
         // '/notifications' : (context) => , //notifications
         '/search': (context) => SearchPage(), //search_page
         '/report': (context) => ReportedItemPage(), //reported_items_page
+        '/change': (context) => ChangePasswordPage(), //change_password_page
       },
     );
   }

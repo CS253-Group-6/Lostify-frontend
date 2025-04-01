@@ -1,4 +1,8 @@
+
 import 'package:flutter/material.dart';
+
+import 'package:intl/intl.dart';
+
 
 void main() {
   runApp(MaterialApp(
@@ -56,89 +60,91 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     double buttonSpacing = screenHeight * 0.07; // Space before Submit button
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/adg.png"), // Background image
-            fit: BoxFit.cover,
+      body: SingleChildScrollView( // Ensures smooth scrolling when keyboard opens
+        child: Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height, // Ensures full-screen height
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/Admin Login.png"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.1), // Moves title lower
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
 
-            // Title (Bold)
-            Text(
-              "Change Password",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            SizedBox(height: titleSpacing), // Space after title
-
-            Expanded(
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Old Password Label (Bold)
-                      inputLabel("Old Password"),
-                      SizedBox(height: fieldSpacing * 0.5),
-                      inputField(_oldPasswordController, "Enter Old Password"),
-                      SizedBox(height: fieldSpacing),
-
-                      // New Password Label (Bold)
-                      inputLabel("New Password"),
-                      SizedBox(height: fieldSpacing * 0.5),
-                      inputField(_newPasswordController, "Enter New Password"),
-                      SizedBox(height: fieldSpacing),
-
-                      // Confirm Password Label (Bold)
-                      inputLabel("Confirm Password"),
-                      SizedBox(height: fieldSpacing * 0.5),
-                      inputField(_confirmPasswordController, "Confirm Password"),
-                      if (_passwordErrorMessage != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            _passwordErrorMessage!,
-                            style: TextStyle(color: Colors.red, fontSize: 14),
-                          ),
-                        ),
-                      SizedBox(height: buttonSpacing), // Space before Submit button
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // Submit Button
-            Center(
-              child: ElevatedButton(
-                onPressed: _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade600,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                ),
+              Center(
                 child: Text(
-                  "Submit",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  "Change Password",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
                 ),
               ),
-            ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
-            SizedBox(height: screenHeight * 0.3), // Bottom space for comfort
-          ],
+              Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    inputLabel("Old Password"),
+                    SizedBox(height: 10),
+                    inputField(_oldPasswordController, "Enter Old Password"),
+                    SizedBox(height: 15),
+
+                    inputLabel("New Password"),
+                    SizedBox(height: 10),
+                    inputField(_newPasswordController, "Enter New Password"),
+                    SizedBox(height: 15),
+
+                    inputLabel("Confirm Password"),
+                    SizedBox(height: 10),
+                    inputField(_confirmPasswordController, "Confirm Password"),
+                    if (_passwordErrorMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          _passwordErrorMessage!,
+                          style: TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      ),
+                    SizedBox(height: 30),
+                  ],
+                ),
+              ),
+
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.shade600,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  ),
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+
+                  ),
+
+                ),
+              ),
+
+              SizedBox(height: 50), // Bottom padding
+            ],
+          ),
         ),
       ),
     );
+
   }
 
   // Updated inputLabel function to make text bold

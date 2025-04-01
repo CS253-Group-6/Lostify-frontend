@@ -10,6 +10,7 @@ import '../../components/home/expandable_fab.dart';
 import '../chat/chat_list.dart';
 import '../search_page.dart';
 import 'tabs.dart';
+import '../change_password.dart';
 
 /// Home page of the application.
 ///
@@ -203,6 +204,15 @@ class _HomePageState extends State<HomePage> {
                   ListTile(
                     title: const Text('Edit Profile'),
                     onTap: () {},
+                  ),
+                  ListTile(
+                    title: const Text('Change Password'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                      );
+                    },
                   ),
                   ListTile(
                     title: const Text('Logout'),
