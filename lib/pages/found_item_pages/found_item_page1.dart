@@ -82,10 +82,37 @@ class _FoundItemPage1State extends State<FoundItemPage1> {
               const SizedBox(height: 270),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => FoundItemPage2())
-                  );
+                  try {
+
+
+                    // Ensure _image is not null if required
+                    if (_image == null) {
+                      throw Exception("Please upload an image.");
+                    }
+
+                    // Creating postDetails1 Map
+                    final Map<String, dynamic> postDetails1 = {
+
+                      'image': _image, // Ensure _image is a valid format
+                    };
+
+                    // Navigate to next screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FoundItemPage2(postDetails1: postDetails1),
+                      ),
+                    );
+
+                  } catch (e) {
+                    // Show error message in a SnackBar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -94,7 +121,7 @@ class _FoundItemPage1State extends State<FoundItemPage1> {
                 ),
                 child: const Text(
                   "Next",
-                  style: TextStyle(fontSize: 18, color: Colors.white)
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ],

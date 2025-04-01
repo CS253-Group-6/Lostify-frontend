@@ -202,7 +202,8 @@ class _LocationDropdownState extends State<LocationDropdown> {
               border: Border.all(color: Colors.white),
             ),
             child: SizedBox(
-              height: 200, // Set a fixed height to enable scrolling
+              height: 200,
+              width: 350,// Set a fixed height to enable scrolling
               child: SingleChildScrollView(
                 child: Column(
                   children: locations

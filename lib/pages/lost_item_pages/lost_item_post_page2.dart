@@ -20,9 +20,12 @@ class LostAnItem2 extends StatefulWidget {
 class _LostAnItem2State extends State<LostAnItem2> {
   final FocusNode _focusNode1 = FocusNode();
   final FocusNode _focusNode2 = FocusNode();
+  final TextEditingController locController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
-  String? _location;
+  String? _location1;
+
+
 
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
@@ -138,9 +141,41 @@ class _LostAnItem2State extends State<LostAnItem2> {
             LocationDropdown(
               onLocationSelected: (String? newValue) {
                 setState(() {
-                  _location = newValue;
+                  _location1 = newValue;
                 });
               },
+            ),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Add a Descriptive Location",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: locController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintText: "More specific location where you lost it",
+                hintStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey, // Change hint text color
+                  fontSize: 15, // Change hint text size
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             const Padding(
@@ -214,25 +249,52 @@ class _LostAnItem2State extends State<LostAnItem2> {
             // Next Button
             ElevatedButton(
               onPressed: () {
-                int userId = Provider.of<UserProvider>(context,listen: false).userId;
-                print('Image Path: ${widget.postDetails1['image']}');
-                Item item = Item(
-                  type: 0,
-                  creator: userId,
-                  title: widget.postDetails1['title'],
-                  description: widget.postDetails1['description'],
-                  location1: _location!,
-                  date: _selectedDate != null
-                      ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                      : '',
-                  time: _selectedTime != null
-                      ? _selectedTime!.format(context)
-                      : '',
-                  image: (File(widget.postDetails1['image'])),
-                  isFound: false,
-                );
-                handleLostItemPost(item);
+                try {
+                  // Validate required fields (Date, Time, and Location)
+
+                  if (_location1  == null) {
+                    throw Exception("Location is required.");
+                  }
+                  if (locController.text.isEmpty) {
+                    throw Exception(" Specific location cannot be empty.");
+                  }
+                  if (_selectedDate == null) {
+                    throw Exception("Please select a date.");
+                  }
+                  if (_selectedTime == null) {
+                    throw Exception("Please select a time.");
+                  }
+
+                  print('Image Path: ${widget.postDetails1['image']}');
+
+                  // Create Item instance
+                  Item item = Item(
+                    type: 0,
+                    creator: Provider.of<UserProvider>(context, listen: false).userId,
+                    title: widget.postDetails1['title'],
+                    description: widget.postDetails1['description'],
+                    location2: locController.text,
+                    location1: _location1!,
+                    date: DateFormat('yyyy-MM-dd').format(_selectedDate!),
+                    time: _selectedTime!.format(context),
+                    image: File(widget.postDetails1['image']),
+                    isFound: false,
+                  );
+
+                  // Call API function to post lost item
+                  handleLostItemPost(item);
+                } catch (e) {
+                  // Show error message in a SnackBar
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
+
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 minimumSize: const Size(double.infinity, 50),

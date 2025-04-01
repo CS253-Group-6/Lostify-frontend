@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'found_item_page3.dart';
 
 class FoundItemPage2 extends StatelessWidget {
+   Map<String, dynamic> postDetails1;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
-  FoundItemPage2({super.key});
+  FoundItemPage2({super.key,required this.postDetails1});
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +86,36 @@ class FoundItemPage2 extends StatelessWidget {
                 const SizedBox(height: 250),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FoundItemPage3())
-                    );
+                    try {
+                      // Ensure controllers are not empty
+                      if (titleController.text.isEmpty || descriptionController.text.isEmpty) {
+                        throw Exception("Title and Description cannot be empty.");
+                      }
+
+
+
+                      postDetails1 = {
+                        'title': titleController.text,
+                        'description': descriptionController.text,
+                      };
+
+                      // Navigate to next screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FoundItemPage3(postDetails1: postDetails1),
+                        ),
+                      );
+
+                    } catch (e) {
+                      // Show error message in a SnackBar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

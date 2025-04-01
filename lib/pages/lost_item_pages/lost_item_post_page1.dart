@@ -137,16 +137,41 @@ class _LostAnItem1State extends State<LostAnItem1> {
                 const SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
-                    final Map<String, dynamic> postDetails1 = {
-                      'title':titleController.text,
-                      'description': descriptionController.text,
-                      'image': _image,
-                    };
-                    // Provider.of<FormDataProvider>(context, listen: false).updateData(formData);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LostAnItem2(postDetails1: postDetails1)),
-                    );
+                    try {
+                      // Ensure controllers are not empty
+                      if (titleController.text.isEmpty || descriptionController.text.isEmpty) {
+                        throw Exception("Title and Description cannot be empty.");
+                      }
+
+                      // Ensure _image is not null if required
+                      if (_image == null) {
+                        throw Exception("Please upload an image.");
+                      }
+
+                      // Creating postDetails1 Map
+                      final Map<String, dynamic> postDetails1 = {
+                        'title': titleController.text,
+                        'description': descriptionController.text,
+                        'image': _image, // Ensure _image is a valid format
+                      };
+
+                      // Navigate to next screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LostAnItem2(postDetails1: postDetails1),
+                        ),
+                      );
+
+                    } catch (e) {
+                      // Show error message in a SnackBar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -158,6 +183,7 @@ class _LostAnItem1State extends State<LostAnItem1> {
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
+
               ],
             ),
           ),

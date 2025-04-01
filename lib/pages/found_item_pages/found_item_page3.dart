@@ -3,13 +3,16 @@ import 'package:intl/intl.dart';
 import 'package:final_project/components/location/location.dart';
 
 class FoundItemPage3 extends StatefulWidget {
-  const FoundItemPage3({super.key});
+  final Map<String, dynamic> postDetails1;
+
+  const FoundItemPage3({super.key,required this.postDetails1});
 
   @override
   State<FoundItemPage3> createState() => _FoundItemPage3State();
 }
 
 class _FoundItemPage3State extends State<FoundItemPage3> {
+  final TextEditingController locController = TextEditingController();
   String? selectedFoundLocation;
   String? selectedPresentLocation;
   DateTime? selectedDate;
@@ -101,15 +104,24 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                LocationDropdown(
-                  onLocationSelected: (final String? newValue) {
-                    setState(() {
-                      selectedFoundLocation = newValue;
-                    });
-                  },
+                TextField(
+                  controller: locController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Specific location where you found it",
+                    hintStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey, // Change hint text color
+                      fontSize: 15, // Change hint text size
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 30),
-                
                 // Date and time of find
                 const Text(
                   "Date and time of find",

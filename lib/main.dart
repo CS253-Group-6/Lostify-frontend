@@ -45,7 +45,8 @@ Future main() async {
       providers: [
         ChangeNotifierProvider(
             create: (context) => UserProvider()), // Register UserProvider
-        ChangeNotifierProvider(create: (context) => ProfileProvider())
+        ChangeNotifierProvider(create: (context) => ProfileProvider()),
+
       ],
       child: const MyApp(),
     ),
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/signup',
+      initialRoute: '/found/post/3',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes
@@ -99,8 +100,8 @@ class MyApp extends StatelessWidget {
 
         // found items routes
         '/found/post/1': (context) => FoundItemPage1(), // found post page1
-        '/found/post/2': (context) => FoundItemPage2(), // found post page2
-        '/found/post/3': (context) => FoundItemPage3(), // found post page3
+        //'/found/post/2': (context) => FoundItemPage2(), // found post page2
+        //'/found/post/3': (context) => FoundItemPage3(), // found post page3
         '/found-items': (context) => FoundItem(), // found_items
 
         // chat pages
