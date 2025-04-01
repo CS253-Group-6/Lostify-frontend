@@ -159,36 +159,38 @@ class _ItemDetailsState extends State<ItemDetails> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  // Action buttons (Share, Report)
+                  const SizedBox(height: 16),
+                  // Action buttons (Report, Chat)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButton.icon(
+                      ElevatedButton.icon(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text('Shared ${widget.post.title}!')),
+                            SnackBar(content: Text('${widget.post.title} reported!')),
                           );
                         },
-                        icon: const Icon(Icons.share, color: Colors.grey),
-                        label: const Text(
-                          'Share',
-                          style: TextStyle(color: Colors.grey),
+                        icon: const Icon(Icons.report, color: Colors.white),
+                        label: const Text('Report'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue, // Blue background
+                          foregroundColor: Colors.white, // White text
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 32),
-                      TextButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content:
-                                    Text('${widget.post.title} reported!')),
-                          );
-                        },
-                        icon: const Icon(Icons.report, color: Colors.grey),
-                        label: const Text(
-                          'Report',
-                          style: TextStyle(color: Colors.grey),
+                      const SizedBox(width: 16),
+                      ElevatedButton.icon(
+                        onPressed: _addChat,
+                        icon: const Icon(Icons.chat, color: Colors.white),
+                        label: const Text('Chat'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue, // Blue background
+                          foregroundColor: Colors.white, // White text
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                       ),
                     ],
@@ -211,12 +213,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                             children: [
                               const Text(
                                 'Vinay Chavan', // Kept your user data
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14, // Consistent font size
+                                ),
                               ),
-                              Text(
+                              const Text(
                                 'B.tech 2nd Year', // Kept your user data
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.grey),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ],
                           ),

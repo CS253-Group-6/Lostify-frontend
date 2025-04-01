@@ -22,13 +22,13 @@ enum PostType { lost, found }
 //   final String?  imageUrl;
 // }
 
-
 final class Post {
   Post({
     required this.postType,
     required this.id,
     required this.title,
-    this.creatorId = 123, // TODO: Change this: Once the provider for this is set up, make it required and remove the default value
+    this.creatorId =
+        123, // TODO: Change this: Once the provider for this is set up, make it required and remove the default value
     this.status = '',
     required this.regDate,
     this.closedDate,
@@ -42,6 +42,7 @@ final class Post {
   /// for a lost item or for a found item.
   final PostType postType;
   final int reports;
+
   /// The unique identifier assigned to the post in the database.
   final int id;
 
@@ -66,4 +67,32 @@ final class Post {
 
   /// Address associated with the post.
   final String address;
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    // Convert the postType string to the PostType enum
+    final typeString = (json['postType'] as String).toLowerCase();
+    final postType = typeString == 'lost' ? PostType.lost : PostType.found;
+
+    // Safely parse optional values and image URL
+    return Post(
+      postType: postType,
+      id: json['id'] as int,
+      title: json['title'] as String,
+      creatorId: json['creatorId'] != null ? json['creatorId'] as int : 123,
+      status: json['status'] as String? ?? '',
+      regDate: DateTime.parse(json['regDate'] as String),
+      closedDate: json['closedDate'] != null && json['closedDate'] != ""
+          ? DateTime.parse(json['closedDate'] as String)
+          : null,
+      reports: json['reports'] is int
+          ? json['reports'] as int
+          : int.tryParse(json['reports']?.toString() ?? '0') ?? 0,
+      description: json['description'] as String? ?? '',
+      imageProvider:
+          json['imageUrl'] != null && (json['imageUrl'] as String).isNotEmpty
+              ? NetworkImage(json['imageUrl'] as String)
+              : null,
+      address: json['address'] as String? ?? '',
+    );
+  }
 }
