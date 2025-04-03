@@ -65,10 +65,10 @@ class _HomePageState extends State<HomePage> {
         0; // Replace with context.watch().user.role;
 
     /// Logout
-    void handleLogout() async {
+    void handleLogout(BuildContext context) async {
       final response = await AuthApi.logout();
       if (response.statusCode == 200) {
-        Navigator.pushReplacementNamed(context, '/user/login');
+        Navigator.pushReplacementNamed(context, '/homeInterface');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -82,9 +82,50 @@ class _HomePageState extends State<HomePage> {
         );
 
         // TODO: remove this navigate in failed
-        Navigator.pushReplacementNamed(context, '/user/login');
+        Navigator.pushReplacementNamed(context, '/homeInterface');
       }
     }
+    void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // Close dialog when tapped outside
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.logout, color: Colors.red, size: 28),
+              SizedBox(width: 10),
+              Text("Logout Confirmation"),
+            ],
+          ),
+          content: Text("Are you sure you want to logout?",style: TextStyle(color: Colors.black),),
+          actions: [
+            // Cancel Button
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey[600], // Dark grey for neutral action
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(10),
+                // ),
+              ),
+              onPressed: () => Navigator.pop(context), // Close the popup
+              child: Text("Cancel", style: TextStyle(color: Colors.white)),
+            ),
+            // Logout Button
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () => handleLogout(context), // Call API-based logout
+              child: Text("Logout", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].
@@ -233,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     title: const Text('Logout'),
-                    onTap: handleLogout,
+                    onTap: () => _showLogoutDialog(context), 
                   ),
                 ],
               ),
