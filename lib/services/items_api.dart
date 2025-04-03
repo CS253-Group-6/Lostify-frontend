@@ -8,7 +8,7 @@ class ItemsApi {
   static const String baseUrl = "http://10.0.2.2:5000";
 
   // Post a lost Item api call
-  static Future<Map<String, dynamic>> postItem(
+  static Future<http.Response> postItem(
       Map<String, dynamic> postDetails) async {
     /* 
         post details format: { 
@@ -24,31 +24,30 @@ class ItemsApi {
       final response = await http.post(
         Uri.parse("$baseUrl/items/post"),
         headers: {"Content-Type": "application/json"},
-        body: {jsonEncode(postDetails)},
+        body: jsonEncode(postDetails),
       );
-      return jsonDecode(response.body);
+      return response;
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 
   // get Item by Id
-  static Future<Map<String, dynamic>> getItemById(int itemId) async {
+  static Future<http.Response> getItemById(int itemId) async {
     ///  pass itemId as argument
 
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/items/$itemId"),
       );
-      return jsonDecode(
-          response.body); // response data has item details in json form
+      return response; // response data has item details in json form
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 
   // edit a post by its id
-  static Future<Map<String, dynamic>> editItem(
+  static Future<http.Response> editItem(
       int itemId, Map<String, dynamic> postDetails) async {
     /* 
         post details format: { 
@@ -63,26 +62,25 @@ class ItemsApi {
       final response = await http.put(
         Uri.parse("$baseUrl/items/$itemId"),
         headers: {"Content-Type": "application/json"},
-        body: {jsonEncode(postDetails)},
+        body: jsonEncode(postDetails),
       );
-      return jsonDecode(response.body);
+      return response;
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 
   // delete an item
-  static Future<Map<String, dynamic>> deleteItem(int itemId) async {
+  static Future<http.Response> deleteItem(int itemId) async {
     ///  pass itemId as argument
 
     try {
       final response = await http.delete(
         Uri.parse("$baseUrl/items/$itemId"),
       );
-      return jsonDecode(
-          response.body); // response data has item details in json form
+      return response; // response data has item details in json form
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 
@@ -108,53 +106,50 @@ class ItemsApi {
   }
 
   // claim an item
-  static Future<Map<String, dynamic>> claimItem(int itemId) async {
+  static Future<http.Response> claimItem(int itemId) async {
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/items/$itemId/claim"),
       );
-      return jsonDecode(
-          response.body); //  Status of claimed post in response body as JSON
+      return response; //  Status of claimed post in response body as JSON
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 
   // report an item
-  static Future<Map<String, dynamic>> getReportCount(int itemId) async {
+  static Future<http.Response> getReportCount(int itemId) async {
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/items/$itemId/report"),
       );
-      return jsonDecode(
-          response.body); //  Report count in response body as JSON
+      return response; //  Report count in response body as JSON
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 
   // report an item
-  static Future<Map<String, dynamic>> reportItem(int itemId) async {
+  static Future<http.Response> reportItem(int itemId) async {
     try {
       final response = await http.put(
         Uri.parse("$baseUrl/items/$itemId/report"),
       );
-      return jsonDecode(
-          response.body); //  Report count in response body as JSON
+      return response; //  Report count in response body as JSON
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 
   // delete reports for a post
-  static Future<Map<String, dynamic>> deleteReports(int itemId) async {
+  static Future<http.Response> deleteReports(int itemId) async {
     try {
       final response = await http.delete(
         Uri.parse("$baseUrl/items/$itemId/report"),
       );
-      return jsonDecode(response.body); //  Undo report of post with post id id
+      return response; //  Undo report of post with post id id
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 }

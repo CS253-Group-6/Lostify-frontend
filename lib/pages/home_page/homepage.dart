@@ -67,13 +67,13 @@ class _HomePageState extends State<HomePage> {
     /// Logout
     void handleLogout() async {
       final response = await AuthApi.logout();
-      if (response['statusCode'] == 200) {
+      if (response.statusCode == 200) {
         Navigator.pushReplacementNamed(context, '/user/login');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Error: ${response['message']}',
+              'Error: ${jsonDecode(response.body)['message']}',
               style: TextStyle(color: Colors.white), // Text color
             ),
             backgroundColor: Colors.red, // Custom background color

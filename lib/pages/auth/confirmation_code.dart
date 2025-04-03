@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -87,20 +88,21 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
       'otp': _controllers.map((e) => e.text).join(),
     };
     print(otpData);
-    /*
+
     // call otp api with the data
-    Map<String, dynamic> response = await AuthApi.verifyOtp(otpData);
+    final response = await AuthApi.verifyOtp(otpData);
 
     // if correct otp verified
-    if (response['statusCode'] == 200) {
+    if (response.statusCode == 200) {
       // make call to login to save cookies
-      Map<String, dynamic> loginResponse = await AuthApi.login({
+      final loginResponse = await AuthApi.login({
         'username': widget.signUpDetails['username'],
         'password': widget.signUpDetails['password'],
       });
       // if login successful
-      final cookies = loginResponse['set-cookie']; // assuming cookie as string
-      // print('Cookies: $cookies');
+      final cookies =
+          loginResponse.headers['set-cookie']; // assuming cookie as string
+      print('Cookies: $cookies');
 
       if (cookies != null) {
         // Parse user_id and user_role from the cookies
@@ -108,15 +110,15 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
         final userRole =
             RegExp(r'user_role=([^;]+)').firstMatch(cookies)?.group(1);
         ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Verified Successfully!',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.blue, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
+          SnackBar(
+            content: Text(
+              'Verified Successfully!',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.blue, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
 
         Navigator.of(context).pushNamed('/home', arguments: {
           'user_id': int.parse(userId!),
@@ -125,25 +127,24 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Error verifying otp ${response['message']}',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.red, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
+        SnackBar(
+          content: Text(
+            'Error verifying otp ${jsonDecode(response.body)['message']}',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
 
       // TODO: if error donot redirect to home
-      Navigator.of(context).pushNamed('/home', arguments: {
-        'user_id': int.parse('0'),
-        'user_role': '0',
-      });
+      // Navigator.of(context).pushNamed('/home', arguments: {
+      //   'user_id': int.parse('0'),
+      //   'user_role': '0',
+      // });
     }
-    */
 
-    Navigator.of(context).pushReplacementNamed('/home');
+    // Navigator.of(context).pushReplacementNamed('/home');
   }
 
   // resend otp after 30 sec expiry  and restart the 30 sec timer

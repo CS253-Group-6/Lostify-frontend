@@ -61,7 +61,7 @@ class EditProfilePageState extends State<EditProfilePage> {
     try {
       int userId = Provider.of<UserProvider>(context, listen: false).userId;
       final response = await ProfileApi.editProfile(userId, profileData);
-      if (response['statusCode'] == 200) {
+      if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(

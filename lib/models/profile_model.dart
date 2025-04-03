@@ -25,10 +25,10 @@ class ProfileModel {
       'name': name,
       'address': address,
       'designation': designation,
-      'phoneNumber': phoneNumber,
-      'rollNumber': rollNumber,
+      'phone': phoneNumber,
+      'roll': rollNumber,
       'email': email,
-      'profileImage': profileImage != null
+      'image': profileImage != null
         ? base64Encode(profileImage!.readAsBytesSync())
         : '',
     };

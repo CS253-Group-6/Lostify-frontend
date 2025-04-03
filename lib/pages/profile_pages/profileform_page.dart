@@ -1,3 +1,4 @@
+import "dart:convert";
 import "dart:io";
 
 import "package:flutter/material.dart";
@@ -68,62 +69,64 @@ class _ProfileFormState extends State<ProfileForm> {
       print('signUp details:');
       print(signUpDetails);
       // api call to signup
-      /*
-      var response = await AuthApi.signUp(signUpDetails);
+
+      final response = await AuthApi.signUp(signUpDetails);
+      print(response.statusCode);
 
       // on successfull signup
-      if (response['statusCode'] == 200) {
+      if (response.statusCode == 201) {
         // store the profile details into the provider
         context.read<ProfileProvider>().setProfile(
-              name: _nameController.text,
-              address: _addressController.text,
-              email: widget.user.email,
-              designation: _designationController.text,
-              phoneNumber: _phoneController.text,
-              rollNumber: int.parse(_rollNoController.text),
-              profileImg: _image != null ? FileImage(_image!) : AssetImage('assets/images/bg1.png')
-            );
+            name: _nameController.text,
+            address: _addressController.text,
+            email: widget.user.email,
+            designation: _designationController.text,
+            phoneNumber: _phoneController.text,
+            rollNumber: int.parse(_rollNoController.text),
+            profileImg: _image != null
+                ? FileImage(_image!)
+                : AssetImage('assets/images/bg1.png'));
 
         // show a snack bar with success message
         ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Sign up successfull!',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.blue, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
-
+          SnackBar(
+            content: Text(
+              'Sign up successfull!',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.blue, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
 
         // navigate to confirmation code page with signup details
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
                 ConfirmationCode(signUpDetails: signUpDetails)));
       } else {
+        print(jsonDecode(response.body)['message']);
         // show a snack bar with error message
         ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Error signing up: ${response['message']}',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.blue, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
+          SnackBar(
+            content: Text(
+              'Error signing up: ${jsonDecode(response.body)['message']}',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
 
-            // TODO: on failure do not redirect.
-            Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                ConfirmationCode(signUpDetails: signUpDetails)));
-      } */
+        // TODO: on failure do not redirect.
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) =>
+        //         ConfirmationCode(signUpDetails: signUpDetails)));
+      }
 
-     // TODO: comment this after intergration with backend and uncomment the upper part
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              ConfirmationCode(signUpDetails: signUpDetails)));
+      // TODO: comment this after intergration with backend and uncomment the upper part
+      // Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) =>
+      //         ConfirmationCode(signUpDetails: signUpDetails)));
     }
   }
 

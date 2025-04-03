@@ -70,7 +70,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
       print('json: ${item.toJson()}');
       /*
       final response = await ItemsApi.postItem(item.toJson());
-      if (response['statusCode'] == 200) {
+      if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
   SnackBar(
     content: Text(

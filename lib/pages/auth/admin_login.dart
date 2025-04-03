@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,10 +31,10 @@ class _AdminLoginState extends State<AdminLogin> {
         "password": _passwordController.text
       };
 
-      Map<String, dynamic> response = await AuthApi.login(adminLoginDetails);
-      if (response['statusCode'] == 200) {
+      final response = await AuthApi.login(adminLoginDetails);
+      if (response.statusCode == 200) {
         // Extract cookies from the response headers
-        final cookies = response['set-cookie'];
+        final cookies = response.headers['set-cookie'];
         // print('Cookies: $cookies');
 
         if (cookies != null) {
@@ -60,7 +62,7 @@ class _AdminLoginState extends State<AdminLogin> {
       } else {
         // Navigator.of(context).pushReplacementNamed('/');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Error logging in : ${response['message']}')));
+            content: Text('Error logging in : ${jsonDecode(response.body)['message']}')));
       }
 
       // Navigator.of(context).pushReplacementNamed('/home');

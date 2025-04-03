@@ -1,3 +1,5 @@
+import 'package:final_project/pages/home_page/homepage.dart';
+import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +24,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   String? _passwordErrorMessage;
 
-  void _submit() {
+  void _submit() async {
     if (_formKey.currentState!.validate()) {
       if (_newPasswordController.text != _confirmPasswordController.text) {
         setState(() {
@@ -32,6 +34,37 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         setState(() {
           _passwordErrorMessage = null;
         });
+        // api for change password
+        var changePasswordData = {
+          'old_password': _oldPasswordController.text,
+          'new_password': _newPasswordController.text
+        };
+        /*
+        final response = await AuthApi.changePassword(changePasswordData);
+        if (response.statusCode == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Password changed successfully',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.blue, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Failed to change password!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.red, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+        }
+        */
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -42,6 +75,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             duration: Duration(seconds: 3), // Display duration
           ),
         );
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => HomePage()));
       }
     }
   }
