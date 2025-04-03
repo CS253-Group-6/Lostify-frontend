@@ -72,25 +72,48 @@ class _LoginState extends State<Login> {
               phoneNumber: response['phone'],
               email: response['email'],
               rollNumber: response['roll'],
-              profileImg: MemoryImage(response['image'])
-              );
+              profileImg: MemoryImage(response['image']));
 
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Logged in Successfully!")));
-          Navigator.of(context).pushReplacementNamed('/home', arguments: {
-            'user_id': userId,
-            'user_role': userRole
-          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Logged in successfully!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.blue, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+
+          Navigator.of(context).pushReplacementNamed('/home',
+              arguments: {'user_id': userId, 'user_role': userRole});
         } else {
           print('No cookies found in the response.');
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("No cookies found!!")));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'No cookies found!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.red, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
         }
 
         // Navigator.of(context).pushReplacementNamed('/');
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Error logging in: ${response['message']}")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error logging in: ${response['message']}',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
+
         Navigator.of(context).pushReplacementNamed('/home');
       }
     }

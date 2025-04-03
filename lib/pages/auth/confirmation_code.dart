@@ -18,7 +18,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
   // four text editing controllers for each text field
   final List<TextEditingController> _controllers =
       List.generate(4, (index) => TextEditingController());
-  
+
   // four focus nodes
   final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
 
@@ -81,13 +81,13 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
 
   // on submiting the otp
   void handleSubmit() async {
-
     // request data required by otp api
     var otpData = {
       'username': widget.signUpDetails['username'],
       'otp': _controllers.map((e) => e.text).join(),
     };
     print(otpData);
+    /*
     // call otp api with the data
     Map<String, dynamic> response = await AuthApi.verifyOtp(otpData);
 
@@ -107,36 +107,59 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
         final userId = RegExp(r'user_id=(\d+)').firstMatch(cookies)?.group(1);
         final userRole =
             RegExp(r'user_role=([^;]+)').firstMatch(cookies)?.group(1);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Verified Successfully!")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Verified Successfully!',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.blue, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
         Navigator.of(context).pushNamed('/home', arguments: {
           'user_id': int.parse(userId!),
           'user_role': userRole,
         });
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Error verifying otp ${response['message']}")));
+      ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Error verifying otp ${response['message']}',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.red, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
       // TODO: if error donot redirect to home
       Navigator.of(context).pushNamed('/home', arguments: {
         'user_id': int.parse('0'),
         'user_role': '0',
       });
     }
+    */
 
-    // Navigator.of(context).pushReplacementNamed('/home');
+    Navigator.of(context).pushReplacementNamed('/home');
   }
 
   // resend otp after 30 sec expiry  and restart the 30 sec timer
   void handleResendOtp() async {
     // code to handle resend otp
     if (_isResendEnabled) {
+      /*
       var responseSignup = await AuthApi.signUp(widget.signUpDetails);
       if (responseSignup['statusCode'] == 200) {
         // code to handle successful response
         _isResendEnabled = false;
         _startResendTimer();
       }
+      */
+      _isResendEnabled = false;
+      _startResendTimer();
     }
   }
 
@@ -171,7 +194,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                           Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "Enter the 6 digit verification code sent to your registered email.",
+                                "Enter the 4 digit verification code sent to your registered email.",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                     color: Color(0xFF71727A), fontSize: 14),
@@ -187,7 +210,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                             4,
                             (index) => Container(
                                   margin:
-                                      const EdgeInsets.symmetric(horizontal: 5),
+                                      const EdgeInsets.symmetric(horizontal: 2),
                                   width: 50,
                                   height: 50,
                                   child: TextField(

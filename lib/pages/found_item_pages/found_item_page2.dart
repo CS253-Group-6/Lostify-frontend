@@ -94,16 +94,17 @@ class FoundItemPage2 extends StatelessWidget {
 
 
 
-                      postDetails1 = {
+                      Map<String,dynamic> postDetails2 = {
                         'title': titleController.text,
                         'description': descriptionController.text,
+                        'image': postDetails1['image']
                       };
 
                       // Navigate to next screen
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FoundItemPage3(postDetails1: postDetails1),
+                          builder: (context) => FoundItemPage3(postDetails2: postDetails2),
                         ),
                       );
 

@@ -1,9 +1,8 @@
-import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
 // import '../../providers/form_data_provider.dart';
 import 'lost_item_post_page2.dart';

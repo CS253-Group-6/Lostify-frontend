@@ -1,10 +1,8 @@
 import "package:flutter/material.dart";
-import "package:provider/provider.dart";
 
 import "../../components/auth/custom_auth_button.dart";
 import "../../models/user_model.dart";
 import "../../pages/profile_pages/profileform_page.dart";
-import "../../providers/user_provider.dart";
 
 /// Signup of the application.
 /// -----
@@ -23,18 +21,17 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  // obscure password 
+  // obscure password
   bool _isObscuredpassword = true;
   bool _isObscuredConfirmPassword = true;
 
   // form key
   final _formKey = GlobalKey<FormState>();
 
-  // text editing controllers for username,email,password to get the value in the TextFormFields 
+  // text editing controllers for username,email,password to get the value in the TextFormFields
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
 
   void handleSubmit() async {
     if (_formKey.currentState!.validate()) {
@@ -46,8 +43,17 @@ class _SignUpState extends State<SignUp> {
       );
 
       // redirect to profile form page
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Registered Successfully!")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Registered successfully',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.blue, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
+
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => ProfileForm(user: user)));
     }
@@ -159,6 +165,12 @@ class _SignUpState extends State<SignUp> {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "Please enter your email";
+                                    } else {
+                                      RegExp emailValidate = RegExp(
+                                          r".+@.+");
+                                      if (!emailValidate.hasMatch(value)) {
+                                        return "Please enter a valid email address";
+                                      }
                                     }
                                     return null;
                                   },

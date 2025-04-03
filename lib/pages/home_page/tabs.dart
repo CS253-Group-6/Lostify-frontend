@@ -1,3 +1,4 @@
+import 'package:final_project/utils/load_all_posts.dart';
 import 'package:flutter/material.dart';
 
 import '/components/home/item_box.dart';
@@ -12,37 +13,39 @@ class LostItemsTab extends StatefulWidget {
 }
 
 class LostItemsTabState extends State<LostItemsTab> {
-  late Future<List<Post>> _lostPosts;
+  List<Post> _lostPosts = [];
   // Change this flag to false to use the hardcoded version.
-  final bool _useDynamicData = true;
+  final bool _useDynamicData = false; //TODO: change to true
 
   @override
   void initState() {
     super.initState();
-    _lostPosts = PostsApi.fetchPosts('lost');
+    // uncomment after backend
+    /*
+    _loadLostPosts();
+    */
+  }
+
+  Future<void> _loadLostPosts() async {
+    final postGetter = LoadPosts();
+    try {
+      final posts = await postGetter.loadLostPosts(); // Await the backend call
+      setState(() {
+        _lostPosts = posts; // Update the state with the loaded posts
+      });
+    } catch (e) {
+      print('Error loading posts: $e');
+    }
   }
 
   // Dynamic version using API
   Widget _buildDynamicLostItems() {
-    return FutureBuilder<List<Post>>(
-      future: _lostPosts,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No lost items found.'));
-        }
-        final lostItems = snapshot.data!;
-        return ListView.builder(
-          itemCount: lostItems.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ItemBox(post: lostItems[index]),
-            );
-          },
+    return ListView.builder(
+      itemCount: _lostPosts.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: ItemBox(post: _lostPosts[index]),
         );
       },
     );
@@ -134,40 +137,43 @@ class FoundItemsTab extends StatefulWidget {
 }
 
 class _FoundItemsTabState extends State<FoundItemsTab> {
-  late Future<List<Post>> _foundPosts;
+  List<Post> _foundPosts = [];
   // Change this flag to false to use the hardcoded version.
-  final bool _useDynamicData = true;
+  final bool _useDynamicData = false; //TODO: change to true
 
   @override
   void initState() {
     super.initState();
-    _foundPosts = PostsApi.fetchPosts('found');
+    // uncomment this after backend
+    /*
+    _loadFoundPosts();
+    */
+    
+  }
+
+  Future<void> _loadFoundPosts() async {
+    final postGetter = LoadPosts();
+    try {
+      final posts = await postGetter.loadFoundPosts(); // Await the backend call
+      setState(() {
+        _foundPosts = posts; // Update the state with the loaded posts
+      });
+    } catch (e) {
+      print('Error loading posts: $e');
+    }
   }
 
   // Dynamic version using API
   Widget _buildDynamicFoundItems() {
-    return FutureBuilder<List<Post>>(
-      future: _foundPosts,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No found items available.'));
-        }
-        final foundItems = snapshot.data!;
         return ListView.builder(
-          itemCount: foundItems.length,
+          itemCount: _foundPosts.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ItemBox(post: foundItems[index]),
+              child: ItemBox(post: _foundPosts[index]),
             );
           },
         );
-      },
-    );
   }
 
   // Hardcoded version using static data

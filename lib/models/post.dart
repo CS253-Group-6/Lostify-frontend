@@ -70,7 +70,7 @@ final class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     // Convert the postType string to the PostType enum
-    final typeString = (json['postType'] as String).toLowerCase();
+    final typeString = (json['type'] == 0?"lost":"found");
     final postType = typeString == 'lost' ? PostType.lost : PostType.found;
 
     // Safely parse optional values and image URL
@@ -78,14 +78,14 @@ final class Post {
       postType: postType,
       id: json['id'] as int,
       title: json['title'] as String,
-      creatorId: json['creatorId'] != null ? json['creatorId'] as int : 123,
+      creatorId: json['creator'] != null ? json['creator'] as int : 123,
       status: json['status'] as String? ?? '',
-      regDate: DateTime.parse(json['regDate'] as String),
+      regDate: DateTime.fromMillisecondsSinceEpoch(json['date']),
       closedDate: json['closedDate'] != null && json['closedDate'] != ""
-          ? DateTime.parse(json['closedDate'] as String)
+          ? DateTime.fromMicrosecondsSinceEpoch(json['closedDate'])
           : null,
-      reports: json['reports'] is int
-          ? json['reports'] as int
+      reports: json['reportCount'] is int
+          ? json['reportCount'] as int
           : int.tryParse(json['reports']?.toString() ?? '0') ?? 0,
       description: json['description'] as String? ?? '',
       imageProvider:

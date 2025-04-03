@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:final_project/utils/load_all_posts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/user_provider.dart';
@@ -83,21 +84,32 @@ class _FoundItemState extends State<FoundItem> {
   Post? _selectedPost;
 
   @override
+  void initState() {
+    super.initState();
+    _loadUserLostPosts(context);
+  }
+
+  List<Post> filteredPosts = [];
+  Future<void> _loadUserLostPosts(BuildContext context) async {
+    final postGetter = LoadPosts();
+    try {
+      final posts =
+          await postGetter.loadUserFoundPosts(context); // Await the backend call
+      print(posts);
+      setState(() {
+        filteredPosts = posts; // Update the state with the loaded posts
+      });
+    } catch (e) {
+      print('Error loading posts: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-     // Get the logged-in user's ID from UserProvider
-    final int userId = Provider.of<UserProvider>(context).userId;
-
-
-    // Use PostFilter to filter posts by userId and postType
-    final List<Post> filteredPosts = PostFilter.filterPosts(
-      posts: posts,
-      userId: userId,
-      postType: PostType.found,
-    );
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Found Items', style: TextStyle(color: Colors.white)),
+        title: const Text('Your Found Items',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,
@@ -169,7 +181,8 @@ class _FoundItemState extends State<FoundItem> {
 
   Widget _buildItemDetails(Post post) {
     // Hard-coded details for demonstration
-    const String itemDescription = "Detailed description of the item, including condition, features, and any identifying marks.";
+    const String itemDescription =
+        "Detailed description of the item, including condition, features, and any identifying marks.";
     const String itemTime = "07:55 PM";
     const String itemDate = "05 Sept 2025";
     const String itemPlace = "College ground, New SAC, IIT Kanpur";
@@ -245,9 +258,11 @@ class _FoundItemState extends State<FoundItem> {
           // Status, Registered Date, Found/Returned Date
           Text("Status: ${post.status}", style: const TextStyle(fontSize: 16)),
           const SizedBox(height: 4),
-          Text("Registered Date: ${formatDate(post.regDate)}", style: const TextStyle(fontSize: 16)),
+          Text("Registered Date: ${formatDate(post.regDate)}",
+              style: const TextStyle(fontSize: 16)),
           const SizedBox(height: 4),
-          Text("Found/Returned Date: ${formatDate(post.closedDate)}", style: const TextStyle(fontSize: 16)),
+          Text("Found/Returned Date: ${formatDate(post.closedDate)}",
+              style: const TextStyle(fontSize: 16)),
           const SizedBox(height: 16),
 
           // Additional info on separate rows for better wrapping
@@ -320,7 +335,8 @@ class _FoundItemState extends State<FoundItem> {
     );
   }
 
-  Widget _buildTransparentButton(String label, {required VoidCallback onPressed}) {
+  Widget _buildTransparentButton(String label,
+      {required VoidCallback onPressed}) {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(

@@ -25,10 +25,14 @@ class _LostAnItem2State extends State<LostAnItem2> {
   final TextEditingController _timeController = TextEditingController();
   String? _location1;
 
-
-
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
+
+  String formatTimeOfDay(TimeOfDay time) {
+    final hours = time.hour.toString().padLeft(2, '0'); // Ensure 2 digits
+    final minutes = time.minute.toString().padLeft(2, '0'); // Ensure 2 digits
+    return '$hours:$minutes'; // Format as HH:mm
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -64,18 +68,59 @@ class _LostAnItem2State extends State<LostAnItem2> {
     try {
       print('itemDetails:');
       print('json: ${item.toJson()}');
+      /*
       final response = await ItemsApi.postItem(item.toJson());
       if (response['statusCode'] == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Item posted succesfully")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Item posted successfully!',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.blue, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
         Navigator.pushNamed(context, '/home');
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Failed to post item")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Failed to post item!',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.red, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
       }
+      */
+      // TODO: uncomment upper part and comment navigator below
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Item posted successfully!',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.blue, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
+
+      Navigator.pushNamed(context, '/home');
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error : $e',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
     }
   }
 
@@ -252,7 +297,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
                 try {
                   // Validate required fields (Date, Time, and Location)
 
-                  if (_location1  == null) {
+                  if (_location1 == null) {
                     throw Exception("Location is required.");
                   }
                   if (locController.text.isEmpty) {
@@ -270,15 +315,18 @@ class _LostAnItem2State extends State<LostAnItem2> {
                   // Create Item instance
                   Item item = Item(
                     type: 0,
-                    creator: Provider.of<UserProvider>(context, listen: false).userId,
+                    creator: Provider.of<UserProvider>(context, listen: false)
+                        .userId,
                     title: widget.postDetails1['title'],
                     description: widget.postDetails1['description'],
                     location2: locController.text,
                     location1: _location1!,
-                    date: DateFormat('yyyy-MM-dd').format(_selectedDate!),
-                    time: _selectedTime!.format(context),
-                    image: File(widget.postDetails1['image']),
-                    isFound: false,
+                    date: DateFormat('yyyy-MM-dd')
+                        .format(_selectedDate!)
+                        .toString(),
+                    time: formatTimeOfDay(_selectedTime!),
+                    image: (widget.postDetails1['image']),
+                    // isFound: false,
                   );
 
                   // Call API function to post lost item
@@ -287,14 +335,13 @@ class _LostAnItem2State extends State<LostAnItem2> {
                   // Show error message in a SnackBar
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+                      content: Text(e.toString(),
+                          style: TextStyle(color: Colors.white)),
                       backgroundColor: Colors.red,
                     ),
                   );
                 }
               },
-
-
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 minimumSize: const Size(double.infinity, 50),

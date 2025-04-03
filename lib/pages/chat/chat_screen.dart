@@ -48,14 +48,23 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           .collection("chats")
           .add(imageMessage);
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error sending image: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error sending image : $e',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
     } finally {
       setState(() {
         _isUploading = false;
       });
     }
   }
+
   /// Scrolls the ListView to the bottom.
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -85,13 +94,11 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           children: [
             const CircleAvatar(
               backgroundImage: NetworkImage(
-                'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
+                  'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
             ),
             const SizedBox(width: 10),
-            Text(
-              context.watch<ProfileProvider>().name,
-              style: TextStyle(color: Colors.white)
-            ),
+            Text(context.watch<ProfileProvider>().name,
+                style: TextStyle(color: Colors.white)),
             const Spacer(),
             ElevatedButton(
               onPressed: () async =>
@@ -115,7 +122,8 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   .collection("chats")
                   .orderBy("time", descending: false)
                   .snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const Center(child: Text("No messages yet."));
                 }
@@ -124,13 +132,15 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     final message = snapshot.data!.docs[index];
-                    final isMe
-                      = message['senderId'] == context.watch<ProfileProvider>().id;
+                    final isMe = message['senderId'] ==
+                        context.watch<ProfileProvider>().id;
 
                     return Align(
-                      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                      alignment:
+                          isMe ? Alignment.centerRight : Alignment.centerLeft,
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: isMe ? Colors.blue[100] : Colors.grey[200],
@@ -156,7 +166,8 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                   width: 200,
                                   height: 200,
                                   fit: BoxFit.cover,
-                                  loadingBuilder: (context, child, loadingProgress) {
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
                                     if (loadingProgress == null) return child;
                                     return const CircularProgressIndicator();
                                   },
@@ -166,10 +177,9 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 ),
                               ),
                             const SizedBox(height: 5),
-                            Text(
-                              message['time']!,
-                              style: const TextStyle(fontSize: 12, color: Colors.grey)
-                            ),
+                            Text(message['time']!,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.grey)),
                           ],
                         ),
                       ),
@@ -191,9 +201,11 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 10),
                       hintText: 'Write a message...',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)),
                     ),
                   ),
                 ),
@@ -201,13 +213,13 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   onPressed: _isUploading
                       ? null
                       : () {
-                        ChatServices.sendMessage(
-                          context,
-                          _messageController,
-                          widget.chatDetails,
-                        );
-                        _scrollToBottom();
-                      },
+                          ChatServices.sendMessage(
+                            context,
+                            _messageController,
+                            widget.chatDetails,
+                          );
+                          _scrollToBottom();
+                        },
                   icon: const Icon(Icons.send),
                 ),
                 IconButton(
@@ -223,6 +235,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       ),
     );
   }
+
   /// Shows a preview dialog for a sent image.
   Future<void> _showSentImagePreview(final String imageFile) async {
     await showDialog(
