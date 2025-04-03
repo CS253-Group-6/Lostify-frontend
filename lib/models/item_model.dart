@@ -3,8 +3,9 @@ import 'dart:io';
 
 class Item{
   int id = 0,type = 0,creator = 0;
-  String title, description, location1,location2, date, time;
-  File image;
+  String title, description, location1,location2, time;
+  String date;
+  File? image;
   bool isFound = false;
 
   Item({
@@ -14,15 +15,15 @@ class Item{
     required this.date,
     this.time = '',
     required this.image,
-    this.isFound = false,
+    // this.isFound = false,
     required this.type,
     required this.creator,
     this.location2 = '',
   });
 
-  void found(){
-    isFound = true;
-  }
+  // void found(){
+  //   isFound = true;
+  // }
   
   Map<String, dynamic> toJson() {
     return {
@@ -34,7 +35,7 @@ class Item{
       "creator": creator,
       "date": date,
       "time": time,
-      "image": base64Encode(image.readAsBytesSync()), // Convert file to Base64
+      "image": base64Encode(image!.readAsBytesSync()), // Convert file to Base64
       // "isFound": isFound,
     };
   }

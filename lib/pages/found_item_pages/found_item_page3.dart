@@ -5,13 +5,12 @@ import 'package:provider/provider.dart';
 import '../../providers/user_provider.dart';
 import '../../models/item_model.dart';
 import '../../services/items_api.dart';
-import 'dart:io';
 
 
 class FoundItemPage3 extends StatefulWidget {
-  final Map<String, dynamic> postDetails1;
+  final Map<String, dynamic> postDetails2;
 
-  const FoundItemPage3({super.key,required this.postDetails1});
+  const FoundItemPage3({super.key,required this.postDetails2});
 
   @override
   State<FoundItemPage3> createState() => _FoundItemPage3State();
@@ -24,11 +23,19 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
 
+  String formatTimeOfDay(TimeOfDay time) {
+    final hours = time.hour.toString().padLeft(2, '0'); // Ensure 2 digits
+    final minutes = time.minute.toString().padLeft(2, '0'); // Ensure 2 digits
+    return '$hours:$minutes'; // Format as HH:mm
+  }
 
-  void handleLostItemPost(Item item) async {
+
+  void handleFoundItemPost(Item item) async {
+    /*
     try {
       print('itemDetails:');
       print('json: ${item.toJson()}');
+      
       final response = await ItemsApi.postItem(item.toJson());
       if (response['statusCode'] == 200) {
         ScaffoldMessenger.of(context)
@@ -42,6 +49,12 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Error: $e")));
     }
+    */
+    
+    // uncomment the above part and comment the below part after integration
+    ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Item posted succesfully")));
+        Navigator.pushNamed(context, '/home');
   }
   // Opens the DatePicker
   Future<void> _pickDate(BuildContext context) async {
@@ -73,18 +86,6 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
     }
   }
 
-  // Handle the found item post
-  void handleFoundItemPost(){
-    // TODO: get details of all foundpages in json format
-
-    // TODO: make api call with correct data to backend using services class (use try-catch)
-
-    // if success
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Item posted successfully!!")));
-    Navigator.pushNamed(context, '/home');
-
-    // TODO: if error show ScaffoldMessenger with error message
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -267,21 +268,21 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
 
                       // Create Item instance
                       Item item = Item(
-                        type: 0,
+                        type: 1,
                         creator: Provider.of<UserProvider>(context, listen: false).userId,
-                        title: widget.postDetails1['title'],
-                        description: widget.postDetails1['description'],
+                        title: widget.postDetails2['title'],
+                        description: widget.postDetails2['description'],
 
                         location2: locController.text,
                         location1: selectedPresentLocation!,
-                        date: DateFormat('yyyy-MM-dd').format(selectedDate!),
-                        time: selectedTime!.format(context),
-                        image: File(widget.postDetails1['image']),
-                        isFound: true,
+                        date: DateFormat('yyyy-MM-dd').format(selectedDate!).toString(),
+                        time: formatTimeOfDay(selectedTime!),
+                        image: (widget.postDetails2['image']),
+                        // isFound: true,
                       );
 
                       // Call API function to post lost item
-                      handleLostItemPost(item);
+                      handleFoundItemPost(item);
                     } catch (e) {
                       // Show error message in a SnackBar
                       ScaffoldMessenger.of(context).showSnackBar(
