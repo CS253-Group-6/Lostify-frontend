@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:final_project/components/location/location.dart';
+import 'package:provider/provider.dart';
+import '../../providers/user_provider.dart';
+import '../../models/item_model.dart';
+import '../../services/items_api.dart';
+import 'dart:io';
+
 
 class FoundItemPage3 extends StatefulWidget {
   final Map<String, dynamic> postDetails1;
@@ -13,11 +19,30 @@ class FoundItemPage3 extends StatefulWidget {
 
 class _FoundItemPage3State extends State<FoundItemPage3> {
   final TextEditingController locController = TextEditingController();
-  String? selectedFoundLocation;
+
   String? selectedPresentLocation;
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
 
+
+  void handleLostItemPost(Item item) async {
+    try {
+      print('itemDetails:');
+      print('json: ${item.toJson()}');
+      final response = await ItemsApi.postItem(item.toJson());
+      if (response['statusCode'] == 200) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Item posted succesfully")));
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Failed to post item")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
   // Opens the DatePicker
   Future<void> _pickDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -221,7 +246,52 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
 
                 // Next Button
                 ElevatedButton(
-                  onPressed: handleFoundItemPost,
+                  onPressed: () {
+                    try {
+                      // Validate required fields (Date, Time, and Location)
+
+                      if (selectedPresentLocation  == null) {
+                        throw Exception("Location is required.");
+                      }
+                      if (locController.text.isEmpty) {
+                        throw Exception(" Specific location cannot be empty.");
+                      }
+                      if (selectedDate == null) {
+                        throw Exception("Please select a date.");
+                      }
+                      if (selectedTime == null) {
+                        throw Exception("Please select a time.");
+                      }
+
+
+
+                      // Create Item instance
+                      Item item = Item(
+                        type: 0,
+                        creator: Provider.of<UserProvider>(context, listen: false).userId,
+                        title: widget.postDetails1['title'],
+                        description: widget.postDetails1['description'],
+
+                        location2: locController.text,
+                        location1: selectedPresentLocation!,
+                        date: DateFormat('yyyy-MM-dd').format(selectedDate!),
+                        time: selectedTime!.format(context),
+                        image: File(widget.postDetails1['image']),
+                        isFound: true,
+                      );
+
+                      // Call API function to post lost item
+                      handleLostItemPost(item);
+                    } catch (e) {
+                      // Show error message in a SnackBar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     minimumSize: const Size(double.infinity, 50),
