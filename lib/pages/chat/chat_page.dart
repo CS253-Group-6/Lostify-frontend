@@ -84,17 +84,31 @@ class _ChatPageState extends State<ChatPage> {
   Future<void> _insertMedia() async {
     try {
       final XFile? pickedFile =
-      await _picker.pickImage(source: ImageSource.gallery);
+          await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         await _showImageConfirmation(File(pickedFile.path));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("No image selected.")),
+          SnackBar(
+            content: Text(
+              'No image selected!',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error selecting image: $e")),
+        SnackBar(
+          content: Text(
+            'Error selecting image: $e',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
       );
     }
   }
@@ -103,17 +117,31 @@ class _ChatPageState extends State<ChatPage> {
   Future<void> _openCamera() async {
     try {
       final XFile? pickedFile =
-      await _picker.pickImage(source: ImageSource.camera);
+          await _picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
         await _showImageConfirmation(File(pickedFile.path));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("No image captured.")),
+          SnackBar(
+            content: Text(
+              'No image captured!',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error capturing image: $e")),
+        SnackBar(
+          content: Text(
+            'Error capturing image: $e',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
       );
     }
   }
@@ -275,10 +303,12 @@ class _ChatPageState extends State<ChatPage> {
     // Only add a long-press context menu if there's text
     final bubbleGestureDetector = (text != null && text.trim().isNotEmpty)
         ? GestureDetector(
-      onLongPress: () => _showTextCopyMenu(text),
-      child: _buildBubbleLayout(isUser: isUser, time: time, text: text, image: image),
-    )
-        : _buildBubbleLayout(isUser: isUser, time: time, text: text, image: image);
+            onLongPress: () => _showTextCopyMenu(text),
+            child: _buildBubbleLayout(
+                isUser: isUser, time: time, text: text, image: image),
+          )
+        : _buildBubbleLayout(
+            isUser: isUser, time: time, text: text, image: image);
 
     return bubbleGestureDetector;
   }
@@ -342,19 +372,19 @@ class _ChatPageState extends State<ChatPage> {
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         mainAxisAlignment:
-        isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: isUser
             ? [
-          Text(time, style: _timeStyle()),
-          const SizedBox(width: 6),
-          bubble,
-        ]
+                Text(time, style: _timeStyle()),
+                const SizedBox(width: 6),
+                bubble,
+              ]
             : [
-          bubble,
-          const SizedBox(width: 6),
-          Text(time, style: _timeStyle()),
-        ],
+                bubble,
+                const SizedBox(width: 6),
+                Text(time, style: _timeStyle()),
+              ],
       ),
     );
   }

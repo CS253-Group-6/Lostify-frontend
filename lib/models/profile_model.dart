@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 
 class ProfileModel {
   String name;
@@ -29,9 +28,9 @@ class ProfileModel {
       'phoneNumber': phoneNumber,
       'rollNumber': rollNumber,
       'email': email,
-      'profileImage': profileImage is FileImage
-          ? base64Encode(await (profileImage as FileImage).file.readAsBytes())
-          : '',
+      'profileImage': profileImage != null
+        ? base64Encode(profileImage!.readAsBytesSync())
+        : '',
     };
   }
 }

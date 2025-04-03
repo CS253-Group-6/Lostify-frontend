@@ -55,14 +55,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // get the role details from Navigator args
 
-    final roleData = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>? ?? {
-      'user_id': 0,
-      'user_role': '0'
-    };
+    final roleData =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>? ??
+            {'user_id': 0, 'user_role': '0'};
     // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
 
     /// User role
-    final int role = int.tryParse(roleData['user_role'])??0; // Replace with context.watch().user.role;
+    final int role = int.tryParse(roleData['user_role']) ??
+        0; // Replace with context.watch().user.role;
 
     /// Logout
     void handleLogout() async {
@@ -71,7 +71,15 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushReplacementNamed(context, '/user/login');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${response['message']}')));
+          SnackBar(
+            content: Text(
+              'Error: ${response['message']}',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
 
         // TODO: remove this navigate in failed
         Navigator.pushReplacementNamed(context, '/user/login');
@@ -209,14 +217,17 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     title: const Text('Edit Profile'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/edit-profile');
+                    },
                   ),
                   ListTile(
                     title: const Text('Change Password'),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                        MaterialPageRoute(
+                            builder: (context) => ChangePasswordPage()),
                       );
                     },
                   ),

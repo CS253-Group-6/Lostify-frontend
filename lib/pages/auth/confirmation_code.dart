@@ -107,16 +107,34 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
         final userId = RegExp(r'user_id=(\d+)').firstMatch(cookies)?.group(1);
         final userRole =
             RegExp(r'user_role=([^;]+)').firstMatch(cookies)?.group(1);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Verified Successfully!")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Verified Successfully!',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.blue, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
         Navigator.of(context).pushNamed('/home', arguments: {
           'user_id': int.parse(userId!),
           'user_role': userRole,
         });
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Error verifying otp ${response['message']}")));
+      ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Error verifying otp ${response['message']}',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.red, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
       // TODO: if error donot redirect to home
       Navigator.of(context).pushNamed('/home', arguments: {
         'user_id': int.parse('0'),

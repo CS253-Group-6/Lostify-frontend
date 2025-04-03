@@ -6,11 +6,10 @@ import '../../providers/user_provider.dart';
 import '../../models/item_model.dart';
 import '../../services/items_api.dart';
 
-
 class FoundItemPage3 extends StatefulWidget {
   final Map<String, dynamic> postDetails2;
 
-  const FoundItemPage3({super.key,required this.postDetails2});
+  const FoundItemPage3({super.key, required this.postDetails2});
 
   @override
   State<FoundItemPage3> createState() => _FoundItemPage3State();
@@ -29,7 +28,6 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
     return '$hours:$minutes'; // Format as HH:mm
   }
 
-
   void handleFoundItemPost(Item item) async {
     /*
     try {
@@ -38,24 +36,61 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
       
       final response = await ItemsApi.postItem(item.toJson());
       if (response['statusCode'] == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Item posted succesfully")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Item posted successfully',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.blue, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
         Navigator.pushNamed(context, '/home');
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Failed to post item")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Failed to post item!',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.red, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Error : $e',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.red, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
     }
     */
-    
+
     // uncomment the above part and comment the below part after integration
-    ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Item posted succesfully")));
-        Navigator.pushNamed(context, '/home');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Item posted successfully!',
+          style: TextStyle(color: Colors.white), // Text color
+        ),
+        backgroundColor: Colors.blue, // Custom background color
+        duration: Duration(seconds: 3), // Display duration
+      ),
+    );
+
+    Navigator.pushNamed(context, '/home');
   }
+
   // Opens the DatePicker
   Future<void> _pickDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -64,7 +99,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    
+
     if (pickedDate != null) {
       setState(() {
         selectedDate = pickedDate;
@@ -86,12 +121,12 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Found an item', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Found an item', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,
@@ -106,19 +141,19 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
         // Gradient background
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/new_background.png"), // Updated background image
+            image: AssetImage(
+                "assets/images/new_background.png"), // Updated background image
             fit: BoxFit.cover,
           ),
         ),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // TODO: Back arrow + Page Title
-
-
 
                 // Location where item was found
                 const Text(
@@ -176,7 +211,8 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                             children: [
                               Text(
                                 selectedDate != null
-                                    ? DateFormat('dd/MM/yyyy').format(selectedDate!)
+                                    ? DateFormat('dd/MM/yyyy')
+                                        .format(selectedDate!)
                                     : "DD/MM/YY",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -186,7 +222,8 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                                       : Colors.grey,
                                 ),
                               ),
-                              const Icon(Icons.calendar_today, color: Colors.grey), // Calendar icon
+                              const Icon(Icons.calendar_today,
+                                  color: Colors.grey), // Calendar icon
                             ],
                           ),
                         ),
@@ -208,15 +245,20 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                selectedTime != null ? selectedTime!.format(context) : "Time",
+                                selectedTime != null
+                                    ? selectedTime!.format(context)
+                                    : "Time",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
-                                  color: selectedTime != null ? Colors.black : Colors.grey,
+                                  color: selectedTime != null
+                                      ? Colors.black
+                                      : Colors.grey,
                                 ),
                               ),
 
-                              Icon(Icons.access_time, color: Colors.grey), // Clock icon
+                              Icon(Icons.access_time,
+                                  color: Colors.grey), // Clock icon
                             ],
                           ),
                         ),
@@ -251,7 +293,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                     try {
                       // Validate required fields (Date, Time, and Location)
 
-                      if (selectedPresentLocation  == null) {
+                      if (selectedPresentLocation == null) {
                         throw Exception("Location is required.");
                       }
                       if (locController.text.isEmpty) {
@@ -264,18 +306,20 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                         throw Exception("Please select a time.");
                       }
 
-
-
                       // Create Item instance
                       Item item = Item(
                         type: 1,
-                        creator: Provider.of<UserProvider>(context, listen: false).userId,
+                        creator:
+                            Provider.of<UserProvider>(context, listen: false)
+                                .userId,
                         title: widget.postDetails2['title'],
                         description: widget.postDetails2['description'],
 
                         location2: locController.text,
                         location1: selectedPresentLocation!,
-                        date: DateFormat('yyyy-MM-dd').format(selectedDate!).toString(),
+                        date: DateFormat('yyyy-MM-dd')
+                            .format(selectedDate!)
+                            .toString(),
                         time: formatTimeOfDay(selectedTime!),
                         image: (widget.postDetails2['image']),
                         // isFound: true,
@@ -287,7 +331,8 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                       // Show error message in a SnackBar
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+                          content: Text(e.toString(),
+                              style: TextStyle(color: Colors.white)),
                           backgroundColor: Colors.red,
                         ),
                       );

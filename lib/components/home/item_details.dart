@@ -167,7 +167,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                       ElevatedButton.icon(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${widget.post.title} reported!')),
+                            SnackBar(
+                              content: Text(
+                                '${widget.post.title} reported!',
+                                style: TextStyle(
+                                    color: Colors.white), // Text color
+                              ),
+                              backgroundColor:
+                                  Colors.blue, // Custom background color
+                              duration:
+                                  Duration(seconds: 3), // Display duration
+                            ),
                           );
                         },
                         icon: const Icon(Icons.report, color: Colors.white),

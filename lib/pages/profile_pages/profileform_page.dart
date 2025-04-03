@@ -85,8 +85,17 @@ class _ProfileFormState extends State<ProfileForm> {
             );
 
         // show a snack bar with success message
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Signup successful!!")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Sign up successfull!',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.blue, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
 
         // navigate to confirmation code page with signup details
         Navigator.of(context).push(MaterialPageRoute(
@@ -94,8 +103,17 @@ class _ProfileFormState extends State<ProfileForm> {
                 ConfirmationCode(signUpDetails: signUpDetails)));
       } else {
         // show a snack bar with error message
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Error signing up: ${response['message']}")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Error signing up: ${response['message']}',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.blue, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
             // TODO: on failure do not redirect.
             Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>

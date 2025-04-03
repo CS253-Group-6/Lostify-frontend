@@ -1,6 +1,7 @@
 import 'package:final_project/components/home/item_box.dart';
 import 'package:final_project/models/chat_model.dart';
 import 'package:final_project/models/user_model.dart';
+import 'package:final_project/pages/edit_profile/edit_profile.dart';
 import '../../models/post.dart';
 import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
 import 'package:final_project/providers/profile_provider.dart';
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/home',
+      initialRoute: '/signup',
       navigatorKey: navigatorKey,
       routes: {
         // auth routes
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
                   email: "vinay23@iitk.ac.in",
                   password: "password"),
             ),
+        '/edit-profile': (context)=>EditProfilePage(),
         // '/profile-dashboard' : (context) => , // profile_dashboard page
 
         // home pages

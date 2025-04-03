@@ -59,7 +59,8 @@ class ItemDetailsPage extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background.png'), // Path to your background image
+                image: AssetImage(
+                    'assets/background.png'), // Path to your background image
                 fit: BoxFit.cover, // Cover the entire screen
               ),
             ),
@@ -100,13 +101,15 @@ class ItemDetailsPage extends StatelessWidget {
                 // Title
                 Text(
                   post.title,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 // Date of registration
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, size: 18, color: Colors.black),
+                    const Icon(Icons.calendar_today,
+                        size: 18, color: Colors.black),
                     const SizedBox(width: 8),
                     Text(
                       'Registered on: ${ItemBox.dateAsString(post.regDate)}',
@@ -132,7 +135,9 @@ class ItemDetailsPage extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      post.postType == PostType.lost ? 'Lost Item' : 'Found Item',
+                      post.postType == PostType.lost
+                          ? 'Lost Item'
+                          : 'Found Item',
                       style: TextStyle(
                         fontSize: 16,
                         color: post.postType == PostType.lost
@@ -161,7 +166,8 @@ class ItemDetailsPage extends StatelessWidget {
                 // Description
                 Row(
                   children: [
-                    const Icon(Icons.description, size: 18, color: Colors.black),
+                    const Icon(Icons.description,
+                        size: 18, color: Colors.black),
                     const SizedBox(width: 8),
                     const Text(
                       'Description:',
@@ -186,9 +192,11 @@ class ItemDetailsPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.redAccent,
                       minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: const Text("Delete", style: TextStyle(fontSize: 18, color: Colors.white)),
+                    child: const Text("Delete",
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                   )
                 else
                   Row(
@@ -198,7 +206,17 @@ class ItemDetailsPage extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${post.title} reported!')),
+                            SnackBar(
+                              content: Text(
+                                '${post.title} reported!',
+                                style: TextStyle(
+                                    color: Colors.white), // Text color
+                              ),
+                              backgroundColor:
+                                  Colors.blue, // Custom background color
+                              duration:
+                                  Duration(seconds: 3), // Display duration
+                            ),
                           );
                         },
                         icon: const Icon(Icons.report, color: Colors.white),
@@ -216,7 +234,8 @@ class ItemDetailsPage extends StatelessWidget {
                         onPressed: () {
                           ChatServices.addChat(context, itemId, postOwnerId);
                         },
-                        icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
+                        icon: const Icon(Icons.chat_bubble_outline,
+                            color: Colors.white),
                         label: const Text('Chat'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue, // Blue background
