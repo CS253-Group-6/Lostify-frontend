@@ -1,10 +1,8 @@
 import "package:flutter/material.dart";
-import "package:provider/provider.dart";
 
 import "../../components/auth/custom_auth_button.dart";
 import "../../models/user_model.dart";
 import "../../pages/profile_pages/profileform_page.dart";
-import "../../providers/user_provider.dart";
 
 /// Signup of the application.
 /// -----
@@ -159,6 +157,11 @@ class _SignUpState extends State<SignUp> {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "Please enter your email";
+                                    }else{
+                                      RegExp emailValidate = RegExp(r"^[a-zA-Z0-9._%+-]+@iitk\.ac\.in$");
+                                      if (!emailValidate.hasMatch(value)) {
+                                        return "Please enter a valid IITK email address";
+                                      }
                                     }
                                     return null;
                                   },

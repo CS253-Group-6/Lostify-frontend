@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class ProfileModel {
   String name;
-  String phoneNumber, address, designation,email;
-  int rollNumber;
+  String phoneNumber, address,email;
+  String? designation;
+  int? rollNumber;
   File? profileImage;
 
 

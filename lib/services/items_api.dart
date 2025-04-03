@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../../models/item_model.dart';
 
 class ItemsApi {
-  static const String baseUrl = "http://127.0.0.1:5000";
+  static const String baseUrl = "http://10.0.2.2:5000";
 
   // Post a lost Item api call
   static Future<Map<String, dynamic>> postItem(
@@ -92,7 +92,14 @@ class ItemsApi {
       final response = await http.get(
         Uri.parse("$baseUrl/items/all"),
       );
-      return jsonDecode(response.body); // response data has items list
+      print(jsonDecode(response.body));
+      // Parse the response body
+      final List<dynamic> jsonResponse = jsonDecode(response.body);
+
+      // Ensure the response is a list of maps
+      return jsonResponse
+          .map((item) => item as Map<String, dynamic>)
+          .toList(); // response data has items list
     } catch (e) {
       return [
         {"message": "Unexpected error: $e", "statusCode": 500}

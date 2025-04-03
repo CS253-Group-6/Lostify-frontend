@@ -38,8 +38,16 @@ class ProfileFormInput extends StatelessWidget {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: controller,
             validator: (value){
-              if ((value == null || value.isEmpty) && validate){
-                return "Please enter your $label";
+              if (validate) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your $label';
+                }else{
+                  RegExp phoneExp = RegExp(r'^[0-9]{10}$');
+                  if (label == 'Phone Number'&&!phoneExp.hasMatch(value)) {
+                    return 'Enter a valid 10 digit $label';
+                  }
+                }
+                return null;
               }
               return null;
             },

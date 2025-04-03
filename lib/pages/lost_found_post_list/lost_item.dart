@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:final_project/utils/load_all_posts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -8,7 +9,6 @@ import '../../models/post.dart';
 import '../../pages/chat/chat_page.dart';
 import '../../utils/post_filter.dart';
 import '../../providers/user_provider.dart';
-
 
 class LostItem extends StatefulWidget {
   const LostItem({super.key});
@@ -29,7 +29,6 @@ class _LostItemState extends State<LostItem> {
       reports: 1,
       description: "This is the description of item id:1",
       imageProvider: Image.asset('assets/wallet.png').image,
-
     ),
     Post(
       postType: PostType.lost,
@@ -73,18 +72,30 @@ class _LostItemState extends State<LostItem> {
 
   bool _showDetails = false;
   Post? _selectedPost;
+  @override
+  void initState() {
+    super.initState();
+    _loadUserLostPosts(context);
+  }
+
+  List<Post> filteredPosts = [];
+  Future<void> _loadUserLostPosts(BuildContext context) async {
+    print('loading');
+    final postGetter = LoadPosts();
+    try {
+      final posts =
+          await postGetter.loadUserLostPosts(context); // Await the backend call
+      print(posts);
+      setState(() {
+        filteredPosts = posts; // Update the state with the loaded posts
+      });
+    } catch (e) {
+      print('Error loading posts: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    final int userId = Provider.of<UserProvider>(context).userId; 
-
-    final List<Post> filteredPosts = PostFilter.filterPosts(
-      posts: posts,
-      userId: userId,
-      postType: PostType.lost,
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Lost Items',

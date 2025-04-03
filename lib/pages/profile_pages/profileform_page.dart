@@ -12,7 +12,6 @@ import "../../models/profile_model.dart";
 import "../../models/user_model.dart";
 import "../../services/auth_api.dart";
 
-
 /// Create Profile Page of the application.
 /// -----
 /// #### Description:
@@ -24,12 +23,9 @@ import "../../services/auth_api.dart";
 /// 4. Designation i.e. Student / Faculty        --- optional
 /// 5. PF/Roll No. (IITK roll number)            --- optional
 /// 6. Profile Picture                           --- optional
-/// 
-
-
+///
 
 class ProfileForm extends StatefulWidget {
-
   // get user details from signup page
   final User user;
   const ProfileForm({super.key, required this.user});
@@ -39,7 +35,6 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
-
   final _formKey = GlobalKey<FormState>();
 
   // controllers to handle the value of text in TextFormField
@@ -59,11 +54,10 @@ class _ProfileFormState extends State<ProfileForm> {
           name: _nameController.text,
           address: _addressController.text,
           designation: _designationController.text,
-          rollNumber: int.parse(_rollNoController.text),
+          rollNumber: int.tryParse(_rollNoController.text),
           phoneNumber: _phoneController.text,
           email: widget.user.email,
-          profileImage: _image
-          );
+          profileImage: _image);
 
       // create a Json data compatible with signup api request body
       Map<String, dynamic> signUpDetails = {
@@ -74,6 +68,7 @@ class _ProfileFormState extends State<ProfileForm> {
       print('signUp details:');
       print(signUpDetails);
       // api call to signup
+      /*
       var response = await AuthApi.signUp(signUpDetails);
 
       // on successfull signup
@@ -105,7 +100,12 @@ class _ProfileFormState extends State<ProfileForm> {
             Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
                 ConfirmationCode(signUpDetails: signUpDetails)));
-      }
+      } */
+
+     // TODO: comment this after intergration with backend and uncomment the upper part
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              ConfirmationCode(signUpDetails: signUpDetails)));
     }
   }
 

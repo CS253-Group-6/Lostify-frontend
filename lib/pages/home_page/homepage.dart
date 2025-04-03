@@ -55,11 +55,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // get the role details from Navigator args
 
-    final roleData = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
+    final roleData = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>? ?? {
+      'user_id': 0,
+      'user_role': '0'
+    };
     // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
 
     /// User role
-    final int role = int.parse(roleData['user_role']); // Replace with context.watch().user.role;
+    final int role = int.tryParse(roleData['user_role'])??0; // Replace with context.watch().user.role;
 
     /// Logout
     void handleLogout() async {
