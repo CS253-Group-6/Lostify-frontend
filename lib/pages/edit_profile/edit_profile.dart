@@ -117,22 +117,14 @@ class EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       // AppBar with a back button and title
       appBar: AppBar(
+        title: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
-        elevation: 4,
-        toolbarHeight: 90.0,
+        elevation: 0,
+        centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          "Edit Profile",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
-        centerTitle: true,
       ),
 
       // Background Image
