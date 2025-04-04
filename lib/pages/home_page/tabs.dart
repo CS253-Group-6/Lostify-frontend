@@ -76,6 +76,7 @@ class LostItemsTabState extends State<LostItemsTab> {
         postType: PostType.lost,
         id: 10,
         title: 'ID card',
+        
         regDate: DateTime(2025, 03, 13),
       ),
       Post(
@@ -100,7 +101,7 @@ class LostItemsTabState extends State<LostItemsTab> {
 
     // Filter for lost items only
     List<Post> lostItems =
-        items.where((post) => post.postType == PostType.lost).toList();
+        items.where((post) => post.postType == PostType.lost && post.closedById == null).toList();
 
     return ListView(
       children: [
@@ -226,7 +227,7 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
 
     // Filter for found items only
     List<Post> foundItems =
-        items.where((post) => post.postType == PostType.found).toList();
+        items.where((post) => post.postType == PostType.found && post.closedById==null).toList();
 
     return ListView(
       children: [

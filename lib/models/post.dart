@@ -32,6 +32,7 @@ final class Post {
     this.status = '',
     required this.regDate,
     this.closedDate,
+    this.closedById,
     this.reports = 0,
     this.description = '',
     this.imageProvider,
@@ -58,6 +59,7 @@ final class Post {
   /// The date of creation of the post.
   final DateTime regDate;
   final DateTime? closedDate;
+  final int? closedById;
 
   /// Description of the post.
   final String description;
@@ -84,6 +86,7 @@ final class Post {
       closedDate: json['closedDate'] != null && json['closedDate'] != ""
           ? DateTime.fromMicrosecondsSinceEpoch(json['closedDate'])
           : null,
+      closedById: json['closedBy'] != null ? json['closedBy'] as int : null,
       reports: json['reportCount'] is int
           ? json['reportCount'] as int
           : int.tryParse(json['reports']?.toString() ?? '0') ?? 0,

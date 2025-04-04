@@ -31,7 +31,7 @@ class HomeInterface extends StatelessWidget {
                   Text(
                     "LOSTIFY",
                     style: TextStyle(
-                      fontSize: 60,
+                      fontSize: 55,
                       fontWeight: FontWeight.bold,
                       color: Colors.blue.shade500,
                     ),
@@ -40,7 +40,7 @@ class HomeInterface extends StatelessWidget {
                   const Text(
                     "Discover • Connect • Reclaim",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: Colors.black26,
                       letterSpacing: 1.0,
@@ -59,6 +59,8 @@ class HomeInterface extends StatelessWidget {
                 children: [
                   CustomButton(
                     text: "Admin Login",
+                    width: 300, // Adjust the width as needed
+                    height: 50, // Adjust the height as needed
                     onPressed: () {
                       Navigator.pushNamed(context, '/admin/login');
                     },
@@ -66,21 +68,38 @@ class HomeInterface extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomButton(
                     text: "User Login",
+                    width: 300, // Adjust the width as needed
+                    height: 50,
                     onPressed: () {
                       Navigator.pushNamed(context, '/user/login');
                     },
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
                   TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/signup');
                     },
-                    child: const Text(
-                      "Not a member? Register now",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black45,
-                        fontWeight: FontWeight.bold,
+                    child: const Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Not a member? ",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black45,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "Register now",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black45,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline, // Underline "Register now"
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -88,23 +107,6 @@ class HomeInterface extends StatelessWidget {
               ),
             ),
 
-            // Contact Us Button at Bottom Center
-            Positioned(
-              bottom: 40,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: CustomButton(
-                  text: "Contact Us",
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/contact');
-                  },
-                  width: 110,
-                  height: 28,
-                  fontSize: 10,
-                ),
-              ),
-            ),
           ],
         ),
       ),

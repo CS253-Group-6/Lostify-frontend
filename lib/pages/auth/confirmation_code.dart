@@ -125,7 +125,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     }
     */
 
-    Navigator.of(context).pushReplacementNamed('/home');
+    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => route.isFirst);
   }
 
   // resend otp after 30 sec expiry  and restart the 30 sec timer

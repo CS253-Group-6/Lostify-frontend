@@ -282,9 +282,8 @@ class ItemBox extends StatelessWidget {
                   Text('Registered Date: ${dateAsString(regDate)}'),
                 const SizedBox(height: 4),
                 if (extraProperty == null)
-                  Text(
-                  '${postType == PostType.lost ? "Found Date: " : "Returned Date: "}: ${dateAsString(postType == PostType.lost ? post.closedDate : post.closedDate)}',
-                  ),
+                  if (post.closedById != null)
+                    Text('Closed'),
                 const SizedBox(height: 8),
 
                 // "View Post" button navigates to ItemDetailsPage
