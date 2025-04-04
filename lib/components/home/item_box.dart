@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../services/items_api.dart';
 import '../../models/post.dart';
 import '../../pages/home_page/item_details_page.dart';
 
@@ -9,24 +9,24 @@ import '../../pages/home_page/item_details_page.dart';
 
 /// Details of a post.
 ///
-/// This class groups together attributes of a post, similar to a C `struct`.
+/// This class groups together attributes of a post, similar to a C struct.
 ///
 /// #### Public members:
 ///
-/// * `postType` – An instance of [PostType] indicating whether the post is
+/// * postType – An instance of [PostType] indicating whether the post is
 ///                for a lost item or for a found item.
 ///
-/// * `id` – The unique identifier assigned to the post in the database.
+/// * id – The unique identifier assigned to the post in the database.
 ///
-/// * `title` – The title given to the post.
+/// * title – The title given to the post.
 ///
-/// * `status` – ?
+/// * status – ?
 ///
-/// * `regDate` – The date of creation of the post.
+/// * regDate – The date of creation of the post.
 ///
-/// * `description` – Description of the post.
+/// * description – Description of the post.
 ///
-/// * `itemImage` – An optional image of the article concerned.
+/// * itemImage – An optional image of the article concerned.
 // final class Post {
 //   Post({
 //     required this.postType,
@@ -78,7 +78,7 @@ const double kItemBoxBorderRadius = 20.0;
 ///
 /// Inherits from [StatelessWidget].
 class ItemBox extends StatelessWidget {
-  const ItemBox({super.key, required this.post, this.extraProperty });
+  const ItemBox({super.key, required this.post, this.extraProperty});
 
   final Post post;
   final String? extraProperty;
@@ -92,17 +92,24 @@ class ItemBox extends StatelessWidget {
   DateTime? get foundDate => null; // Placeholder
   ImageProvider? get itemImage => post.imageProvider;
 
-
   @override
   Widget build(BuildContext context) {
     // Determine color based on status text
 
     final Color statusColor =
-        postType == PostType.found ? Colors.green : Colors.red;
+    postType == PostType.found ? Colors.green : Colors.red;
 
     // function to add chat for the post in user's chat list
     void handleItemDetails() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetailsPage(itemId: id, postOwnerId: 1,post:post,extraProperty: extraProperty,)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ItemDetailsPage(
+                itemId: id,
+                postOwnerId: 1,
+                post: post,
+                extraProperty: extraProperty,
+              )));
     }
 
     void deletePost(BuildContext context) {
@@ -117,9 +124,50 @@ class ItemBox extends StatelessWidget {
               child: const Text("Cancel"),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                try {
+                  // Call the delete API using the given itemId
+                  final response = await ItemsApi.deleteItem(post.id);
+                  // final responseData = jsonDecode(response.body);
+
+                  if (response.statusCode == 204) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          '${post.title} deleted successfully!',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.blue,
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Failed to delete ${post.title}.',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'An error occurred: $e',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.red,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
                 //onDelete(); // Calls the delete function passed from parent
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
               child: const Text("Delete", style: TextStyle(color: Colors.red)),
             ),
@@ -185,8 +233,10 @@ class ItemBox extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       'Reports: $reports',
-                      style: const TextStyle(fontWeight: FontWeight.bold,fontSize :16
-                          ,color: Colors.blue),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.blue),
                     ),
                   ),
                 const SizedBox(height: 4),
@@ -196,10 +246,9 @@ class ItemBox extends StatelessWidget {
                   style: TextStyle(color: statusColor),
                 ),
                 const SizedBox(height: 4),
-                if(extraProperty == null)
+                if (extraProperty == null)
                   Text('Registered Date: ${dateAsString(regDate)}'),
-                  const SizedBox(height: 8),
-                
+                const SizedBox(height: 8),
 
                 // "View Post" button navigates to ItemDetailsPage
                 Row(
@@ -213,12 +262,12 @@ class ItemBox extends StatelessWidget {
                       child: const Text('View'),
                     ),
                     // <-- Added delete callback
-                    if(extraProperty!= null)
+                    if (extraProperty != null)
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.redAccent),
-                        tooltip: "Delete Post",
-                          onPressed: () => deletePost(context)
-                      ),
+                          icon:
+                          const Icon(Icons.delete, color: Colors.redAccent),
+                          tooltip: "Delete Post",
+                          onPressed: () => deletePost(context)),
                   ],
                 ),
               ],
