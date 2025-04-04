@@ -204,21 +204,61 @@ class ItemDetailsPage extends StatelessWidget {
                 const Spacer(),
                 // Action buttons (e.g., Report, Share, Chat)
                 // if (extraProperty != null)
-                if (extraProperty != null||postOwnerId == logged_in_userId)
-                // if(true)
+                // if (extraProperty != null||postOwnerId == logged_in_userId)
+                if(true)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       // Delete Button
                       ElevatedButton.icon(
-                        onPressed: () {
-                          deletePost(context);
-                        }, 
+                        onPressed: () async {
+                          try {
+                            // Call the delete API using the given itemId
+                            final response = await ItemsApi.deleteItem(itemId);
+                            // final responseData = jsonDecode(response.body);
+
+                            if (response.statusCode == 204) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${post.title} deleted successfully!',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.blue,
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                              Navigator.pop(context);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Failed to delete ${post.title}.',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'An error occurred: $e',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.red,
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                        },
                         icon: const Icon(Icons.delete, color: Colors.white),
                         label: const Text('Delete'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red, // Red background
-                          foregroundColor: Colors.white, // White text
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
