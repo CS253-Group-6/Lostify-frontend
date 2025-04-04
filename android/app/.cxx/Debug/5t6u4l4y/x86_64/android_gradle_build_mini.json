@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/satwik/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/satwik/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Applications/Coding/Flutter/Lostify/Lostify/android/app/.cxx/Debug/5t6u4l4y/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/satwik/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Applications/Coding/Flutter/Lostify/Lostify/android/app/.cxx/Debug/5t6u4l4y/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
