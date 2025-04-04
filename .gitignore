@@ -7,7 +7,10 @@
 .buildlog/
 .history
 
-
+# Extra
+/.idea/
+/android/.cxx/Debug/
+/android/gradle/wrapper/
 
 # Flutter repo-specific
 /bin/cache/

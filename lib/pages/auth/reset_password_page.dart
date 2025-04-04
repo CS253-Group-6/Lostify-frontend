@@ -104,7 +104,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             children: [
                               Input(
                                 textController: _usernameController,
-                                hintText: "Enter username",
+                                hintText: "Enter CC username",
                                 showEyeIcon: false,
                               ),
                               const SizedBox(height: 24),

@@ -141,9 +141,7 @@ class _LoginState extends State<Login> {
                 width: 452,
                 height: 271,
               ),
-              SizedBox(
-                height: 51,
-              ),
+             
               const SizedBox(height: 51),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 40),

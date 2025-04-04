@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../components/home/action_button.dart';
 import '../../components/home/expandable_fab.dart';
@@ -42,7 +43,7 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   /// List of tab titles.
   final List<Widget> _tabs = const [Tab(text: 'Lost'), Tab(text: 'Found')];
 
@@ -53,6 +54,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required when using AutomaticKeepAliveClientMixin
     // get the role details from Navigator args
 
     final roleData =
@@ -130,66 +132,181 @@ class _HomePageState extends State<HomePage> {
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].
     final w = AppBar(
-      title: const Text('Lostify', style: TextStyle(color: Colors.white)),
-      bottom: TabBar(tabs: _tabs),
-      backgroundColor: Colors.blue,
-      elevation: 0,
-      leading: Builder(
-        builder: (context) => IconButton(
-          icon: const Icon(Icons.menu), // Adds the hamburger menu icon
-          color: Colors.white,
-          onPressed: () {
-            Scaffold.of(context).openDrawer(); // Opens the drawer
-          },
-        ),
+    title: const Text('Lostify', style: TextStyle(color: Colors.white)),
+    bottom: TabBar(
+      tabs: _tabs,
+      labelColor: Colors.white, // Color for the selected tab
+      unselectedLabelColor: Colors.white70, // Color for unselected tabs
+      indicatorColor: Colors.white, // Color for the indicator below the selected tab
+    ),
+    backgroundColor: Colors.blue,
+    elevation: 0,
+    leading: Builder(
+      builder: (context) => IconButton(
+        icon: const Icon(Icons.menu), // Adds the hamburger menu icon
+        color: Colors.white,
+        onPressed: () {
+          Scaffold.of(context).openDrawer(); // Opens the drawer
+        },
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(
-            CupertinoIcons.search,
-            size: 30,
-          ),
-          color: Colors.white,
-          onPressed: () {
-            // Navigate to the search page when the search icon is tapped
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SearchPage(),
-              ), // Replace SearchPage with your actual search page widget
-            );
-          },
+    ),
+    actions: [
+      IconButton(
+        icon: const Icon(
+          CupertinoIcons.search,
+          size: 30,
         ),
-      ],
-    );
+        color: Colors.white,
+        onPressed: () {
+          // Navigate to the search page when the search icon is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchPage(),
+            ), // Replace SearchPage with your actual search page widget
+          );
+        },
+      ),
+    ],
+  );
 
     // Tab controller
-    return DefaultTabController(
-      length: _tabs.length,
-      child: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/new_background.png'),
-                fit: BoxFit.cover,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop && !_isFabExpanded) {
+          // Handle the pop event here if needed
+          // For example, you can navigate to a different page or show a message
+            SystemNavigator.pop();
+        }
+      },
+      child: DefaultTabController(
+        length: _tabs.length,
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/new_background.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            // App bar wrapped with `PreferredSize`.
-            appBar: PreferredSize(
-              preferredSize: w.preferredSize,
-              child: Stack(
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              // App bar wrapped with `PreferredSize`.
+              appBar: PreferredSize(
+                preferredSize: w.preferredSize,
+                child: Stack(
+                  children: [
+                    IgnorePointer(
+                      ignoring: _isFabExpanded,
+                      child: ImageFiltered(
+                        imageFilter: _isFabExpanded
+                            ? ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0)
+                            : ImageFilter.blur(),
+                        child: w,
+                      ),
+                    ),
+                    // Overlay blur effect when the FAB is expanded
+                    if (_isFabExpanded)
+                      Container(
+                        color: Colors.white
+                            .withValues(alpha: 0.5), // Brighten the background
+                        child: const SizedBox
+                            .expand(), // Make sure this covers the entire screen
+                      ),
+                  ],
+                ),
+              ),
+              drawer: Drawer(
+                backgroundColor: Colors.white,
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    // Remove 'const' here if you plan to show a dynamic name.
+                    DrawerHeader(
+                      decoration: const BoxDecoration(color: Colors.blue),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircleAvatar(
+                            radius: 45,
+                            backgroundImage:
+                                AssetImage('assets/images/profile_picture.png'),
+                          ),
+                          const SizedBox(height: 10),
+                          // Replace 'John Doe' with the actual name or a variable holding it.
+                          Text(
+                            'John Doe',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Your lost items'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/lost-items');
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Your found items'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/found-items');
+                      },
+                    ),
+                    if (role == 1)
+                      ListTile(
+                        title: const Text('Reported Items'),
+                        onTap: () {},
+                      ),
+                    ListTile(
+                      title: const Text('Messages'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatList()),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Edit Profile'),
+                      onTap: () {
+                      Navigator.pushNamed(context, '/edit-profile');
+                    },
+                    ),
+                    ListTile(
+                      title: const Text('Change Password'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChangePasswordPage()),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Logout'),
+                      onTap: () => _showLogoutDialog(context), 
+                    ),
+                  ],
+                ),
+              ),
+      
+              body: Stack(
                 children: [
+                  // TabBarView wrapped with a blur effect
                   IgnorePointer(
                     ignoring: _isFabExpanded,
                     child: ImageFiltered(
                       imageFilter: _isFabExpanded
                           ? ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0)
                           : ImageFilter.blur(),
-                      child: w,
+                      child: TabBarView(children: _widgets),
                     ),
                   ),
                   // Overlay blur effect when the FAB is expanded
@@ -202,159 +319,65 @@ class _HomePageState extends State<HomePage> {
                     ),
                 ],
               ),
-            ),
-            drawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  // Remove 'const' here if you plan to show a dynamic name.
-                  DrawerHeader(
-                    decoration: const BoxDecoration(color: Colors.blue),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircleAvatar(
-                          radius: 45,
-                          backgroundImage:
-                              AssetImage('assets/images/profile_picture.png'),
-                        ),
-                        const SizedBox(height: 10),
-                        // Replace 'John Doe' with the actual name or a variable holding it.
-                        Text(
-                          'John Doe',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
+              // Expandable floating action button
+              floatingActionButton: ExpandableFab(
+                initialOpen: false,
+                distance: 150.0,
+                onPressed: () {
+                  setState(() {
+                    _isFabExpanded = !_isFabExpanded;
+                  });
+                },
+                childWhileClosed: const Icon(
+                  Icons.add,
+                  color: Colors.white, // Set the icon color to white
+                  size: 30, // Adjust size if needed
+                ),                // Child buttons that appear when expanded
+                children: <Row>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'Post a lost item',
+                        textScaler: TextScaler.linear(1.20),
+                      ),
+                      const SizedBox(width: 10.0, height: 10.0),
+                      ActionButton(
+                          icon: const Icon(CupertinoIcons.search),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/lost/post/1');
+                          }),
+                    ],
                   ),
-                  ListTile(
-                    title: const Text('Your lost items'),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/lost-items');
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Your found items'),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/found-items');
-                    },
-                  ),
-                  if (role == 1)
-                    ListTile(
-                      title: const Text('Reported Items'),
-                      onTap: () {},
-                    ),
-                  ListTile(
-                    title: const Text('Messages'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ChatList()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Edit Profile'),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/edit-profile');
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Change Password'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChangePasswordPage()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Logout'),
-                    onTap: () => _showLogoutDialog(context), 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'Post a found item',
+                        textScaler: TextScaler.linear(1.20),
+                      ),
+                      const SizedBox(width: 10.0, height: 10.0),
+                      ActionButton(
+                        icon: const Icon(CupertinoIcons.speaker_1_fill),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/found/post/1');
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
+              // FloatingActionButton(
+              //   onPressed: () {},
+              //   tooltip: 'Make a new post',
+              //   child: const Icon(Icons.add),
+              // ),
             ),
-
-            body: Stack(
-              children: [
-                // TabBarView wrapped with a blur effect
-                IgnorePointer(
-                  ignoring: _isFabExpanded,
-                  child: ImageFiltered(
-                    imageFilter: _isFabExpanded
-                        ? ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0)
-                        : ImageFilter.blur(),
-                    child: TabBarView(children: _widgets),
-                  ),
-                ),
-                // Overlay blur effect when the FAB is expanded
-                if (_isFabExpanded)
-                  Container(
-                    color: Colors.white
-                        .withValues(alpha: 0.5), // Brighten the background
-                    child: const SizedBox
-                        .expand(), // Make sure this covers the entire screen
-                  ),
-              ],
-            ),
-            // Expandable floating action button
-            floatingActionButton: ExpandableFab(
-              initialOpen: false,
-              distance: 150.0,
-              onPressed: () {
-                setState(() {
-                  _isFabExpanded = !_isFabExpanded;
-                });
-              },
-              childWhileClosed: const Icon(Icons.add), // Icon when closed
-              // Child buttons that appear when expanded
-              children: <Row>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'Post a lost item',
-                      textScaler: TextScaler.linear(1.20),
-                    ),
-                    const SizedBox(width: 10.0, height: 10.0),
-                    ActionButton(
-                        icon: const Icon(CupertinoIcons.search),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/lost/post/1');
-                        }),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'Post a found item',
-                      textScaler: TextScaler.linear(1.20),
-                    ),
-                    const SizedBox(width: 10.0, height: 10.0),
-                    ActionButton(
-                      icon: const Icon(CupertinoIcons.speaker_1_fill),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/found/post/1');
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            // FloatingActionButton(
-            //   onPressed: () {},
-            //   tooltip: 'Make a new post',
-            //   child: const Icon(Icons.add),
-            // ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+  @override
+  bool get wantKeepAlive => true; 
 }
