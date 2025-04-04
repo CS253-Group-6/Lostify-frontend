@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/home/item_box.dart';
 import '../../models/post.dart';
 import '../../services/chat_api.dart';
+import '../../providers/user_provider.dart';
+import '../../services/items_api.dart';
 
 class ItemDetailsPage extends StatelessWidget {
   final Post post;
@@ -19,6 +22,8 @@ class ItemDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int logged_in_userId =
+        Provider.of<UserProvider>(context, listen: false).userId;
     void deletePost(BuildContext context) {
       showDialog(
         context: context,
@@ -33,6 +38,20 @@ class ItemDetailsPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 // onDelete(); // Calls the delete function passed from parent
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      '${post.title} deleted!',
+                      style: TextStyle(
+                          color: Colors.white), // Text color
+                    ),
+                    backgroundColor:
+                    Colors.blue, // Custom background color
+                    duration:
+                    Duration(seconds: 3), // Display duration
+                  ),
+                );
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
               child: const Text("Delete", style: TextStyle(color: Colors.red)),
@@ -184,19 +203,44 @@ class ItemDetailsPage extends StatelessWidget {
                 ),
                 const Spacer(),
                 // Action buttons (e.g., Report, Share, Chat)
-                if (extraProperty != null)
-                  ElevatedButton(
-                    onPressed: () {
-                      deletePost(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: const Text("Delete",
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
+                // if (extraProperty != null)
+                if (extraProperty != null||postOwnerId == logged_in_userId)
+                // if(true)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Delete Button
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          deletePost(context);
+                        }, 
+                        icon: const Icon(Icons.delete, color: Colors.white),
+                        label: const Text('Delete'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red, // Red background
+                          foregroundColor: Colors.white, // White text
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+                      // Chat Button
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          ChatServices.addChat(context, itemId, postOwnerId);
+                        },
+                        icon: const Icon(Icons.chat_bubble_outline,
+                            color: Colors.white),
+                        label: const Text('Chat'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue, // Blue background
+                          foregroundColor: Colors.white, // White text
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 else
                   Row(
@@ -204,26 +248,53 @@ class ItemDetailsPage extends StatelessWidget {
                     children: [
                       // Report Button
                       ElevatedButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                '${post.title} reported!',
-                                style: TextStyle(
-                                    color: Colors.white), // Text color
+                        onPressed: () async {
+                          try {
+                            // Call the report API using the given itemId
+                            final response = await ItemsApi.reportItem(itemId);
+                            // final responseData = jsonDecode(response.body);
+
+                            if (response.statusCode == 204) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${post.title} reported successfully!',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.blue,
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Failed to report ${post.title}.',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'An error occurred: $e',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.red,
+                                duration: const Duration(seconds: 3),
                               ),
-                              backgroundColor:
-                                  Colors.blue, // Custom background color
-                              duration:
-                                  Duration(seconds: 3), // Display duration
-                            ),
-                          );
+                            );
+                          }
                         },
                         icon: const Icon(Icons.report, color: Colors.white),
                         label: const Text('Report'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red, // Blue background
-                          foregroundColor: Colors.white, // White text
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),

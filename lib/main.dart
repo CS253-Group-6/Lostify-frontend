@@ -18,7 +18,7 @@ import 'pages/auth/confirmation_code.dart';
 import 'pages/auth/reset_password_page.dart';
 import 'pages/auth/signup.dart';
 import 'pages/auth/user_login.dart';
-import 'pages/chaange_password_pages/change_password.dart';
+import 'pages/change_password_pages/change_password.dart';
 import 'pages/found_item_pages/found_item_page1.dart';
 import 'pages/home_page/home_interface.dart';
 import 'pages/home_page/homepage.dart';
@@ -48,6 +48,7 @@ Future main() async {
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

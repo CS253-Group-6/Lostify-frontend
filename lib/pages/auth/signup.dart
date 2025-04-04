@@ -128,7 +128,7 @@ class _SignUpState extends State<SignUp> {
                               decoration: const InputDecoration(
                                 filled: true,
                                 fillColor: Colors.transparent,
-                                hintText: 'Username',
+                                hintText: 'CC Username',
                                 hintStyle: TextStyle(color: Color(0xFF8F9098)),
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.symmetric(

@@ -47,8 +47,12 @@ dependencies:
   firebase_messaging: ^15.2.4
   crypto:
   onesignal_flutter: ^5.3.0
+  mockito: ^5.4.2
 
 dev_dependencies:
+  mockito: ^5.4.2
+  build_runner: ^2.4.7
+
   flutter_test:
     sdk: flutter
 

@@ -188,14 +188,20 @@ class _LocationDropdownState extends State<LocationDropdown> {
           ),
           onChanged: (value) {
             setState(() {
-              showDropdown = value.isNotEmpty;
+              // Check if there are matching locations
+              final filteredLocations = locations
+                  .where((loc) => loc.toLowerCase().contains(value.toLowerCase()))
+                  .toList();
+
+              // Show dropdown only if there are matches
+              showDropdown = value.isNotEmpty && filteredLocations.isNotEmpty;
             });
           },
         ),
         if (showDropdown)
           Container(
-            margin: EdgeInsets.only(top: 5),
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -203,28 +209,27 @@ class _LocationDropdownState extends State<LocationDropdown> {
             ),
             child: SizedBox(
               height: 200,
-              width: 350,// Set a fixed height to enable scrolling
+              width: 350, // Set a fixed height to enable scrolling
               child: SingleChildScrollView(
                 child: Column(
                   children: locations
                       .where((loc) => loc.toLowerCase().contains(_controller.text.toLowerCase()))
                       .map((loc) => ListTile(
-                    title: Text(loc),
-                    onTap: () {
-                      setState(() {
-                        selectedLocation = loc;
-                        _controller.text = loc;
-                        showDropdown = false;
-                      });
-                      widget.onLocationSelected(loc);
-                    },
-                  ))
+                            title: Text(loc),
+                            onTap: () {
+                              setState(() {
+                                selectedLocation = loc;
+                                _controller.text = loc;
+                                showDropdown = false;
+                              });
+                              widget.onLocationSelected(loc);
+                            },
+                          ))
                       .toList(),
                 ),
               ),
             ),
           ),
-
       ],
     );
   }

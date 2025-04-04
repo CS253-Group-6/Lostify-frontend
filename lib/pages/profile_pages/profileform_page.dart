@@ -49,7 +49,7 @@ class _ProfileFormState extends State<ProfileForm> {
     // validate the form details filled
     if (_formKey.currentState!.validate()) {
       // final userProvider = Provider.of<UserProvider>(context, listen: false);
-
+      
       // collect the profile details data
       ProfileModel profileData = ProfileModel(
           name: _nameController.text,
@@ -69,7 +69,7 @@ class _ProfileFormState extends State<ProfileForm> {
       print('signUp details:');
       print(signUpDetails);
       // api call to signup
-
+      
       final response = await AuthApi.signUp(signUpDetails);
       print(response.statusCode);
 
@@ -106,23 +106,18 @@ class _ProfileFormState extends State<ProfileForm> {
       } else {
         print(jsonDecode(response.body)['message']);
         // show a snack bar with error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Error signing up: ${jsonDecode(response.body)['message']}',
-              style: TextStyle(color: Colors.white), // Text color
-            ),
-            backgroundColor: Colors.red, // Custom background color
-            duration: Duration(seconds: 3), // Display duration
-          ),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Error signing up: ${jsonDecode(response.body)['message']}")));
+            // TODO: on failure do not redirect.
+            Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                ConfirmationCode(signUpDetails: signUpDetails)));
+      } 
 
-        // TODO: on failure do not redirect.
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) =>
-        //         ConfirmationCode(signUpDetails: signUpDetails)));
-      }
-
+     // TODO: comment this after intergration with backend and uncomment the upper part
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) =>
+              ConfirmationCode(signUpDetails: signUpDetails)));
       // TODO: comment this after intergration with backend and uncomment the upper part
       // Navigator.of(context).push(MaterialPageRoute(
       //     builder: (context) =>
@@ -133,18 +128,38 @@ class _ProfileFormState extends State<ProfileForm> {
   File? _image;
   final ImagePicker _picker = ImagePicker();
 
-  Future<void> _pickImage() async {
-    try {
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
+Future<void> _pickImage() async {
+  try {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      final fileSize = await file.length(); // Get file size in bytes
+
+      // Check if the file size exceeds 10 MB (10 * 1024 * 1024 bytes)
+      if (fileSize > 10 * 1024 * 1024) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("File size exceeds 10 MB. Please upload a smaller file."),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return; // Do not set the image if it exceeds the size limit
       }
-    } catch (e) {
-      print("Error picking image: $e");
+
+      setState(() {
+        _image = file; // Set the image if the size is valid
+      });
     }
+  } catch (e) {
+    print("Error picking image: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("An error occurred while picking the image."),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -216,43 +231,57 @@ class _ProfileFormState extends State<ProfileForm> {
                           validate: false,
                         ),
                         const SizedBox(height: 8),
-                        Column(
-                          children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Upload Profile pic",
-                                style: TextStyle(fontWeight: FontWeight.w500),
-                              ),
+                       Column(
+                        children: [
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Upload Profile pic",
+                              style: TextStyle(fontWeight: FontWeight.w500),
                             ),
-                            const SizedBox(height: 8),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _image != null
-                                      ? Text(
-                                          "Selected File: ${_image!.path.split('/').last}")
-                                      : const Text("No file selected"),
-                                  const SizedBox(height: 20),
-                                  ElevatedButton(
-                                    onPressed: _pickImage,
-                                    style: ElevatedButton.styleFrom(
-                                      foregroundColor: Colors.white,
-                                      backgroundColor: const Color(0xFF32ADE6),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
+                          ),
+                          const SizedBox(height: 8),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Display the selected image in a small square box
+                                if (_image != null)
+                                  Container(
+                                    width: 70, // Set the width of the box
+                                    height: 70, // Set the height of the box
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey), // Add a border
+                                      borderRadius: BorderRadius.circular(8), // Optional rounded corners
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8), // Match the box's rounded corners
+                                      child: Image.file(
+                                        _image!,
+                                        fit: BoxFit.contain, // Ensure the entire image is visible within the box
                                       ),
                                     ),
-                                    child: const Text("Choose File"),
+                                  )
+                                else
+                                  const Text("No file selected"),
+                                const SizedBox(height: 20),
+                                ElevatedButton(
+                                  onPressed: _pickImage,
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: const Color(0xFF32ADE6),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
                                   ),
-                                ],
-                              ),
+                                  child: const Text("Choose File"),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                         const SizedBox(height: 50),
                         Custombutton(text: "Get OTP", onClick: handleSubmit),
                       ],
