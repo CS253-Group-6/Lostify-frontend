@@ -6,6 +6,7 @@ import '../../models/post.dart';
 import '../../services/chat_api.dart';
 import '../../providers/user_provider.dart';
 import '../../services/items_api.dart';
+
 class ItemDetailsPage extends StatelessWidget {
   final Post post;
   final int itemId, postOwnerId;
@@ -212,7 +213,7 @@ class ItemDetailsPage extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () {
                           deletePost(context);
-                        },
+                        }, 
                         icon: const Icon(Icons.delete, color: Colors.white),
                         label: const Text('Delete'),
                         style: ElevatedButton.styleFrom(
@@ -247,63 +248,81 @@ class ItemDetailsPage extends StatelessWidget {
                     children: [
                       // Report Button
                       ElevatedButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Failed to report ${post.title}.',
-                                style: const TextStyle(color: Colors.white),
+                        onPressed: () async {
+                          try {
+                            // Call the report API using the given itemId
+                            final response = await ItemsApi.reportItem(itemId);
+                            // final responseData = jsonDecode(response.body);
+
+                            if (response.statusCode == 204) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${post.title} reported successfully!',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.blue,
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Failed to report ${post.title}.',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'An error occurred: $e',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.red,
+                                duration: const Duration(seconds: 3),
                               ),
-                              backgroundColor: Colors.red,
-                              duration: const Duration(seconds: 3),
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'An error occurred: $e',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            backgroundColor: Colors.red,
-                            duration: const Duration(seconds: 3),
+                            );
+                          }
+                        },
+                        icon: const Icon(Icons.report, color: Colors.white),
+                        label: const Text('Report'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        );
-                      }
-                    },
-                    icon: const Icon(Icons.report, color: Colors.white),
-                    label: const Text('Report'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
-                    ),
-                  ),
-                  // Chat Button remains unchanged
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      ChatServices.addChat(context, itemId, postOwnerId);
-                    },
-                    icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
-                    label: const Text('Chat'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                      // Chat Button
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          ChatServices.addChat(context, itemId, postOwnerId);
+                        },
+                        icon: const Icon(Icons.chat_bubble_outline,
+                            color: Colors.white),
+                        label: const Text('Chat'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue, // Blue background
+                          foregroundColor: Colors.white, // White text
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-          ],
-        ),
+              ],
+            ),
+          ),
+        ],
       ),
-    ],
-  ),
-);
+    );
   }
 }
