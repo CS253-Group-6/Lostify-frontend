@@ -102,7 +102,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
         SnackBar(
           content: Text(
             'Item posted successfully!',
-            style: TextStyle(color: Colors.white), // Text color
+            style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.blue, // Custom background color
           duration: Duration(seconds: 3), // Display duration
