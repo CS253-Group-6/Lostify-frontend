@@ -63,7 +63,7 @@ class LostItemsTabState extends State<LostItemsTab> {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
-        address: 'Hall 5',
+        address2: 'Hall 5',
       ),
       Post(
         postType: PostType.found,
@@ -104,7 +104,7 @@ class LostItemsTabState extends State<LostItemsTab> {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
-        address: 'Hall 5',
+        address2: 'Hall 5',
       ),
       Post(
         postType: PostType.found,
@@ -135,6 +135,7 @@ class LostItemsTabState extends State<LostItemsTab> {
         id: 234125,
         title: 'Someone\'s baby',
         regDate: DateTime(2025, 03, 13),
+        address2: 'Hall 5',
       ),
     ];
 
@@ -229,7 +230,7 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
-        address: 'Hall 5',
+        address2: 'Hall 5',
       ),
       Post(
         postType: PostType.found,
