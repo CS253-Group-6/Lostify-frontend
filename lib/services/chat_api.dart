@@ -82,18 +82,34 @@ class ChatServices {
           .delete();
 
       // display success messgae to frontend
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Chat deleted Successfully")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Chat deleted successfully!',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
 
       // pop context
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error deleting chat : $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error deleting chat : $e',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
     }
   }
 
-  static void notifyUser(BuildContext context,ChatDetails chatDetails) async {
+  static void notifyUser(BuildContext context, ChatDetails chatDetails) async {
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
     print('playerId: ${profileProvider.playerId}');

@@ -48,6 +48,15 @@ class ProfileFormInput extends StatelessWidget {
                   }
                 }
                 return null;
+              }else{
+                if(label == 'PF/Roll No.' && value!.isNotEmpty){
+                  RegExp rollExp = RegExp(r'^[0-9]+$');
+                  if (!rollExp.hasMatch(value)) {
+                    return 'Enter a valid numeric PF/Roll No.';
+                  }
+                  return null;
+                }
+                return null;
               }
               return null;
             },

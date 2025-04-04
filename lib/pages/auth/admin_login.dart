@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,18 +21,20 @@ class _AdminLoginState extends State<AdminLogin> {
 
   final _adminKey = GlobalKey<FormState>();
 
-  void handleSubmit() async{
-    if(_adminKey.currentState!.validate()){
-      context.read<UserProvider>().setUserName(newUsername: _usernameController.text);
+  void handleSubmit() async {
+    if (_adminKey.currentState!.validate()) {
+      context
+          .read<UserProvider>()
+          .setUserName(newUsername: _usernameController.text);
       var adminLoginDetails = {
         "username": _usernameController.text,
         "password": _passwordController.text
       };
-      
-      Map<String,dynamic> response = await AuthApi.login(adminLoginDetails);
-      if (response['statusCode'] == 200) {
+
+      final response = await AuthApi.login(adminLoginDetails);
+      if (response.statusCode == 200) {
         // Extract cookies from the response headers
-        final cookies = response['set-cookie'];
+        final cookies = response.headers['set-cookie'];
         // print('Cookies: $cookies');
 
         if (cookies != null) {
@@ -39,21 +43,32 @@ class _AdminLoginState extends State<AdminLogin> {
           final userRole =
               RegExp(r'user_role=([^;]+)').firstMatch(cookies)?.group(1);
 
-          Navigator.of(context).pushReplacementNamed('/home',arguments: {
+          Navigator.of(context).pushReplacementNamed('/home', arguments: {
             'user_id': int.parse(userId!),
             'user_role': userRole
           });
-        }else{
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid credentials')));
-        }   
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Invalid credentials!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.red, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+        }
       } else {
         // Navigator.of(context).pushReplacementNamed('/');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error logging in : ${response['message']}')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Error logging in : ${jsonDecode(response.body)['message']}')));
       }
 
       // Navigator.of(context).pushReplacementNamed('/home');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,12 +79,11 @@ class _AdminLoginState extends State<AdminLogin> {
             minHeight: MediaQuery.of(context).size.height,
           ),
           decoration: BoxDecoration(
-            color: Color(0xFF45BBDD).withValues(alpha: 0.4),
-            image: DecorationImage(
-              image: AssetImage("assets/images/Admin Login.png"),
-              fit: BoxFit.cover,
-            )
-          ),
+              color: Color(0xFF45BBDD).withValues(alpha: 0.4),
+              image: DecorationImage(
+                image: AssetImage("assets/images/Admin Login.png"),
+                fit: BoxFit.cover,
+              )),
           child: Column(
             children: [
               Image.asset(

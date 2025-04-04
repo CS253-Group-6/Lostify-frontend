@@ -36,7 +36,8 @@ final class Post {
     this.reports = 0,
     this.description = '',
     this.imageProvider,
-    this.address = '',
+    this.address1 = '',
+    this.address2 = '',
   });
 
   /// An instance of [PostType] indicating whether the post is
@@ -67,12 +68,15 @@ final class Post {
   /// An optional image of the article concerned.
   final ImageProvider? imageProvider;
 
-  /// Address associated with the post.
-  final String address;
+  ///Coarse Address associated with the post.
+  final String address1;
+
+  ///Detailed Address associated with the post.
+  final String address2;
 
   factory Post.fromJson(Map<String, dynamic> json) {
     // Convert the postType string to the PostType enum
-    final typeString = (json['type'] == 0?"lost":"found");
+    final typeString = (json['type'] == 0 ? "lost" : "found");
     final postType = typeString == 'lost' ? PostType.lost : PostType.found;
 
     // Safely parse optional values and image URL
@@ -95,7 +99,7 @@ final class Post {
           json['imageUrl'] != null && (json['imageUrl'] as String).isNotEmpty
               ? NetworkImage(json['imageUrl'] as String)
               : null,
-      address: json['address'] as String? ?? '',
+      address2: json['address'] as String? ?? '',
     );
   }
 }

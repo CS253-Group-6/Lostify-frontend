@@ -1,0 +1,2 @@
+/Applications/Coding/Flutter/Lostify/Lostify/android/app/.cxx/Debug/5t6u4l4y/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Applications/Coding/Flutter/Lostify/Lostify/android/app/.cxx/Debug/5t6u4l4y/armeabi-v7a/CMakeFiles/rebuild_cache.dir

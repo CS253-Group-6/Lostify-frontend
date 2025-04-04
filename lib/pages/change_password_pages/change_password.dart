@@ -1,5 +1,8 @@
+import 'package:final_project/pages/home_page/homepage.dart';
+import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -16,11 +19,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   String? _passwordErrorMessage;
 
-  void _submit() {
+  void _submit() async {
     if (_formKey.currentState!.validate()) {
       if (_newPasswordController.text != _confirmPasswordController.text) {
         setState(() {
@@ -30,9 +34,49 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         setState(() {
           _passwordErrorMessage = null;
         });
+        // api for change password
+        var changePasswordData = {
+          'old_password': _oldPasswordController.text,
+          'new_password': _newPasswordController.text
+        };
+        /*
+        final response = await AuthApi.changePassword(changePasswordData);
+        if (response.statusCode == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Password changed successfully',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.blue, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Failed to change password!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.red, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+        }
+        */
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Password changed successfully!')),
+          SnackBar(
+            content: Text(
+              'Password changed successfully',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.blue, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
         );
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => HomePage()));
       }
     }
   }
@@ -49,7 +93,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
-      return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
         elevation: 2,
@@ -80,7 +124,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20), // Reduced spacing since we have app bar
+              const SizedBox(
+                  height: 20), // Reduced spacing since we have app bar
               Form(
                 key: _formKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -103,7 +148,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
                           _passwordErrorMessage!,
-                          style: const TextStyle(color: Colors.red, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 14),
                         ),
                       ),
                     const SizedBox(height: 30),
@@ -118,7 +164,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15),
                   ),
                   child: const Text(
                     "Submit",
@@ -137,7 +184,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget inputLabel(String text) {
     return Text(
       text,
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+      style: TextStyle(
+          fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
     );
   }
 
@@ -153,7 +201,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return '$hintText is required';
-        } else if (hintText == 'Confirm Password' && _newPasswordController.text != _confirmPasswordController.text) {
+        } else if (hintText == 'Confirm Password' &&
+            _newPasswordController.text != _confirmPasswordController.text) {
           return 'Passwords do not match!';
         }
         return null;

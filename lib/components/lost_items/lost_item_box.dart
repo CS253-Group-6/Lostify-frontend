@@ -106,10 +106,9 @@
 //   }
 // }
 
-
-import '../../models/post.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/post.dart';
 import '../../pages/home_page/item_details_page.dart';
 
 /// Type of post (for lost item or for found item). Passed as argument
@@ -137,7 +136,6 @@ import '../../pages/home_page/item_details_page.dart';
 ///
 /// * `itemImage` – An optional image of the article concerned.
 
-
 /// Style constant for transparency of [ItemBox]
 /// instances.
 const double kItemBoxOpacity = 0.7;
@@ -150,7 +148,7 @@ const double kItemBoxBorderRadius = 20.0;
 ///
 /// Inherits from [StatelessWidget].
 class ItemBox extends StatelessWidget {
-  const ItemBox({super.key, required this.post, this.extraProperty });
+  const ItemBox({super.key, required this.post, this.extraProperty});
 
   final Post post;
   final String? extraProperty;
@@ -163,28 +161,29 @@ class ItemBox extends StatelessWidget {
   DateTime get regDate => post.regDate;
   DateTime? get closedDate => post.closedDate;
   String get description => post.description;
-  String get address => post.address;
+  String get address => post.address2;
   // DateTime? get foundDate => null; // Placeholder
   ImageProvider? get itemImage => post.imageProvider;
-
 
   @override
   Widget build(BuildContext context) {
     // Determine color based on status text
 
     final Color statusColor =
-    postType == PostType.found ? Colors.green : Colors.red;
+        postType == PostType.found ? Colors.green : Colors.red;
 
     // function to add chat for the post in user's chat list
     void handleItemDetails() {
-      Navigator.push(context, MaterialPageRoute(
-        builder: (context) => ItemDetailsPage(
-          itemId: id,
-          postOwnerId: 1,
-          post: post,
-          extraProperty: extraProperty,
-        ),
-      ));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ItemDetailsPage(
+              itemId: id,
+              postOwnerId: 1,
+              post: post,
+              extraProperty: extraProperty,
+            ),
+          ));
     }
 
     void deletePost(BuildContext context) {
@@ -267,8 +266,10 @@ class ItemBox extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       'Reports: $reports',
-                      style: const TextStyle(fontWeight: FontWeight.bold,fontSize :16
-                          ,color: Colors.blue),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.blue),
                     ),
                   ),
                 const SizedBox(height: 4),
@@ -278,7 +279,7 @@ class ItemBox extends StatelessWidget {
                   style: TextStyle(color: statusColor),
                 ),
                 const SizedBox(height: 4),
-                if(extraProperty == null)
+                if (extraProperty == null)
                   Text('Registered Date: ${dateAsString(regDate)}'),
                 const SizedBox(height: 4),
                 if (extraProperty == null)
@@ -298,12 +299,12 @@ class ItemBox extends StatelessWidget {
                       child: const Text('View'),
                     ),
                     // <-- Added delete callback
-                    if(extraProperty!= null)
+                    if (extraProperty != null)
                       IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.redAccent),
+                          icon:
+                              const Icon(Icons.delete, color: Colors.redAccent),
                           tooltip: "Delete Post",
-                          onPressed: () => deletePost(context)
-                      ),
+                          onPressed: () => deletePost(context)),
                   ],
                 ),
               ],
@@ -326,6 +327,3 @@ class ItemBox extends StatelessWidget {
     return '$d.$m.$y';
   }
 }
-
-
-

@@ -17,17 +17,42 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   void handleResetPassword() async {
     if (_usernameController.text.isNotEmpty) {
       final response = await AuthApi.resetPassword(_usernameController.text);
-      if (response['statusCode'] == 200) {
+      if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Password reset successfully')));
+          SnackBar(
+            content: Text(
+              'Password reset successfully.Please check your mail',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.blue, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
+
         Navigator.pushReplacementNamed(context, '/user/login');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to reset password')));
+          SnackBar(
+            content: Text(
+              'Failed to reset password',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter your username')));
+        SnackBar(
+          content: Text(
+            'Please enter your username!',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
     }
   }
 

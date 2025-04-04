@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/chat_model.dart';
+import '../../models/post.dart';
 import '../../pages/chat/chat_screen.dart';
 import '../../providers/profile_provider.dart';
-import '../../models/post.dart';
 
 class ItemDetails extends StatefulWidget {
   final int itemId, postOwnerId;
@@ -150,7 +150,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               size: 16, color: Colors.grey),
                           const SizedBox(width: 4),
                           Text(
-                            widget.post.address,
+                            widget.post.address2,
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.grey),
                           ),
@@ -167,7 +167,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                       ElevatedButton.icon(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${widget.post.title} reported!')),
+                            SnackBar(
+                              content: Text(
+                                '${widget.post.title} reported!',
+                                style: TextStyle(
+                                    color: Colors.white), // Text color
+                              ),
+                              backgroundColor:
+                                  Colors.blue, // Custom background color
+                              duration:
+                                  Duration(seconds: 3), // Display duration
+                            ),
                           );
                         },
                         icon: const Icon(Icons.report, color: Colors.white),

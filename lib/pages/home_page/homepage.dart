@@ -11,7 +11,7 @@ import '../../components/home/expandable_fab.dart';
 import '../chat/chat_list.dart';
 import '../search_page.dart';
 import 'tabs.dart';
-import '../change_password.dart';
+import '../change_password_pages/change_password.dart';
 
 /// Home page of the application.
 ///
@@ -57,28 +57,77 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     super.build(context); // Required when using AutomaticKeepAliveClientMixin
     // get the role details from Navigator args
 
-    final roleData = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>? ?? {
-      'user_id': 0,
-      'user_role': '0'
-    };
+    final roleData =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>? ??
+            {'user_id': 0, 'user_role': '0'};
     // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
 
     /// User role
-    final int role = int.tryParse(roleData['user_role'])??0; // Replace with context.watch().user.role;
+    final int role = int.tryParse(roleData['user_role']) ??
+        0; // Replace with context.watch().user.role;
 
     /// Logout
-    void handleLogout() async {
+    void handleLogout(BuildContext context) async {
       final response = await AuthApi.logout();
-      if (response['statusCode'] == 200) {
-        Navigator.pushReplacementNamed(context, '/user/login');
+      if (response.statusCode == 200) {
+        Navigator.pushReplacementNamed(context, '/homeInterface');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${response['message']}')));
+          SnackBar(
+            content: Text(
+              'Error: ${jsonDecode(response.body)['message']}',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
 
         // TODO: remove this navigate in failed
-        Navigator.pushReplacementNamed(context, '/user/login');
+        Navigator.pushReplacementNamed(context, '/homeInterface');
       }
     }
+    void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // Close dialog when tapped outside
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.logout, color: Colors.red, size: 28),
+              SizedBox(width: 10),
+              Text("Logout Confirmation"),
+            ],
+          ),
+          content: Text("Are you sure you want to logout?",style: TextStyle(color: Colors.black),),
+          actions: [
+            // Cancel Button
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey[600], // Dark grey for neutral action
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(10),
+                // ),
+              ),
+              onPressed: () => Navigator.pop(context), // Close the popup
+              child: Text("Cancel", style: TextStyle(color: Colors.white)),
+            ),
+            // Logout Button
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () => handleLogout(context), // Call API-based logout
+              child: Text("Logout", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].
@@ -226,20 +275,23 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     ),
                     ListTile(
                       title: const Text('Edit Profile'),
-                      onTap: () {},
+                      onTap: () {
+                      Navigator.pushNamed(context, '/edit-profile');
+                    },
                     ),
                     ListTile(
                       title: const Text('Change Password'),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                          MaterialPageRoute(
+                            builder: (context) => ChangePasswordPage()),
                         );
                       },
                     ),
                     ListTile(
                       title: const Text('Logout'),
-                      onTap: handleLogout,
+                      onTap: () => _showLogoutDialog(context), 
                     ),
                   ],
                 ),

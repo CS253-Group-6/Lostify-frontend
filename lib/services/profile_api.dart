@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ProfileApi {
-  static final String baseUrl = 'http://127.0.0.1:5000';
+  static final String baseUrl = 'http://10.0.2.2:5000';
 
   // edit profile
-  static Future<Map<String,dynamic>> editProfile(int userId,Map<String,dynamic> profileDetails) async{
+  static Future<http.Response> editProfile(int userId,Map<String,dynamic> profileDetails) async{
     /*
       profile details format: { 
         name, //string
@@ -24,21 +24,21 @@ class ProfileApi {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(profileDetails),
       );
-      return jsonDecode(response.body);
+      return response;
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 
   // get profile by Id
-  static Future<Map<String,dynamic>> getProfileById(int userId) async{
+  static Future<http.Response> getProfileById(int userId) async{
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/users/$userId/profile"),
       );
-      return jsonDecode(response.body);
+      return response;
     } catch (e) {
-      return {"message": "Unexpected error: $e", "statusCode": 500};
+      return http.Response(jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}), 500);
     }
   }
 }

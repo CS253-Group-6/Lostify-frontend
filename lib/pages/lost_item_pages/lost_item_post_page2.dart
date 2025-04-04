@@ -70,22 +70,57 @@ class _LostAnItem2State extends State<LostAnItem2> {
       print('json: ${item.toJson()}');
       /*
       final response = await ItemsApi.postItem(item.toJson());
-      if (response['statusCode'] == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Item posted succesfully")));
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Item posted successfully!',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.blue, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
         Navigator.pushNamed(context, '/home');
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Failed to post item")));
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(
+      'Failed to post item!',
+      style: TextStyle(color: Colors.white), // Text color
+    ),
+    backgroundColor: Colors.red, // Custom background color
+    duration: Duration(seconds: 3), // Display duration
+  ),
+);
+
       }
       */
       // TODO: uncomment upper part and comment navigator below
-      ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Item posted succesfully")));
-        Navigator.pushNamed(context, '/home');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Item posted successfully!',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.blue, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
+
+      Navigator.pushNamed(context, '/home');
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error : $e',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
     }
   }
 
@@ -286,7 +321,9 @@ class _LostAnItem2State extends State<LostAnItem2> {
                     description: widget.postDetails1['description'],
                     location2: locController.text,
                     location1: _location1!,
-                    date: DateFormat('yyyy-MM-dd').format(_selectedDate!).toString(),
+                    date: DateFormat('yyyy-MM-dd')
+                        .format(_selectedDate!)
+                        .toString(),
                     time: formatTimeOfDay(_selectedTime!),
                     image: (widget.postDetails1['image']),
                     // isFound: false,
