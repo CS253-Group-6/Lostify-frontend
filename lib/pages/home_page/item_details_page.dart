@@ -213,7 +213,7 @@ class ItemDetailsPage extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () {
                           deletePost(context);
-                        },
+                        }, 
                         icon: const Icon(Icons.delete, color: Colors.white),
                         label: const Text('Delete'),
                         style: ElevatedButton.styleFrom(
