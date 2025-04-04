@@ -204,7 +204,7 @@ class ItemDetailsPage extends StatelessWidget {
                 const Spacer(),
                 // Action buttons (e.g., Report, Share, Chat)
                 // if (extraProperty != null)
-                if (postOwnerId == logged_in_userId)
+                if (extraProperty != null||postOwnerId == logged_in_userId)
                 // if(true)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
