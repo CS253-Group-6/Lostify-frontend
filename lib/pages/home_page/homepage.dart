@@ -10,7 +10,7 @@ import '../../components/home/expandable_fab.dart';
 import '../chat/chat_list.dart';
 import '../search_page.dart';
 import 'tabs.dart';
-import '../change_password.dart';
+import '../chaange_password_pages/change_password.dart';
 
 /// Home page of the application.
 ///

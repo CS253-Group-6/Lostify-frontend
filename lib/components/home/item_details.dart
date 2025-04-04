@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/chat_model.dart';
+import '../../models/post.dart';
 import '../../pages/chat/chat_screen.dart';
 import '../../providers/profile_provider.dart';
-import '../../models/post.dart';
 
 class ItemDetails extends StatefulWidget {
   final int itemId, postOwnerId;
@@ -150,7 +150,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               size: 16, color: Colors.grey),
                           const SizedBox(width: 4),
                           Text(
-                            widget.post.address,
+                            widget.post.address2,
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.grey),
                           ),

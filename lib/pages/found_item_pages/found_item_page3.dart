@@ -1,10 +1,10 @@
+import 'package:final_project/components/location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:final_project/components/location/location.dart';
 import 'package:provider/provider.dart';
-import '../../providers/user_provider.dart';
+
 import '../../models/item_model.dart';
-import '../../services/items_api.dart';
+import '../../providers/user_provider.dart';
 
 class FoundItemPage3 extends StatefulWidget {
   final Map<String, dynamic> postDetails2;
@@ -154,10 +154,27 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // TODO: Back arrow + Page Title
-
+                // Present location of item
+                const Text(
+                  "Approximate Location of Discovery",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                LocationDropdown(
+                  onLocationSelected: (String? newValue) {
+                    setState(() {
+                      selectedPresentLocation = newValue;
+                    });
+                  },
+                ),
+                const SizedBox(height: 30),
                 // Location where item was found
                 const Text(
-                  "Location where item was found",
+                  "Detailed Location Where Item Was Found",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -267,25 +284,6 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                   ],
                 ),
                 const SizedBox(height: 30),
-
-                // Present location of item
-                const Text(
-                  "Present location of the item",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                LocationDropdown(
-                  onLocationSelected: (String? newValue) {
-                    setState(() {
-                      selectedPresentLocation = newValue;
-                    });
-                  },
-                ),
-                const SizedBox(height: 240),
 
                 // Next Button
                 ElevatedButton(

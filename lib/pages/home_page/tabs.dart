@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '/components/home/item_box.dart';
 import '/models/post.dart';
-import '../../services/posts_api.dart';
 
 class LostItemsTab extends StatefulWidget {
   const LostItemsTab({super.key});
@@ -64,7 +63,7 @@ class LostItemsTabState extends State<LostItemsTab> {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
-        address: 'Hall 5',
+        address2: 'Hall 5',
       ),
       Post(
         postType: PostType.found,
@@ -95,6 +94,48 @@ class LostItemsTabState extends State<LostItemsTab> {
         id: 43,
         title: 'Someone\'s baby',
         regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.lost,
+        id: 8,
+        title: 'Hercules cycle',
+        regDate: DateTime(2025, 03, 13),
+        description: ' ',
+        imageProvider: const NetworkImage(
+          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+        ),
+        address2: 'Hall 5',
+      ),
+      Post(
+        postType: PostType.found,
+        id: 645,
+        title: 'Keys',
+        regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.lost,
+        id: 1234,
+        title: 'ID card',
+        regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.lost,
+        id: 1235,
+        title: 'CHM111 lab report',
+        regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.found,
+        id: 15423,
+        title: 'Mont Blanc pen',
+        regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.found,
+        id: 234125,
+        title: 'Someone\'s baby',
+        regDate: DateTime(2025, 03, 13),
+        address2: 'Hall 5',
       ),
     ];
 
@@ -148,7 +189,6 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
     /*
     _loadFoundPosts();
     */
-    
   }
 
   Future<void> _loadFoundPosts() async {
@@ -165,15 +205,15 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
 
   // Dynamic version using API
   Widget _buildDynamicFoundItems() {
-        return ListView.builder(
-          itemCount: _foundPosts.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ItemBox(post: _foundPosts[index]),
-            );
-          },
+    return ListView.builder(
+      itemCount: _foundPosts.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: ItemBox(post: _foundPosts[index]),
         );
+      },
+    );
   }
 
   // Hardcoded version using static data
@@ -190,7 +230,7 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
-        address: 'Hall 5',
+        address2: 'Hall 5',
       ),
       Post(
         postType: PostType.found,
