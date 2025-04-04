@@ -63,6 +63,7 @@ class LostItemsTabState extends State<LostItemsTab> {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
+        address1: 'Hall 5',
         address2: 'Hall 5',
       ),
       Post(
