@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 import '../../components/home/action_button.dart';
 import '../../components/home/expandable_fab.dart';
 import '../chat/chat_list.dart';
-import '../search_page.dart';
+import '../search/search_page.dart';
 import 'tabs.dart';
 import '../chaange_password_pages/change_password.dart';
 
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
     final roleData =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>? ??
-            {'user_id': 0, 'user_role': '0'};
+            {'user_id': 0, 'user_role': '1'};
     // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
 
     /// User role
@@ -245,7 +246,12 @@ class _HomePageState extends State<HomePage> {
                   if (role == 1)
                     ListTile(
                       title: const Text('Reported Items'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ReportedItemPage()),
+                        );
+                      },
                     ),
                   ListTile(
                     title: const Text('Messages'),
