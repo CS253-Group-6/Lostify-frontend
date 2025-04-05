@@ -25,7 +25,7 @@ import 'pages/home_page/homepage.dart';
 import 'pages/lost_found_post_list/found_item.dart';
 import 'pages/lost_found_post_list/lost_item.dart';
 import 'pages/profile_pages/profileform_page.dart';
-import 'pages/search_page.dart';
+import 'pages/search/search_page.dart';
 import 'providers/user_provider.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();

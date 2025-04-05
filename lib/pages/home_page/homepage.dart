@@ -11,7 +11,7 @@ import '../../components/home/expandable_fab.dart';
 import '../chat/chat_list.dart';
 import '../search/search_page.dart';
 import 'tabs.dart';
-import '../chaange_password_pages/change_password.dart';
+import '../change_password_pages/change_password.dart';
 
 /// Home page of the application.
 ///
@@ -45,7 +45,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   /// List of tab titles.
-  final List<Widget> _tabs = const [Tab(text: 'Lost'), Tab(text: 'Found')];
+  /// List of tab titles.
+final List<Widget> _tabs = const [
+  Tab(
+    child: Text(
+      'Lost',
+      style: TextStyle(color: Colors.white),
+    ),
+  ),
+  Tab(
+    child: Text(
+      'Found',
+      style: TextStyle(color: Colors.white),
+    ),
+  ),
+];
 
   /// List of widgets corresponding to tabs in [_tabs].
   final List<Widget> _widgets = const [LostItemsTab(), FoundItemsTab()];
@@ -58,7 +72,7 @@ class _HomePageState extends State<HomePage> {
 
     final roleData =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>? ??
-            {'user_id': 0, 'user_role': '1'};
+            {'user_id': 0, 'user_role': '0'};
     // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
 
     /// User role
@@ -67,24 +81,9 @@ class _HomePageState extends State<HomePage> {
 
     /// Logout
     void handleLogout(BuildContext context) async {
-      final response = await AuthApi.logout();
-      if (response.statusCode == 200) {
-        Navigator.pushReplacementNamed(context, '/homeInterface');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Error: ${jsonDecode(response.body)['message']}',
-              style: TextStyle(color: Colors.white), // Text color
-            ),
-            backgroundColor: Colors.red, // Custom background color
-            duration: Duration(seconds: 3), // Display duration
-          ),
-        );
+      // final response = await AuthApi.logout();
 
-        // TODO: remove this navigate in failed
-        Navigator.pushReplacementNamed(context, '/homeInterface');
-      }
+      Navigator.pushReplacementNamed(context, '/homeInterface');
     }
     void _showLogoutDialog(BuildContext context) {
     showDialog(
@@ -217,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                         const CircleAvatar(
                           radius: 45,
                           backgroundImage:
-                              AssetImage('assets/images/profile_picture.png'),
+                              AssetImage('assets/images/profile_hardcoded.png'),
                         ),
                         const SizedBox(height: 10),
                         // Replace 'John Doe' with the actual name or a variable holding it.
@@ -329,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
-                        icon: const Icon(CupertinoIcons.search),
+                        icon: const Icon(Icons.report_problem),
                         onPressed: () {
                           Navigator.pushNamed(context, '/lost/post/1');
                         }),
@@ -344,7 +343,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
-                      icon: const Icon(CupertinoIcons.speaker_1_fill),
+                      icon: const Icon(Icons.archive),
                       onPressed: () {
                         Navigator.pushNamed(context, '/found/post/1');
                       },
