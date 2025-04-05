@@ -180,6 +180,16 @@ class EditProfilePageState extends State<EditProfilePage> {
                                 : null,
                           ),
                         ),
+                        // hardcoded
+                        // GestureDetector(
+                        //   onTap: _pickImage,
+                        //   child: CircleAvatar(
+                        //     radius: 50,
+                        //     backgroundImage: _imageFile != null
+                        //         ? FileImage(_imageFile!)
+                        //         : AssetImage('assets/images/profile_hardcoded.png') as ImageProvider,
+                        //   ),
+                        // ),
                         SizedBox(height: 20),
 
                         // Form Fields
