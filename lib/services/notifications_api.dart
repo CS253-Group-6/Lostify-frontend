@@ -19,10 +19,12 @@ class NotificationsApi {
   static Future<void> sendNotification(
       String playerId, String title, String body) async {
     const String oneSignalApiUrl = "https://onesignal.com/api/v1/notifications";
-    const String oneSignalRestApiKey = "os_v2_app_bpbjc4wf3vfghbdtseh74kgcrgxfdxtfqgvuxa5yg4vmia6csea43pc7otzqdbzs774huhxaui2jdvsdavghpbxeschk74wdr6ydsuy";
+    const String oneSignalRestApiKey =
+        "os_v2_app_bpbjc4wf3vfghbdtseh74kgcrgxfdxtfqgvuxa5yg4vmia6csea43pc7otzqdbzs774huhxaui2jdvsdavghpbxeschk74wdr6ydsuy";
 
     final Map<String, dynamic> notificationData = {
-      "app_id": "0bc29172-c5dd-4a63-8473-910ffe28c289", // Replace with your OneSignal App ID
+      "app_id":
+          "0bc29172-c5dd-4a63-8473-910ffe28c289", // Replace with your OneSignal App ID
       "include_player_ids": [playerId],
       "headings": {"en": title},
       "contents": {"en": body},
@@ -36,7 +38,7 @@ class NotificationsApi {
       },
       body: jsonEncode(notificationData),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       print("Notification sent successfully!");
     } else {
       print("Failed to send notification: ${response.body}");

@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/providers/profile_provider.dart';
+import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/chat_model.dart';
 import '../../pages/chat/chat_screen.dart';
@@ -24,6 +29,8 @@ class _ChatListItemState extends State<ChatListItem>
     });
   }
 
+  String? name = '0';
+  int recieverUserId = 0;
   @override
   void initState() {
     super.initState();
@@ -31,6 +38,24 @@ class _ChatListItemState extends State<ChatListItem>
     WidgetsBinding.instance.addObserver(this);
     // set status to be online
     setStatus('Online');
+    // set the name of the user
+    getUserName();
+  }
+
+  void getUserName() async {
+    // get profile details of user by id
+
+    recieverUserId = widget.chat['users'][0] ==
+            Provider.of<ProfileProvider>(context, listen: false).id
+        ? widget.chat['users'][1]
+        : widget.chat['users'][0];
+    final profileResponse = await ProfileApi.getProfileById(recieverUserId);
+    final profileDetails = jsonDecode(profileResponse.body);
+    print(profileDetails);
+    setState(() {
+      name = profileDetails['name'] ?? '0';
+      recieverUserId = profileDetails['id'] ?? 0;
+    });
   }
 
   @override
@@ -58,17 +83,20 @@ class _ChatListItemState extends State<ChatListItem>
           backgroundImage: NetworkImage(
               'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
         ),
-        title: Text("${widget.chat['users'][0]}"),
+        title: Text("${name}"),
         subtitle: Text(widget.chat['lastMessage']),
         trailing: Column(
           children: [
             Text(widget.chat['status']),
             Text(
-              widget.chat['lastMessageTime'] is Timestamp
-                  ? DateFormat('hh:mm').format(
-                      (widget.chat['lastMessageTime'] as Timestamp).toDate(),
-                    )
-                  : widget.chat['lastMessageTime'] as String,
+              widget.chat['lastMessageTime'] != null
+                  ? (widget.chat['lastMessageTime'] is Timestamp
+                      ? DateFormat('hh:mm').format(
+                          (widget.chat['lastMessageTime'] as Timestamp)
+                              .toDate(),
+                        )
+                      : widget.chat['lastMessageTime'] as String)
+                  : '...', // Fallback for null values
             ),
           ],
         ),
@@ -78,8 +106,11 @@ class _ChatListItemState extends State<ChatListItem>
             MaterialPageRoute(
                 builder: (context) => ChatScreen(
                     chatDetails: ChatDetails(
-                        senderId: widget.chat['users'][0],
-                        recieverId: widget.chat['users'][1],
+                        senderId: widget.chat['users'][0] == recieverUserId
+                            ? widget.chat['users'][1]
+                            : widget.chat['users'][0],
+                        recieverId: recieverUserId,
+                        recieverName: name ?? '0',
                         itemId: widget.chat['itemId'],
                         chatRoomId: widget.chat.id))),
           );

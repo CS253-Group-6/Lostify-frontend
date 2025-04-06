@@ -36,10 +36,10 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       String imageURL = await UploadHandler.handleUpload(_picker, type);
 
       final imageMessage = {
-        'senderId': widget.chatDetails.senderId,
+        'senderId': Provider.of<ProfileProvider>(context, listen: false).id,
         'text': imageURL,
         'type': 'image',
-        'time': DateFormat('HH:mm').format(DateTime.now()),
+        'time': FieldValue.serverTimestamp(),
       };
       print(imageMessage);
       await FirebaseFirestore.instance
@@ -86,6 +86,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.chatDetails);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -97,18 +98,20 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
             ),
             const SizedBox(width: 10),
-            Text(context.watch<ProfileProvider>().name,
+            Text(widget.chatDetails.recieverName,
                 style: TextStyle(color: Colors.white)),
             const Spacer(),
-            ElevatedButton(
-              onPressed: () async =>
-                  await ChatServices.deleteChat(context, widget.chatDetails),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text("Close"),
-            )
+            if (widget.chatDetails.senderId ==
+                Provider.of<ProfileProvider>(context, listen: false).id)
+              ElevatedButton(
+                onPressed: () async =>
+                    await ChatServices.deleteChat(context, widget.chatDetails),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text("Close"),
+              )
           ],
         ),
       ),
@@ -124,16 +127,32 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  // Check for NOT_FOUND error and handle it
+                  if (snapshot.error.toString().contains('NOT_FOUND')) {
+                    return const Center(child: Text('Chat not found.'));
+                  }
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const Center(child: Text("No messages yet."));
                 }
+                // Auto-scroll to the bottom when new messages are received
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _scrollToBottom();
+                });
 
                 return ListView.builder(
+                  controller: _scrollController,
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     final message = snapshot.data!.docs[index];
                     final isMe = message['senderId'] ==
                         context.watch<ProfileProvider>().id;
+                    print(
+                        'iseMe: $isMe,profileId: ${context.watch<ProfileProvider>().id}, messageId: ${message['senderId']}');
 
                     return Align(
                       alignment:
@@ -177,7 +196,15 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 ),
                               ),
                             const SizedBox(height: 5),
-                            Text(message['time']!,
+                            Text(
+                                message['time'] != null
+                                    ? (message['time'] is Timestamp
+                                        ? DateFormat('hh:mm').format(
+                                            (message['time'] as Timestamp)
+                                                .toDate(),
+                                          )
+                                        : message['time'] as String)
+                                    : '...', // Fallback for null values
                                 style: const TextStyle(
                                     fontSize: 12, color: Colors.grey)),
                           ],

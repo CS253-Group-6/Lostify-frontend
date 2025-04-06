@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/providers/user_provider.dart';
+import 'package:final_project/services/items_api.dart';
+import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/chat_model.dart';
@@ -11,15 +14,45 @@ import '../../services/notifications_api.dart';
 import '../../utils/upload_handler.dart';
 
 class ChatServices {
+  static Map<String, dynamic> recieverDetails = {};
   // create a firebase firestore instance to save and get chats.
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseFirestore _chatInstance = FirebaseFirestore.instance;
 
-  static void addChat(BuildContext context, int itemId, int postOwnerId) {
-    String chatId = createChatId(context, postOwnerId);
+  // get receiver details
+  static Future<Map<String, dynamic>> getRecieverDetails(
+      BuildContext context, int recieverId) async {
+    final profileResponse = await ProfileApi.getProfileById(recieverId);
+    final profileDetails = jsonDecode(profileResponse.body);
+    print(profileDetails);
+    return profileDetails;
+
+    /*
+    void getUserName() async {
+    // get profile details of user by id
+
+    recieverUserId = widget.chat['users'][0] ==
+            Provider.of<ProfileProvider>(context, listen: false).id
+        ? widget.chat['users'][1]
+        : widget.chat['users'][0];
+    final profileResponse = await ProfileApi.getProfileById(recieverUserId);
+    final profileDetails = jsonDecode(profileResponse.body);
+    print(profileDetails);
+    setState(() {
+      name = profileDetails['name'] ?? '0';
+      recieverUserId = profileDetails['id'] ?? 0;
+    });
+  } */
+  }
+
+  static void addChat(BuildContext context, int itemId, int postOwnerId) async {
+    String chatId = createChatId(context, itemId, postOwnerId);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
-    int currUserId = profileProvider.id;
+    int currUserId = Provider.of<UserProvider>(context, listen: false).id;
+
+    print(
+        'currUserId: $currUserId, postOwnerId: $postOwnerId,name: ${profileProvider.name}');
     _chatInstance.collection("chats").doc(chatId).set({
       "users": [currUserId, postOwnerId],
       "lastMessage": "",
@@ -28,10 +61,13 @@ class ChatServices {
       "status": "Offline",
       "unreadMessagesNumber": 0,
     });
+    // get reciever details
+    recieverDetails = await getRecieverDetails(context, postOwnerId);
 
     ChatDetails chatDetails = ChatDetails(
         senderId: currUserId,
         recieverId: postOwnerId,
+        recieverName: recieverDetails['name'],
         itemId: itemId,
         chatRoomId: chatId);
     Navigator.push(
@@ -42,14 +78,15 @@ class ChatServices {
     );
   }
 
-  static createChatId(BuildContext context, int postOwnerId) {
+  static createChatId(BuildContext context, int itemId, int postOwnerId) {
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
     int currUserId = profileProvider.id;
+    print('currUserId: $currUserId, postOwnerId: $postOwnerId');
     if (currUserId < postOwnerId) {
-      return '${currUserId}_$postOwnerId';
+      return '${currUserId}_${postOwnerId}_${itemId}';
     } else {
-      return '${postOwnerId}_$currUserId';
+      return '${postOwnerId}_${currUserId}_${itemId}';
     }
   }
 
@@ -80,6 +117,26 @@ class ChatServices {
           .collection("chats")
           .doc(chatDetails.chatRoomId)
           .delete();
+
+      // delete the chat from flask
+      final response =
+          await ItemsApi.claimItem(chatDetails.itemId, chatDetails.recieverId);
+
+      print('response: ${response.body}');
+
+      if (!(response.statusCode >= 200 && response.statusCode <= 300)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Claim to the post failed',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
+        return;
+      }
 
       // display success messgae to frontend
       ScaffoldMessenger.of(context).showSnackBar(
@@ -117,7 +174,7 @@ class ChatServices {
       await NotificationsApi.sendNotification(
         profileProvider.playerId!,
         "Lostify",
-        "You have a new message in the chat from ${chatDetails.senderId}!",
+        "You have a new message in the chat from ${Provider.of<ProfileProvider>(context, listen: false).name}!",
       );
     }
   }
@@ -126,10 +183,10 @@ class ChatServices {
       TextEditingController messageController, ChatDetails chatDetails) async {
     if (messageController.text.isNotEmpty) {
       final newMessage = {
-        'senderId': chatDetails.senderId,
+        'senderId': Provider.of<ProfileProvider>(context, listen: false).id,
         'text': messageController.text,
         'type': 'text',
-        'time': DateFormat('HH:mm').format(DateTime.now()),
+        'time': FieldValue.serverTimestamp(),
       };
       // _messages.add(newMessage);
       messageController.clear();

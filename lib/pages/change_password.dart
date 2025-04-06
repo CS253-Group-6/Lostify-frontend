@@ -1,7 +1,6 @@
 import 'package:final_project/pages/home_page/homepage.dart';
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -39,9 +38,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           'old_password': _oldPasswordController.text,
           'new_password': _newPasswordController.text
         };
-        /*
+
         final response = await AuthApi.changePassword(changePasswordData);
-        if (response.statusCode == 200) {
+        print(response.body);
+        print(response.statusCode);
+        if (response.statusCode >= 200 && response.statusCode < 210) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -52,6 +53,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               duration: Duration(seconds: 3), // Display duration
             ),
           );
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => HomePage()));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -64,19 +67,19 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             ),
           );
         }
-        */
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Password changed successfully',
-              style: TextStyle(color: Colors.white), // Text color
-            ),
-            backgroundColor: Colors.blue, // Custom background color
-            duration: Duration(seconds: 3), // Display duration
-          ),
-        );
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => HomePage()));
+
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(
+        //       'Password changed successfully',
+        //       style: TextStyle(color: Colors.white), // Text color
+        //     ),
+        //     backgroundColor: Colors.blue, // Custom background color
+        //     duration: Duration(seconds: 3), // Display duration
+        //   ),
+        // );
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (context) => HomePage()));
       }
     }
   }

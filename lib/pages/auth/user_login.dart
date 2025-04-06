@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/services/auth_api.dart';
 import 'package:final_project/services/profile_api.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/auth/auth_input.dart';
 import '../../components/auth/custom_auth_button.dart';
@@ -37,45 +39,51 @@ class _LoginState extends State<Login> {
 
       // api call for login
       final response = await AuthApi.login(loginDetails);
-
+      print(response.body);
+      print(response.statusCode);
       // if successfull login
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 && response.statusCode < 210) {
         // set user name into userprovider
         context
             .read<UserProvider>()
             .setUserName(newUsername: _usernameController.text);
 
         // Extract cookies from the response headers
-        final cookies = response.headers['set-cookie'];
-        // print('Cookies: $cookies');
+        final cookie = response.headers['set-cookie'];
+        print('Cookies: $cookie');
+        final prefs = await SharedPreferences.getInstance();
 
-        if (cookies != null) {
+        if (cookie != null) {
+          // Save the cookies to shared preferences
+          // await prefs.setString('cookies', cookie);
           // Parse user_id and user_role from the cookies
-          final userId = RegExp(r'user_id=(\d+)').firstMatch(cookies)?.group(1);
-          final userRole =
-              RegExp(r'user_role=([^;]+)').firstMatch(cookies)?.group(1);
+          final int userId = jsonDecode(response.body)['id'];
+          final int userRole = jsonDecode(response.body)['role'];
 
-          // print('User ID: $userId');
+          print('User ID: $userId');
           // print('User Role: $userRole');
 
           // save userId into UserProvier
-          context.read<UserProvider>().setId(id: int.parse(userId!));
+          context.read<UserProvider>().setId(id: userId);
+          print(Provider.of<UserProvider>(context, listen: false).userId);
 
           // get profile details form userId
-          final response =
-              await ProfileApi.getProfileById(int.parse(userId));
-
+          final profileResponse = await ProfileApi.getProfileById(userId);
+          print(profileResponse.body);
           // write the current logged in user's profile details into Profile Provider
           context.read<ProfileProvider>().setProfile(
-              name: jsonDecode(response.body)['name'],
-              id: int.parse(userId),
-              address: jsonDecode(response.body)['address'],
-              designation: jsonDecode(response.body)['designation'],
-              phoneNumber: jsonDecode(response.body)['phone'],
-              email: jsonDecode(response.body)['email'],
-              rollNumber: jsonDecode(response.body)['roll'],
-              profileImg: MemoryImage(jsonDecode(response.body)['image']));
-
+              name: jsonDecode(profileResponse.body)['name'],
+              id: userId,
+              address: jsonDecode(profileResponse.body)['address'],
+              designation: jsonDecode(profileResponse.body)['designation'],
+              phoneNumber: jsonDecode(profileResponse.body)['phone'],
+              email: jsonDecode(profileResponse.body)['email'],
+              rollNumber: jsonDecode(profileResponse.body)['roll'],
+              profileImg: jsonDecode(profileResponse.body)['image'] != null
+                  ? MemoryImage(Uint8List.fromList(
+                      utf8.encode(jsonDecode(profileResponse.body)['image'])))
+                  : null);
+          print('logged in user profile details: with id: $userId');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -116,7 +124,7 @@ class _LoginState extends State<Login> {
           ),
         );
 
-        Navigator.of(context).pushReplacementNamed('/home');
+        // Navigator.of(context).pushReplacementNamed('/home');
       }
     }
   }

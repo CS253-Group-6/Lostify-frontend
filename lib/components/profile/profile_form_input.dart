@@ -30,26 +30,25 @@ class ProfileFormInput extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             // color: Colors.black.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Color(0xFFC5C6CC), width: 2),
-
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Color(0xFFC5C6CC), width: 2),
           ),
           child: TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: controller,
-            validator: (value){
+            validator: (value) {
               if (validate) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your $label';
-                }else{
+                } else {
                   RegExp phoneExp = RegExp(r'^[0-9]{10}$');
-                  if (label == 'Phone Number'&&!phoneExp.hasMatch(value)) {
+                  if (label == 'Phone Number' && !phoneExp.hasMatch(value)) {
                     return 'Enter a valid 10 digit $label';
                   }
                 }
                 return null;
-              }else{
-                if(label == 'PF/Roll No.' && value!.isNotEmpty){
+              } else {
+                if (label == 'PF/Roll No.' && value!.isNotEmpty) {
                   RegExp rollExp = RegExp(r'^[0-9]+$');
                   if (!rollExp.hasMatch(value)) {
                     return 'Enter a valid numeric PF/Roll No.';
@@ -58,17 +57,15 @@ class ProfileFormInput extends StatelessWidget {
                 }
                 return null;
               }
-              return null;
             },
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.transparent,
               hintText: hintText,
-              hintStyle: TextStyle(
-                color: Color(0xFF8F9098)
-              ),
+              hintStyle: TextStyle(color: Color(0xFF8F9098)),
               border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             ),
           ),
         ),

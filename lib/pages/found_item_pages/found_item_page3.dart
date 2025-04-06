@@ -1,9 +1,10 @@
+import 'package:final_project/components/location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:final_project/components/location/location.dart';
 import 'package:provider/provider.dart';
-import '../../providers/user_provider.dart';
+
 import '../../models/item_model.dart';
+import '../../providers/user_provider.dart';
 import '../../services/items_api.dart';
 
 class FoundItemPage3 extends StatefulWidget {
@@ -29,66 +30,62 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
   }
 
   void handleFoundItemPost(Item item) async {
-    /*
     try {
       print('itemDetails:');
       print('json: ${item.toJson()}');
-      
+
       final response = await ItemsApi.postItem(item.toJson());
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Item posted successfully',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.blue, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
+          SnackBar(
+            content: Text(
+              'Item posted successfully',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.blue, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
 
         Navigator.pushNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Failed to post item!',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.red, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
-
+          SnackBar(
+            content: Text(
+              'Failed to post item!',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Error : $e',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.red, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
-
+        SnackBar(
+          content: Text(
+            'Error : $e',
+            style: TextStyle(color: Colors.white), // Text color
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ),
+      );
     }
-    */
 
     // uncomment the above part and comment the below part after integration
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Item posted successfully!',
-          style: TextStyle(color: Colors.white), // Text color
-        ),
-        backgroundColor: Colors.blue, // Custom background color
-        duration: Duration(seconds: 3), // Display duration
-      ),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     content: Text(
+    //       'Item posted successfully!',
+    //       style: TextStyle(color: Colors.white), // Text color
+    //     ),
+    //     backgroundColor: Colors.blue, // Custom background color
+    //     duration: Duration(seconds: 3), // Display duration
+    //   ),
+    // );
 
-    Navigator.pushNamed(context, '/home');
+    // Navigator.pushNamed(context, '/home');
   }
 
   // Opens the DatePicker

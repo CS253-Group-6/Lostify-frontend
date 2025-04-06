@@ -1,5 +1,5 @@
 class ChatDetails {
-  String chatRoomId;
+  String chatRoomId, recieverName;
   int senderId, recieverId, itemId;
 
   ChatDetails({
@@ -7,5 +7,6 @@ class ChatDetails {
     required this.recieverId,
     required this.itemId,
     required this.chatRoomId,
+    required this.recieverName,
   });
 }

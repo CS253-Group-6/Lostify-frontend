@@ -19,6 +19,7 @@ class ItemDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('ItemDetailsPage: $itemId, $postOwnerId, ${post.title}');
     void deletePost(BuildContext context) {
       showDialog(
         context: context,

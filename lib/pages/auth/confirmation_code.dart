@@ -85,7 +85,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     // request data required by otp api
     var otpData = {
       'username': widget.signUpDetails['username'],
-      'otp': _controllers.map((e) => e.text).join(),
+      'otp': int.tryParse(_controllers.map((e) => e.text).join()) ?? 0,
     };
     print(otpData);
 
@@ -93,49 +93,47 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     final response = await AuthApi.verifyOtp(otpData);
 
     // if correct otp verified
-    if (response.statusCode == 200) {
+    if (response.statusCode >= 200 && response.statusCode <= 210) {
       // make call to login to save cookies
       final loginResponse = await AuthApi.login({
         'username': widget.signUpDetails['username'],
         'password': widget.signUpDetails['password'],
       });
       // if login successful
-      final cookies =
-          loginResponse.headers['set-cookie']; // assuming cookie as string
-      print('Cookies: $cookies');
+      if (loginResponse.statusCode >= 200 && loginResponse.statusCode <= 210) {
+        final role = jsonDecode(loginResponse.body)['role'];
+        final id = jsonDecode(loginResponse.body)['id'];
+        // print('${jsonDecode(loginResponse.body)}');
+        if (role != null) {
+          // Parse user_id and user_role from the cookies
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Verified Successfully!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.blue, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
 
-      if (cookies != null) {
-        // Parse user_id and user_role from the cookies
-        final userId = RegExp(r'user_id=(\d+)').firstMatch(cookies)?.group(1);
-        final userRole =
-            RegExp(r'user_role=([^;]+)').firstMatch(cookies)?.group(1);
+          Navigator.of(context).pushNamed('/home', arguments: {
+            'user_id': id,
+            'user_role': role,
+          });
+        }
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Verified Successfully!',
+              'Error verifying otp ${jsonDecode(response.body)['message']}',
               style: TextStyle(color: Colors.white), // Text color
             ),
-            backgroundColor: Colors.blue, // Custom background color
+            backgroundColor: Colors.red, // Custom background color
             duration: Duration(seconds: 3), // Display duration
           ),
         );
-
-        Navigator.of(context).pushNamed('/home', arguments: {
-          'user_id': int.parse(userId!),
-          'user_role': userRole,
-        });
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Error verifying otp ${jsonDecode(response.body)['message']}',
-            style: TextStyle(color: Colors.white), // Text color
-          ),
-          backgroundColor: Colors.red, // Custom background color
-          duration: Duration(seconds: 3), // Display duration
-        ),
-      );
 
       // TODO: if error donot redirect to home
       // Navigator.of(context).pushNamed('/home', arguments: {
@@ -151,14 +149,13 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
   void handleResendOtp() async {
     // code to handle resend otp
     if (_isResendEnabled) {
-      /*
       var responseSignup = await AuthApi.signUp(widget.signUpDetails);
-      if (responseSignup['statusCode'] == 200) {
+      if (responseSignup.statusCode == 201) {
         // code to handle successful response
         _isResendEnabled = false;
         _startResendTimer();
       }
-      */
+
       _isResendEnabled = false;
       _startResendTimer();
     }

@@ -78,7 +78,7 @@ const double kItemBoxBorderRadius = 20.0;
 ///
 /// Inherits from [StatelessWidget].
 class ItemBox extends StatelessWidget {
-  const ItemBox({super.key, required this.post, this.extraProperty });
+  const ItemBox({super.key, required this.post, this.extraProperty});
 
   final Post post;
   final String? extraProperty;
@@ -91,7 +91,7 @@ class ItemBox extends StatelessWidget {
   DateTime get regDate => post.regDate;
   DateTime? get foundDate => null; // Placeholder
   ImageProvider? get itemImage => post.imageProvider;
-
+  int get creatorId => post.creatorId;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,15 @@ class ItemBox extends StatelessWidget {
 
     // function to add chat for the post in user's chat list
     void handleItemDetails() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetailsPage(itemId: id, postOwnerId: 1,post:post,extraProperty: extraProperty,)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ItemDetailsPage(
+                    itemId: id,
+                    postOwnerId: creatorId,
+                    post: post,
+                    extraProperty: extraProperty,
+                  )));
     }
 
     void deletePost(BuildContext context) {
@@ -185,8 +193,10 @@ class ItemBox extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       'Reports: $reports',
-                      style: const TextStyle(fontWeight: FontWeight.bold,fontSize :16
-                          ,color: Colors.blue),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.blue),
                     ),
                   ),
                 const SizedBox(height: 4),
@@ -196,12 +206,12 @@ class ItemBox extends StatelessWidget {
                   style: TextStyle(color: statusColor),
                 ),
                 const SizedBox(height: 4),
-                if(extraProperty == null)
+                if (extraProperty == null)
                   Text('Registered Date: ${dateAsString(regDate)}'),
-                  const SizedBox(height: 4),
-                if(extraProperty == null)
+                const SizedBox(height: 4),
+                if (extraProperty == null)
                   Text('Found Date: ${dateAsString(foundDate)}'),
-                  const SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // "View Post" button navigates to ItemDetailsPage
                 Row(
@@ -215,12 +225,12 @@ class ItemBox extends StatelessWidget {
                       child: const Text('View'),
                     ),
                     // <-- Added delete callback
-                    if(extraProperty!= null)
+                    if (extraProperty != null)
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.redAccent),
-                        tooltip: "Delete Post",
-                          onPressed: () => deletePost(context)
-                      ),
+                          icon:
+                              const Icon(Icons.delete, color: Colors.redAccent),
+                          tooltip: "Delete Post",
+                          onPressed: () => deletePost(context)),
                   ],
                 ),
               ],

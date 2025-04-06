@@ -70,7 +70,7 @@ final class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     // Convert the postType string to the PostType enum
-    final typeString = (json['type'] == 0?"lost":"found");
+    final typeString = (json['type'] == 0 ? "lost" : "found");
     final postType = typeString == 'lost' ? PostType.lost : PostType.found;
 
     // Safely parse optional values and image URL

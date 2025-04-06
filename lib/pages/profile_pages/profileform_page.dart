@@ -7,10 +7,10 @@ import "package:provider/provider.dart";
 
 import "../../components/auth/custom_auth_button.dart";
 import "../../components/profile/profile_form_input.dart";
-import "../../pages/auth/confirmation_code.dart";
-import "../../providers/profile_provider.dart";
 import "../../models/profile_model.dart";
 import "../../models/user_model.dart";
+import "../../pages/auth/confirmation_code.dart";
+import "../../providers/profile_provider.dart";
 import "../../services/auth_api.dart";
 
 /// Create Profile Page of the application.
@@ -68,13 +68,15 @@ class _ProfileFormState extends State<ProfileForm> {
       };
       print('signUp details:');
       print(signUpDetails);
+      print('image: ${signUpDetails['image'] == null}');
       // api call to signup
 
       final response = await AuthApi.signUp(signUpDetails);
       print(response.statusCode);
+      print(response.body);
 
       // on successfull signup
-      if (response.statusCode == 201) {
+      if (response.statusCode >= 201 && response.statusCode < 210) {
         // store the profile details into the provider
         context.read<ProfileProvider>().setProfile(
             name: _nameController.text,

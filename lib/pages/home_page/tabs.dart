@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '/components/home/item_box.dart';
 import '/models/post.dart';
-import '../../services/posts_api.dart';
 
 class LostItemsTab extends StatefulWidget {
   const LostItemsTab({super.key});
@@ -15,15 +14,14 @@ class LostItemsTab extends StatefulWidget {
 class LostItemsTabState extends State<LostItemsTab> {
   List<Post> _lostPosts = [];
   // Change this flag to false to use the hardcoded version.
-  final bool _useDynamicData = false; //TODO: change to true
+  final bool _useDynamicData = true; //TODO: change to true
 
   @override
   void initState() {
     super.initState();
     // uncomment after backend
-    /*
+
     _loadLostPosts();
-    */
   }
 
   Future<void> _loadLostPosts() async {
@@ -139,16 +137,14 @@ class FoundItemsTab extends StatefulWidget {
 class _FoundItemsTabState extends State<FoundItemsTab> {
   List<Post> _foundPosts = [];
   // Change this flag to false to use the hardcoded version.
-  final bool _useDynamicData = false; //TODO: change to true
+  final bool _useDynamicData = true; //TODO: change to true
 
   @override
   void initState() {
     super.initState();
     // uncomment this after backend
-    /*
+
     _loadFoundPosts();
-    */
-    
   }
 
   Future<void> _loadFoundPosts() async {
@@ -165,15 +161,15 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
 
   // Dynamic version using API
   Widget _buildDynamicFoundItems() {
-        return ListView.builder(
-          itemCount: _foundPosts.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ItemBox(post: _foundPosts[index]),
-            );
-          },
+    return ListView.builder(
+      itemCount: _foundPosts.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: ItemBox(post: _foundPosts[index]),
         );
+      },
+    );
   }
 
   // Hardcoded version using static data

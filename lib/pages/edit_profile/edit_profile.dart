@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/providers/user_provider.dart';
 import 'package:final_project/services/profile_api.dart';
@@ -22,7 +24,38 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class EditProfilePageState extends State<EditProfilePage> {
+  // Global key for the form
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the text controllers with existing profile data
+    _nameController.text =
+        Provider.of<ProfileProvider>(context, listen: false).name;
+    _phoneController.text =
+        Provider.of<ProfileProvider>(context, listen: false).phoneNumber;
+    _addressController.text =
+        Provider.of<ProfileProvider>(context, listen: false).address;
+    _designationController.text =
+        Provider.of<ProfileProvider>(context, listen: false).designation;
+    _rollNumberController.text =
+        Provider.of<ProfileProvider>(context, listen: false)
+            .rollNumber
+            .toString();
+  }
+
+  // Function to dispose of the controllers
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    _designationController.dispose();
+    _rollNumberController.dispose();
+    super.dispose();
+  }
+
   // Controllers for input fields
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -52,32 +85,58 @@ class EditProfilePageState extends State<EditProfilePage> {
         "address": _addressController.text,
         "designation": _designationController.text,
         "rollNumber": _rollNumberController.text,
-        "profileImage": _imageFile,
+        "profileImage": _imageFile != null
+            ? base64Encode(_imageFile!.readAsBytesSync())
+            : '',
         "email": Provider.of<ProfileProvider>(context, listen: false).email
       };
       print(profileData);
-      /*
-    // Save the profile data to the database or API
-    try {
-      int userId = Provider.of<UserProvider>(context, listen: false).userId;
-      final response = await ProfileApi.editProfile(userId, profileData);
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Profile Updated successfully!',
-              style: TextStyle(color: Colors.white), // Text color
+
+      // Save the profile data to the database or API
+      try {
+        int userId = Provider.of<UserProvider>(context, listen: false).userId;
+        final response = await ProfileApi.editProfile(userId, profileData);
+        print(response.statusCode);
+        print(response.body);
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          context.read<ProfileProvider>().setProfile(
+              name: _nameController.text,
+              address: _addressController.text,
+              email: Provider.of<ProfileProvider>(context, listen: false).email,
+              designation: _designationController.text,
+              phoneNumber: _phoneController.text,
+              rollNumber: int.tryParse(_rollNumberController.text) ?? 0,
+              profileImg: _imageFile != null
+                  ? FileImage(_imageFile!)
+                  : AssetImage('assets/images/bg1.png'));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Profile Updated successfully!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.blue, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
             ),
-            backgroundColor: Colors.blue, // Custom background color
-            duration: Duration(seconds: 3), // Display duration
-          ),
-        );
-        Navigator.of(context).pop();
-      } else {
+          );
+          Navigator.of(context).pop();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Failed to update profile!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.red, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+        }
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Failed to update profile!',
+              'Error: $e',
               style: TextStyle(color: Colors.white), // Text color
             ),
             backgroundColor: Colors.red, // Custom background color
@@ -85,30 +144,18 @@ class EditProfilePageState extends State<EditProfilePage> {
           ),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Error: $e',
-            style: TextStyle(color: Colors.white), // Text color
-          ),
-          backgroundColor: Colors.red, // Custom background color
-          duration: Duration(seconds: 3), // Display duration
-        ),
-      );
-    }
-    */
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Profile Updated successfully!',
-            style: TextStyle(color: Colors.white), // Text color
-          ),
-          backgroundColor: Colors.blue, // Custom background color
-          duration: Duration(seconds: 3), // Display duration
-        ),
-      );
-      Navigator.of(context).pop();
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       'Profile Updated successfully!',
+      //       style: TextStyle(color: Colors.white), // Text color
+      //     ),
+      //     backgroundColor: Colors.blue, // Custom background color
+      //     duration: Duration(seconds: 3), // Display duration
+      //   ),
+      // );
+      // Navigator.of(context).pop();
     }
   }
 
@@ -117,7 +164,8 @@ class EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       // AppBar with a back button and title
       appBar: AppBar(
-        title: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Edit Profile', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,

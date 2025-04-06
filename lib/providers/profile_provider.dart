@@ -9,7 +9,7 @@ class ProfileProvider extends ChangeNotifier {
   String email;
   String? playerId;
   ImageProvider profileImg;
-  
+
   Future<void> _fetchAndSavePlayerId() async {
     // Fetch OneSignal player ID
     String? fetchedPlayerId = await OneSignal.User.pushSubscription.id;
@@ -35,8 +35,7 @@ class ProfileProvider extends ChangeNotifier {
       this.id = 0,
       this.playerId,
       this.email = '',
-      this.profileImg = const AssetImage('assets/images/bg1.png')
-      });
+      this.profileImg = const AssetImage('assets/images/bg1.png')});
 
   void setName({required String name}) async {
     this.name = name;
@@ -52,11 +51,18 @@ class ProfileProvider extends ChangeNotifier {
     int rollNumber = 0,
     ImageProvider? profileImg,
     int id = 0,
-
   }) async {
     this.name = name;
     this.address = address;
-    _fetchAndSavePlayerId();
+    this.designation = designation;
+    this.phoneNumber = phoneNumber;
+    this.email = email;
+    this.rollNumber = rollNumber;
+    this.id = id;
+    this.profileImg = profileImg ?? const AssetImage('assets/images/bg1.png');
+    this.playerId = playerId;
+    // Fetch and save player ID
+    await _fetchAndSavePlayerId();
     notifyListeners();
   }
 }

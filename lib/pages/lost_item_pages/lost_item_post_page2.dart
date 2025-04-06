@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:final_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -68,48 +66,47 @@ class _LostAnItem2State extends State<LostAnItem2> {
     try {
       print('itemDetails:');
       print('json: ${item.toJson()}');
-      /*
+
       final response = await ItemsApi.postItem(item.toJson());
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Item posted successfully!',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.blue, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
+          SnackBar(
+            content: Text(
+              'Item posted successfully!',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.blue, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
 
         Navigator.pushNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text(
-      'Failed to post item!',
-      style: TextStyle(color: Colors.white), // Text color
-    ),
-    backgroundColor: Colors.red, // Custom background color
-    duration: Duration(seconds: 3), // Display duration
-  ),
-);
-
-      }
-      */
-      // TODO: uncomment upper part and comment navigator below
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Item posted successfully!',
-            style: TextStyle(color: Colors.white), // Text color
+          SnackBar(
+            content: Text(
+              'Failed to post item!',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
           ),
-          backgroundColor: Colors.blue, // Custom background color
-          duration: Duration(seconds: 3), // Display duration
-        ),
-      );
+        );
+      }
 
-      Navigator.pushNamed(context, '/home');
+      // TODO: uncomment upper part and comment navigator below
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       'Item posted successfully!',
+      //       style: TextStyle(color: Colors.white), // Text color
+      //     ),
+      //     backgroundColor: Colors.blue, // Custom background color
+      //     duration: Duration(seconds: 3), // Display duration
+      //   ),
+      // );
+
+      // Navigator.pushNamed(context, '/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

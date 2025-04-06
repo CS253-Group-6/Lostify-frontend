@@ -1,16 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/home/action_button.dart';
 import '../../components/home/expandable_fab.dart';
+import '../change_password.dart';
 import '../chat/chat_list.dart';
 import '../search_page.dart';
 import 'tabs.dart';
-import '../change_password.dart';
 
 /// Home page of the application.
 ///
@@ -57,17 +60,21 @@ class _HomePageState extends State<HomePage> {
 
     final roleData =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>? ??
-            {'user_id': 0, 'user_role': '0'};
+            {'user_id': 0, 'user_role': 0};
     // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
+    final profileImage =
+        Provider.of<ProfileProvider>(context, listen: false).profileImg;
+    final name = Provider.of<ProfileProvider>(context, listen: false).name;
+    print(profileImage);
 
     /// User role
-    final int role = int.tryParse(roleData['user_role']) ??
-        0; // Replace with context.watch().user.role;
+    final int role =
+        roleData['user_role'] ?? 0; // Replace with context.watch().user.role;
 
     /// Logout
     void handleLogout() async {
       final response = await AuthApi.logout();
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 && response.statusCode < 210) {
         Navigator.pushReplacementNamed(context, '/user/login');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -172,15 +179,18 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 45,
                           backgroundImage:
-                              AssetImage('assets/images/profile_picture.png'),
+                              profileImage != null && profileImage is File
+                                  ? FileImage(profileImage as File)
+                                  : const AssetImage(
+                                      'assets/images/profile_picture.png'),
                         ),
                         const SizedBox(height: 10),
                         // Replace 'John Doe' with the actual name or a variable holding it.
                         Text(
-                          'John Doe',
+                          '$name',
                           style: const TextStyle(
                             fontSize: 20,
                             color: Colors.white,
