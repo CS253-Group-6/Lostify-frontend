@@ -91,7 +91,7 @@ class _ProfileFormState extends State<ProfileForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Sign up successfull!',
+              'OTP sent successfully!',
               style: TextStyle(color: Colors.white), // Text color
             ),
             backgroundColor: Colors.blue, // Custom background color
