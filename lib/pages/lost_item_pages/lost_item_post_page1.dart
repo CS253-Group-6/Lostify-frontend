@@ -142,10 +142,10 @@ class _LostAnItem1State extends State<LostAnItem1> {
                         throw Exception("Title and Description cannot be empty.");
                       }
 
-                      // Ensure _image is not null if required
-                      if (_image == null) {
-                        throw Exception("Please upload an image.");
-                      }
+                      // // Ensure _image is not null if required
+                      // if (_image == null) {
+                      //   throw Exception("Please upload an image.");
+                      // }
 
                       // Creating postDetails1 Map
                       final Map<String, dynamic> postDetails1 = {

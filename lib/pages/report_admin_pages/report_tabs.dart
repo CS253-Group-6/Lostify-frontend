@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/post.dart';
 import '/components/home/item_box.dart';
+import '../../models/post.dart';
 
 class ItemsTab extends StatelessWidget {
   const ItemsTab({super.key});
@@ -20,7 +20,7 @@ class ItemsTab extends StatelessWidget {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
-        address: 'Hall 5',
+        address2: 'Hall 5',
       ),
       Post(
         postType: PostType.found,
@@ -60,8 +60,6 @@ class ItemsTab extends StatelessWidget {
     ];
     items.sort((a, b) => b.reports.compareTo(a.reports));
 
-
-
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -81,6 +79,3 @@ class ItemsTab extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../services/items_api.dart';
 import '../../models/post.dart';
 import '../../pages/home_page/item_details_page.dart';
 
@@ -125,9 +125,50 @@ class ItemBox extends StatelessWidget {
               child: const Text("Cancel"),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                try {
+                  // Call the delete API using the given itemId
+                  final response = await ItemsApi.deleteItem(post.id);
+                  // final responseData = jsonDecode(response.body);
+
+                  if (response.statusCode == 204) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          '${post.title} deleted successfully!',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.blue,
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Failed to delete ${post.title}.',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'An error occurred: $e',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.red,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
                 //onDelete(); // Calls the delete function passed from parent
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
               child: const Text("Delete", style: TextStyle(color: Colors.red)),
             ),

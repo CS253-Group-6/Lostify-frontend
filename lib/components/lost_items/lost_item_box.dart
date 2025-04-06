@@ -106,9 +106,9 @@
 //   }
 // }
 
-import '../../models/post.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/post.dart';
 import '../../pages/home_page/item_details_page.dart';
 
 /// Type of post (for lost item or for found item). Passed as argument
@@ -161,7 +161,7 @@ class ItemBox extends StatelessWidget {
   DateTime get regDate => post.regDate;
   DateTime? get closedDate => post.closedDate;
   String get description => post.description;
-  String get address => post.address;
+  String get address => post.address2;
   // DateTime? get foundDate => null; // Placeholder
   ImageProvider? get itemImage => post.imageProvider;
   int get creatorId => post.creatorId;
@@ -181,6 +181,16 @@ class ItemBox extends StatelessWidget {
             builder: (context) => ItemDetailsPage(
               itemId: id,
               postOwnerId: creatorId,
+              post: post,
+              extraProperty: extraProperty,
+            ),
+          ));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ItemDetailsPage(
+              itemId: id,
+              postOwnerId: 1,
               post: post,
               extraProperty: extraProperty,
             ),
@@ -284,9 +294,7 @@ class ItemBox extends StatelessWidget {
                   Text('Registered Date: ${dateAsString(regDate)}'),
                 const SizedBox(height: 4),
                 if (extraProperty == null)
-                  Text(
-                    '${postType == PostType.lost ? "Found Date: " : "Returned Date: "}: ${dateAsString(postType == PostType.lost ? post.closedDate : post.closedDate)}',
-                  ),
+                  if (post.closedById != null) Text('Closed'),
                 const SizedBox(height: 8),
 
                 // "View Post" button navigates to ItemDetailsPage

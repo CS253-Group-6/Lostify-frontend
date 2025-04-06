@@ -3,12 +3,9 @@ import 'dart:ui';
 import 'package:final_project/utils/load_all_posts.dart';
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
 import '../../components/lost_items/lost_item_box.dart';
 import '../../models/post.dart';
 import '../../pages/chat/chat_page.dart';
-import '../../utils/post_filter.dart';
-import '../../providers/user_provider.dart';
 
 class LostItem extends StatefulWidget {
   const LostItem({super.key});
@@ -25,7 +22,7 @@ class _LostItemState extends State<LostItem> {
       title: 'Wallet',
       status: 'Missing',
       regDate: DateTime.parse('2025-01-18'),
-      address: 'Hall 5',
+      address2: 'Hall 5',
       reports: 1,
       description: "This is the description of item id:1",
       imageProvider: Image.asset('assets/wallet.png').image,

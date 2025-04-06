@@ -62,7 +62,8 @@ class LostItemsTabState extends State<LostItemsTab> {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
-        address: 'Hall 5',
+        address1: 'Hall 5',
+        address2: 'Hall 5',
       ),
       Post(
         postType: PostType.found,
@@ -74,6 +75,7 @@ class LostItemsTabState extends State<LostItemsTab> {
         postType: PostType.lost,
         id: 10,
         title: 'ID card',
+        
         regDate: DateTime(2025, 03, 13),
       ),
       Post(
@@ -94,11 +96,53 @@ class LostItemsTabState extends State<LostItemsTab> {
         title: 'Someone\'s baby',
         regDate: DateTime(2025, 03, 13),
       ),
+      Post(
+        postType: PostType.lost,
+        id: 8,
+        title: 'Hercules cycle',
+        regDate: DateTime(2025, 03, 13),
+        description: ' ',
+        imageProvider: const NetworkImage(
+          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+        ),
+        address2: 'Hall 5',
+      ),
+      Post(
+        postType: PostType.found,
+        id: 645,
+        title: 'Keys',
+        regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.lost,
+        id: 1234,
+        title: 'ID card',
+        regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.lost,
+        id: 1235,
+        title: 'CHM111 lab report',
+        regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.found,
+        id: 15423,
+        title: 'Mont Blanc pen',
+        regDate: DateTime(2025, 03, 13),
+      ),
+      Post(
+        postType: PostType.found,
+        id: 234125,
+        title: 'Someone\'s baby',
+        regDate: DateTime(2025, 03, 13),
+        address2: 'Hall 5',
+      ),
     ];
 
     // Filter for lost items only
     List<Post> lostItems =
-        items.where((post) => post.postType == PostType.lost).toList();
+        items.where((post) => post.postType == PostType.lost && post.closedById == null).toList();
 
     return ListView(
       children: [
@@ -145,6 +189,7 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
     // uncomment this after backend
 
     _loadFoundPosts();
+    */
   }
 
   Future<void> _loadFoundPosts() async {
@@ -186,7 +231,7 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
         imageProvider: const NetworkImage(
           'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
         ),
-        address: 'Hall 5',
+        address2: 'Hall 5',
       ),
       Post(
         postType: PostType.found,
@@ -222,7 +267,7 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
 
     // Filter for found items only
     List<Post> foundItems =
-        items.where((post) => post.postType == PostType.found).toList();
+        items.where((post) => post.postType == PostType.found && post.closedById==null).toList();
 
     return ListView(
       children: [

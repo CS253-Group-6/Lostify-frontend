@@ -19,13 +19,14 @@ import 'pages/auth/reset_password_page.dart';
 import 'pages/auth/signup.dart';
 import 'pages/auth/user_login.dart';
 import 'pages/change_password.dart';
+import 'pages/change_password_pages/change_password.dart';
 import 'pages/found_item_pages/found_item_page1.dart';
 import 'pages/home_page/home_interface.dart';
 import 'pages/home_page/homepage.dart';
 import 'pages/lost_found_post_list/found_item.dart';
 import 'pages/lost_found_post_list/lost_item.dart';
 import 'pages/profile_pages/profileform_page.dart';
-import 'pages/search_page.dart';
+import 'pages/search/search_page.dart';
 import 'providers/user_provider.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
                   email: "vinay23@iitk.ac.in",
                   password: "password"),
             ),
+        '/edit-profile': (context) => EditProfilePage(),
         '/edit-profile': (context) => EditProfilePage(),
         // '/profile-dashboard' : (context) => , // profile_dashboard page
 

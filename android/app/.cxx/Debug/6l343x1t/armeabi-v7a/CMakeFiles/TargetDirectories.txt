@@ -1,0 +1,2 @@
+/home/tejasatvik/StudioProjects/lostify-backend/Lostify/android/app/.cxx/Debug/6l343x1t/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/tejasatvik/StudioProjects/lostify-backend/Lostify/android/app/.cxx/Debug/6l343x1t/armeabi-v7a/CMakeFiles/rebuild_cache.dir

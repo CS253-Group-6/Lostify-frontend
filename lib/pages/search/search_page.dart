@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../components/location/location.dart';
+import '../../components/location/location.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});

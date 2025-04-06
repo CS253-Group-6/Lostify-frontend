@@ -98,14 +98,16 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
       height: 56,
       child: Center(
         child: Material(
+          color: Colors.blue,
           shape: const CircleBorder(),
           clipBehavior: Clip.antiAlias,
           elevation: 4,
           child: InkWell(
+            splashColor: Colors.blue,
             onTap: _toggle,
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: Icon(Icons.close, color: Theme.of(context).primaryColor),
+              child: Icon(Icons.close, color: Colors.white, size: 24),
             ),
           ),
         ),
@@ -113,30 +115,39 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
     );
   }
 
-  Widget _buildTapToOpenFab() {
-    return IgnorePointer(
-      ignoring: _open,
-      child: AnimatedContainer(
-        transformAlignment: Alignment.center,
-        transform: Matrix4.diagonal3Values(
-          _open ? 0.7 : 1.0,
-          _open ? 0.7 : 1.0,
-          1.0,
-        ),
+Widget _buildTapToOpenFab() {
+  return IgnorePointer(
+    ignoring: _open,
+    child: AnimatedContainer(
+      transformAlignment: Alignment.center,
+      transform: Matrix4.diagonal3Values(
+        _open ? 0.7 : 1.0,
+        _open ? 0.7 : 1.0,
+        1.0,
+      ),
+      duration: const Duration(milliseconds: 250),
+      curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+      child: AnimatedOpacity(
+        opacity: _open ? 0.0 : 1.0,
+        curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
         duration: const Duration(milliseconds: 250),
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
-        child: AnimatedOpacity(
-          opacity: _open ? 0.0 : 1.0,
-          curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
-          duration: const Duration(milliseconds: 250),
-          child: FloatingActionButton(
-            onPressed: _toggle,
-            child: widget.childWhileClosed,
+        child: FloatingActionButton(
+          onPressed: _toggle,
+          backgroundColor: Colors.blue, // Set the background color to white
+          child: Center(
+            child: Text(
+              '+', // Custom plus sign
+              style: TextStyle(
+                color: Colors.white, // Set the color of the plus sign to blue
+                fontSize: 40, // Adjust the font size as needed
+              ),
+            ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   List<Widget> _buildExpandingActionButtons() {
     final children = <Widget>[];

@@ -78,6 +78,36 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     });
   }
 
+  Future<void> _closeChat() async {
+    final shouldClose = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Close Chat"),
+          content: Text("Do you want to close the chat permanently?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop(false); // Return false
+              },
+            ),
+            TextButton(
+              child: Text("Yes"),
+              onPressed: () {
+                Navigator.of(context).pop(true); // Return true
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldClose == true) {
+      await ChatServices.deleteChat(context, widget.chatDetails);
+    }
+  }
+
   @override
   void dispose() {
     _messageController.dispose();
@@ -111,7 +141,15 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   foregroundColor: Colors.white,
                 ),
                 child: const Text("Close"),
-              )
+              ),
+            ElevatedButton(
+              onPressed: _closeChat,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text("Close"),
+            )
           ],
         ),
       ),

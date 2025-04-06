@@ -1,0 +1,1 @@
+/home/tejasatvik/StudioProjects/lostify-backend/Lostify/build/app/intermediates/cxx/Debug/6l343x1t/obj/armeabi-v7a

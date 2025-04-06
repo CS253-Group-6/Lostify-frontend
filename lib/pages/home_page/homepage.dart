@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:final_project/providers/profile_provider.dart';
+import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,10 @@ import 'package:provider/provider.dart';
 
 import '../../components/home/action_button.dart';
 import '../../components/home/expandable_fab.dart';
-import '../change_password.dart';
 import '../chat/chat_list.dart';
-import '../search_page.dart';
+import '../search/search_page.dart';
 import 'tabs.dart';
+import '../change_password_pages/change_password.dart';
 
 /// Home page of the application.
 ///
@@ -47,7 +48,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   /// List of tab titles.
-  final List<Widget> _tabs = const [Tab(text: 'Lost'), Tab(text: 'Found')];
+  /// List of tab titles.
+  final List<Widget> _tabs = const [
+    Tab(
+      child: Text(
+        'Lost',
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+    Tab(
+      child: Text(
+        'Found',
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  ];
 
   /// List of widgets corresponding to tabs in [_tabs].
   final List<Widget> _widgets = const [LostItemsTab(), FoundItemsTab()];
@@ -75,7 +90,18 @@ class _HomePageState extends State<HomePage> {
     void handleLogout() async {
       final response = await AuthApi.logout();
       if (response.statusCode >= 200 && response.statusCode < 210) {
-        Navigator.pushReplacementNamed(context, '/user/login');
+        // Logout successful
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Logout successful!',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.blue, // Custom background color
+            duration: const Duration(seconds: 3), // Display duration
+          ),
+        );
+        Navigator.pushReplacementNamed(context, '/homeInterface');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -88,9 +114,54 @@ class _HomePageState extends State<HomePage> {
           ),
         );
 
-        // TODO: remove this navigate in failed
-        Navigator.pushReplacementNamed(context, '/user/login');
+        Navigator.pushReplacementNamed(context, '/homeInterface');
       }
+    }
+
+    void _showLogoutDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        barrierDismissible: true, // Close dialog when tapped outside
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: Row(
+              children: [
+                Icon(Icons.logout, color: Colors.red, size: 28),
+                SizedBox(width: 10),
+                Text("Logout Confirmation"),
+              ],
+            ),
+            content: Text(
+              "Are you sure you want to logout?",
+              style: TextStyle(color: Colors.black),
+            ),
+            actions: [
+              // Cancel Button
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.grey[600], // Dark grey for neutral action
+                  // shape: RoundedRectangleBorder(
+                  //   borderRadius: BorderRadius.circular(10),
+                  // ),
+                ),
+                onPressed: () => Navigator.pop(context), // Close the popup
+                child: Text("Cancel", style: TextStyle(color: Colors.white)),
+              ),
+              // Logout Button
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                onPressed: () => handleLogout(), // Call API-based logout
+                child: Text("Logout", style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          );
+        },
+      );
     }
 
     /// App bar prepared outside so that size can be queried in the
@@ -214,7 +285,13 @@ class _HomePageState extends State<HomePage> {
                   if (role == 1)
                     ListTile(
                       title: const Text('Reported Items'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReportedItemPage()),
+                        );
+                      },
                     ),
                   ListTile(
                     title: const Text('Messages'),
@@ -243,7 +320,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     title: const Text('Logout'),
-                    onTap: handleLogout,
+                    onTap: () => _showLogoutDialog(context),
                   ),
                 ],
               ),
@@ -292,7 +369,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
-                        icon: const Icon(CupertinoIcons.search),
+                        icon: const Icon(Icons.report_problem),
                         onPressed: () {
                           Navigator.pushNamed(context, '/lost/post/1');
                         }),
@@ -307,7 +384,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(width: 10.0, height: 10.0),
                     ActionButton(
-                      icon: const Icon(CupertinoIcons.speaker_1_fill),
+                      icon: const Icon(Icons.archive),
                       onPressed: () {
                         Navigator.pushNamed(context, '/found/post/1');
                       },
