@@ -185,16 +185,6 @@ class ItemBox extends StatelessWidget {
               extraProperty: extraProperty,
             ),
           ));
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ItemDetailsPage(
-              itemId: id,
-              postOwnerId: 1,
-              post: post,
-              extraProperty: extraProperty,
-            ),
-          ));
     }
 
     void deletePost(BuildContext context) {
