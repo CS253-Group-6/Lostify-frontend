@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../providers/user_provider.dart';
@@ -38,10 +40,14 @@ class _SearchDisplayPageState extends State<SearchDisplayPage> {
     try {
 // Call the API to get all posts.
       final response = await ItemsApi.getAllItems();
+      if (!(response.statusCode >= 200 && response.statusCode < 300)) {
+        throw Exception("Failed to load posts");
+      }
+      List posts = jsonDecode(response.body)['posts']; //CHECK THIS
       List<Post> allPosts = [];
       // Convert each returned item into a Post object.
       // (Assuming response is a list of JSON items.)
-      for (var item in response) {
+      for (var item in posts) {
         Post post = Post.fromJson(item);
         allPosts.add(post);
       }

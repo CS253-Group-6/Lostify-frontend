@@ -189,7 +189,7 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
     // uncomment this after backend
 
     _loadFoundPosts();
-    */
+
   }
 
   Future<void> _loadFoundPosts() async {
