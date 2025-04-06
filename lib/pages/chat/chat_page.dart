@@ -57,12 +57,40 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   /// Clears the chat messages and closes this page.
+  void _confirmCloseChat() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Close Chat"),
+          content: Text("Do you want to close the chat permanently?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text("Yes"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                _closeChat(); // Execute the close function
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _closeChat() {
     setState(() {
       _messages.clear();
     });
     Navigator.pop(context);
   }
+
 
   /// Sends a text or image message.
   void _sendMessage({String? text, File? image}) {
@@ -206,7 +234,7 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: Colors.blue,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: _closeChat,
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Text("Chat", style: TextStyle(color: Colors.white)),
         centerTitle: true,
@@ -215,7 +243,7 @@ class _ChatPageState extends State<ChatPage> {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: ElevatedButton(
-              onPressed: _closeChat,
+              onPressed: _confirmCloseChat,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
