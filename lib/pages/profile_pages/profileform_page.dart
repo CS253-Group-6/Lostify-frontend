@@ -52,13 +52,14 @@ class _ProfileFormState extends State<ProfileForm> {
       
       // collect the profile details data
       ProfileModel profileData = ProfileModel(
-          name: _nameController.text,
-          address: _addressController.text,
-          designation: _designationController.text,
+          name: _nameController.text.trim(),
+          address: _addressController.text.trim(),
+          designation: _designationController.text.trim(),
           rollNumber: int.tryParse(_rollNoController.text),
-          phoneNumber: _phoneController.text,
-          email: widget.user.email,
-          profileImage: _image);
+          phoneNumber: _phoneController.text.trim(),
+          email: widget.user.email.trim(),
+          profileImage: _image
+      );
 
       // create a Json data compatible with signup api request body
       Map<String, dynamic> signUpDetails = {
@@ -79,15 +80,13 @@ class _ProfileFormState extends State<ProfileForm> {
       if (response.statusCode >= 201 && response.statusCode < 210) {
         // store the profile details into the provider
         context.read<ProfileProvider>().setProfile(
-            name: _nameController.text,
-            address: _addressController.text,
-            email: widget.user.email,
-            designation: _designationController.text,
-            phoneNumber: _phoneController.text,
+            name: _nameController.text.trim(),
+            address: _addressController.text.trim(),
+            email: widget.user.email.trim(),
+            designation: _designationController.text.trim(),
+            phoneNumber: _phoneController.text.trim(),
             rollNumber: int.parse(_rollNoController.text),
-            profileImg: _image != null
-                ? FileImage(_image!)
-                : AssetImage('assets/images/bg1.png'));
+            profileImg: _image != null ? _image!: null);
 
         // show a snack bar with success message
         ScaffoldMessenger.of(context).showSnackBar(

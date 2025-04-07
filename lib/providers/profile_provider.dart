@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'dart:io';
 
 class ProfileProvider extends ChangeNotifier {
   String name;
@@ -8,7 +9,7 @@ class ProfileProvider extends ChangeNotifier {
   int id;
   String email;
   String? playerId;
-  ImageProvider profileImg;
+  File? profileImg;
 
   Future<void> _fetchAndSavePlayerId() async {
     // Fetch OneSignal player ID
@@ -35,7 +36,7 @@ class ProfileProvider extends ChangeNotifier {
       this.id = 0,
       this.playerId,
       this.email = '',
-      this.profileImg = const AssetImage('assets/images/bg1.png')});
+      this.profileImg = null});
 
   void setName({required String name}) async {
     this.name = name;
@@ -49,7 +50,7 @@ class ProfileProvider extends ChangeNotifier {
     String phoneNumber = '',
     String email = '',
     int rollNumber = 0,
-    ImageProvider? profileImg,
+    File? profileImg,
     int id = 0,
   }) async {
     this.name = name;
@@ -59,7 +60,7 @@ class ProfileProvider extends ChangeNotifier {
     this.email = email;
     this.rollNumber = rollNumber;
     this.id = id;
-    this.profileImg = profileImg ?? const AssetImage('assets/images/bg1.png');
+    this.profileImg;
     this.playerId = playerId;
     // Fetch and save player ID
     await _fetchAndSavePlayerId();

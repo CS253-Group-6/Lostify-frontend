@@ -25,7 +25,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
-      if (_newPasswordController.text != _confirmPasswordController.text) {
+      if (_newPasswordController.text.trim() != _confirmPasswordController.text.trim()) {
         setState(() {
           _passwordErrorMessage = 'Passwords do not match!';
         });
@@ -35,8 +35,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         });
         // api for change password
         var changePasswordData = {
-          'old_password': _oldPasswordController.text,
-          'new_password': _newPasswordController.text
+          'old_password': _oldPasswordController.text.trim(),
+          'new_password': _newPasswordController.text.trim()
         };
 
         final response = await AuthApi.changePassword(changePasswordData);
@@ -205,7 +205,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         if (value!.isEmpty) {
           return '$hintText is required';
         } else if (hintText == 'Confirm Password' &&
-            _newPasswordController.text != _confirmPasswordController.text) {
+            _newPasswordController.text.trim() != _confirmPasswordController.text.trim()) {
           return 'Passwords do not match!';
         }
         return null;

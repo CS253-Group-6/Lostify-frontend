@@ -250,14 +250,16 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircleAvatar(
-                          radius: 45,
-                          backgroundImage:
-                              profileImage != null && profileImage is File
-                                  ? FileImage(profileImage as File)
-                                  : const AssetImage(
-                                      'assets/images/profile_picture.png'),
-                        ),
+                        (profileImage != null)?
+                          ClipOval(
+                            child: Image.file(
+                              profileImage,
+                              fit: BoxFit.cover,
+                              height: 80,
+                              width: 80,
+                            ),
+                          ):
+                          const Icon(Icons.person, size: 80,color: Colors.white,),
                         const SizedBox(height: 10),
                         // Replace 'John Doe' with the actual name or a variable holding it.
                         Text(

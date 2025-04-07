@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 
 enum PostType { lost, found }
 //
@@ -66,7 +71,7 @@ final class Post {
   final String description;
 
   /// An optional image of the article concerned.
-  final ImageProvider? imageProvider;
+  final File? imageProvider;
 
   ///Coarse Address associated with the post.
   final String address1;
@@ -74,7 +79,14 @@ final class Post {
   ///Detailed Address associated with the post.
   final String address2;
 
-  factory Post.fromJson(Map<String, dynamic> json) {
+  // save image
+  static Future<File> saveProfileImage(Uint8List bytes, String filename) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$filename');
+    return await file.writeAsBytes(bytes);
+  }
+
+  static Future<Post> fromJson(Map<String, dynamic> json) async{
     // Convert the postType string to the PostType enum
     final typeString = (json['type'] == 0 ? "lost" : "found");
     final postType = typeString == 'lost' ? PostType.lost : PostType.found;
@@ -86,7 +98,7 @@ final class Post {
       title: json['title'] as String,
       creatorId: json['creator'] != null ? json['creator'] as int : 123,
       status: json['status'] as String? ?? '',
-      regDate: DateTime.fromMillisecondsSinceEpoch(json['date']),
+      regDate: DateTime.fromMillisecondsSinceEpoch(json['date'] * 1000),
       closedDate: json['closedDate'] != null && json['closedDate'] != ""
           ? DateTime.fromMicrosecondsSinceEpoch(json['closedDate'])
           : null,
@@ -96,8 +108,8 @@ final class Post {
           : int.tryParse(json['reports']?.toString() ?? '0') ?? 0,
       description: json['description'] as String? ?? '',
       imageProvider:
-          json['imageUrl'] != null && (json['imageUrl'] as String).isNotEmpty
-              ? NetworkImage(json['imageUrl'] as String)
+          json['image'] != null && (json['image'] as String).isNotEmpty
+              ? await saveProfileImage(base64Decode(json['image']), 'item ${json['id']}')
               : null,
       address2: json['address'] as String? ?? '',
     );

@@ -23,10 +23,8 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
 
-  String formatTimeOfDay(TimeOfDay time) {
-    final hours = time.hour.toString().padLeft(2, '0'); // Ensure 2 digits
-    final minutes = time.minute.toString().padLeft(2, '0'); // Ensure 2 digits
-    return '$hours:$minutes'; // Format as HH:mm
+  DateTime combineDateAndTime(DateTime date, TimeOfDay time){
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
   void handleFoundItemPost(Item item) async {
@@ -34,7 +32,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
       print('itemDetails:');
       print('json: ${item.toJson()}');
 
-      final response = await ItemsApi.postItem(item.toJson());
+      final response = await ItemsApi.postItem(await item.toJson());
       if (response.statusCode >= 200 && response.statusCode < 300) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -291,7 +289,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                       if (selectedPresentLocation == null) {
                         throw Exception("Location is required.");
                       }
-                      if (locController.text.isEmpty) {
+                      if (locController.text.trim().isEmpty) {
                         throw Exception(" Specific location cannot be empty.");
                       }
                       if (selectedDate == null) {
@@ -310,12 +308,9 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
                         title: widget.postDetails2['title'],
                         description: widget.postDetails2['description'],
 
-                        location2: locController.text,
+                        location2: locController.text.trim(),
                         location1: selectedPresentLocation!,
-                        date: DateFormat('yyyy-MM-dd')
-                            .format(selectedDate!)
-                            .toString(),
-                        time: formatTimeOfDay(selectedTime!),
+                        datetime: combineDateAndTime(selectedDate!, selectedTime!).toUtc().microsecondsSinceEpoch ~/ 1000,
                         image: (widget.postDetails2['image']),
                         // isFound: true,
                       );

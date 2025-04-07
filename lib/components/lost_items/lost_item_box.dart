@@ -106,6 +106,8 @@
 //   }
 // }
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../models/post.dart';
@@ -163,7 +165,7 @@ class ItemBox extends StatelessWidget {
   String get description => post.description;
   String get address => post.address2;
   // DateTime? get foundDate => null; // Placeholder
-  ImageProvider? get itemImage => post.imageProvider;
+  File? get itemImage => post.imageProvider;
   int get creatorId => post.creatorId;
 
   @override
@@ -232,8 +234,8 @@ class ItemBox extends StatelessWidget {
           if (itemImage != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image(
-                image: itemImage!,
+              child: Image.file(
+                itemImage!,
                 fit: BoxFit.contain,
                 height: 80,
                 width: 80,

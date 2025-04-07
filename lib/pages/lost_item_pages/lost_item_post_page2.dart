@@ -26,10 +26,9 @@ class _LostAnItem2State extends State<LostAnItem2> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
-  String formatTimeOfDay(TimeOfDay time) {
-    final hours = time.hour.toString().padLeft(2, '0'); // Ensure 2 digits
-    final minutes = time.minute.toString().padLeft(2, '0'); // Ensure 2 digits
-    return '$hours:$minutes'; // Format as HH:mm
+
+  DateTime combineDateAndTime(DateTime date, TimeOfDay time){
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -67,7 +66,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
       print('itemDetails:');
       print('json: ${item.toJson()}');
 
-      final response = await ItemsApi.postItem(item.toJson());
+      final response = await ItemsApi.postItem(await item.toJson());
       if (response.statusCode >= 200 && response.statusCode < 300) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -297,7 +296,7 @@ class _LostAnItem2State extends State<LostAnItem2> {
                   if (_location1 == null) {
                     throw Exception("Location is required.");
                   }
-                  if (locController.text.isEmpty) {
+                  if (locController.text.trim().isEmpty) {
                     throw Exception(" Specific location cannot be empty.");
                   }
                   if (_selectedDate == null) {
@@ -316,12 +315,9 @@ class _LostAnItem2State extends State<LostAnItem2> {
                         .userId,
                     title: widget.postDetails1['title'],
                     description: widget.postDetails1['description'],
-                    location2: locController.text,
+                    location2: locController.text.trim(),
                     location1: _location1!,
-                    date: DateFormat('yyyy-MM-dd')
-                        .format(_selectedDate!)
-                        .toString(),
-                    time: formatTimeOfDay(_selectedTime!),
+                    datetime: combineDateAndTime(_selectedDate!, _selectedTime!).toUtc().millisecondsSinceEpoch ~/ 1000,
                     image: (widget.postDetails1['image']),
                     // isFound: false,
                   );

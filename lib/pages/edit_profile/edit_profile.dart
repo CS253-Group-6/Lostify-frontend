@@ -43,6 +43,8 @@ class EditProfilePageState extends State<EditProfilePage> {
         Provider.of<ProfileProvider>(context, listen: false)
             .rollNumber
             .toString();
+    _imageFile = Provider.of<ProfileProvider>(context, listen: false)
+            .profileImg;
   }
 
   // Function to dispose of the controllers
@@ -80,13 +82,13 @@ class EditProfilePageState extends State<EditProfilePage> {
   void _saveProfile() async {
     if (_formKey.currentState!.validate()) {
       final profileData = {
-        "name": _nameController.text,
-        "phoneNumber": _phoneController.text,
-        "address": _addressController.text,
-        "designation": _designationController.text,
-        "rollNumber": _rollNumberController.text,
+        "name": _nameController.text.trim(),
+        "phoneNumber": _phoneController.text.trim(),
+        "address": _addressController.text.trim(),
+        "designation": _designationController.text.trim(),
+        "rollNumber": _rollNumberController.text.trim(),
         "profileImage": _imageFile != null
-            ? base64Encode(_imageFile!.readAsBytesSync())
+            ? base64Encode(await _imageFile!.readAsBytesSync())
             : '',
         "email": Provider.of<ProfileProvider>(context, listen: false).email
       };
@@ -100,15 +102,13 @@ class EditProfilePageState extends State<EditProfilePage> {
         print(response.body);
         if (response.statusCode >= 200 && response.statusCode < 300) {
           context.read<ProfileProvider>().setProfile(
-              name: _nameController.text,
-              address: _addressController.text,
+              name: _nameController.text.trim(),
+              address: _addressController.text.trim(),
               email: Provider.of<ProfileProvider>(context, listen: false).email,
-              designation: _designationController.text,
-              phoneNumber: _phoneController.text,
+              designation: _designationController.text.trim(),
+              phoneNumber: _phoneController.text.trim(),
               rollNumber: int.tryParse(_rollNumberController.text) ?? 0,
-              profileImg: _imageFile != null
-                  ? FileImage(_imageFile!)
-                  : AssetImage('assets/images/bg1.png'));
+              profileImg: _imageFile);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(

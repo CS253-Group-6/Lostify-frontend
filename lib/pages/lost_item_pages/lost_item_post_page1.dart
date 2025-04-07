@@ -138,7 +138,7 @@ class _LostAnItem1State extends State<LostAnItem1> {
                   onPressed: () {
                     try {
                       // Ensure controllers are not empty
-                      if (titleController.text.isEmpty || descriptionController.text.isEmpty) {
+                      if (titleController.text.trim().isEmpty || descriptionController.text.trim().isEmpty) {
                         throw Exception("Title and Description cannot be empty.");
                       }
 
@@ -149,8 +149,8 @@ class _LostAnItem1State extends State<LostAnItem1> {
 
                       // Creating postDetails1 Map
                       final Map<String, dynamic> postDetails1 = {
-                        'title': titleController.text,
-                        'description': descriptionController.text,
+                        'title': titleController.text.trim(),
+                        'description': descriptionController.text.trim(),
                         'image': _image, // Ensure _image is a valid format
                       };
 

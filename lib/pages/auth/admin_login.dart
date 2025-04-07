@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/auth/auth_input.dart';
 import '../../components/auth/custom_auth_button.dart';
@@ -12,10 +13,10 @@ class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
 
   @override
-  State<AdminLogin> createState() => _AdminLoginState();
+  State<AdminLogin> createState() => AdminLoginState();
 }
 
-class _AdminLoginState extends State<AdminLogin> {
+class AdminLoginState extends State<AdminLogin> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -25,28 +26,64 @@ class _AdminLoginState extends State<AdminLogin> {
     if (_adminKey.currentState!.validate()) {
       context
           .read<UserProvider>()
-          .setUserName(newUsername: _usernameController.text);
+          .setUserName(newUsername: _usernameController.text.trim());
       var adminLoginDetails = {
-        "username": _usernameController.text,
-        "password": _passwordController.text
+        "username": _usernameController.text.trim(),
+        "password": _passwordController.text.trim()
       };
 
       final response = await AuthApi.login(adminLoginDetails);
       if (response.statusCode == 200) {
+        // set user name into userprovider
+        context
+            .read<UserProvider>()
+            .setUserName(newUsername: _usernameController.text.trim());
         // Extract cookies from the response headers
-        final cookies = response.headers['set-cookie'];
-        // print('Cookies: $cookies');
+        final cookie = response.headers['set-cookie'];
+        print('Cookies: $cookie');
+        final prefs = await SharedPreferences.getInstance();
 
-        if (cookies != null) {
+        if (cookie != null) {
+          // Save the cookies to shared preferences
+          // await prefs.setString('cookies', cookie);
           // Parse user_id and user_role from the cookies
-          final userId = RegExp(r'user_id=(\d+)').firstMatch(cookies)?.group(1);
-          final userRole =
-              RegExp(r'user_role=([^;]+)').firstMatch(cookies)?.group(1);
+          final int userId = jsonDecode(response.body)['id'];
+          final int userRole = jsonDecode(response.body)['role'];
 
-          Navigator.of(context).pushReplacementNamed('/home', arguments: {
-            'user_id': int.parse(userId!),
-            'user_role': userRole
-          });
+          print('User ID: $userId');
+          // print('User Role: $userRole');
+
+          // save userId into UserProvier
+          context.read<UserProvider>().setId(id: userId);
+          print(Provider.of<UserProvider>(context, listen: false).userId);
+
+          print('logged in user profile details: with id: $userId');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Logged in successfully!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.blue, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+
+          Navigator.of(context).pushReplacementNamed('/home',
+              arguments: {'user_id': userId, 'user_role': userRole});
+        } else {
+          print('No cookies found in the response.');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Invalid Credentials, Please try again!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.red, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+        }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -59,15 +96,11 @@ class _AdminLoginState extends State<AdminLogin> {
             ),
           );
         }
-      } else {
-        // Navigator.of(context).pushReplacementNamed('/');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Error logging in : ${jsonDecode(response.body)['message']}')));
       }
 
       // Navigator.of(context).pushReplacementNamed('/home');
     }
-  }
+  
 
   @override
   Widget build(BuildContext context) {

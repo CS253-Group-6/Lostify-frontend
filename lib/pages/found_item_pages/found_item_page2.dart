@@ -88,15 +88,15 @@ class FoundItemPage2 extends StatelessWidget {
                   onPressed: () {
                     try {
                       // Ensure controllers are not empty
-                      if (titleController.text.isEmpty || descriptionController.text.isEmpty) {
+                      if (titleController.text.trim().isEmpty || descriptionController.text.trim().isEmpty) {
                         throw Exception("Title and Description cannot be empty.");
                       }
 
 
 
                       Map<String,dynamic> postDetails2 = {
-                        'title': titleController.text,
-                        'description': descriptionController.text,
+                        'title': titleController.text.trim(),
+                        'description': descriptionController.text.trim(),
                         'image': postDetails1['image']
                       };
 

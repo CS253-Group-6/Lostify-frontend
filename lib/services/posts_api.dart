@@ -26,7 +26,11 @@ class PostsApi {
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
       // Ensure your Post model has a fromJson constructor
-      return data.map((json) => Post.fromJson(json)).toList();
+      List<Post> posts = [];
+      for (var json in data) {
+        posts.add(await Post.fromJson(json));
+      }
+      return posts;
     } else {
       throw Exception('Failed to load posts');
     }

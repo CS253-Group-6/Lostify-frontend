@@ -308,7 +308,7 @@ class _ChatPageState extends State<ChatPage> {
           // Send icon button
           IconButton(
             icon: const Icon(Icons.send, color: Colors.blue),
-            onPressed: () => _sendMessage(text: _controller.text),
+            onPressed: () => _sendMessage(text: _controller.text.trim()),
           ),
           // Camera icon
           IconButton(

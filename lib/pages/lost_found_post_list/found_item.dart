@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:final_project/components/utils/loader.dart';
 import 'package:final_project/utils/load_all_posts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,65 +21,65 @@ class FoundItem extends StatefulWidget {
 
 class _FoundItemState extends State<FoundItem> {
   // Example data for found items
-  final List<Post> posts = [
-    Post(
-      postType: PostType.found,
-      id: 1,
-      title: 'Phone',
-      status: 'Returned',
-      regDate: DateTime.parse('2025-01-02'),
-      closedDate: DateTime.parse('2025-01-06'),
-      imageProvider: Image.asset('assets/phone.png').image,
-    ),
-    Post(
-      postType: PostType.found,
-      id: 2,
-      title: 'Mouse',
-      status: 'Not Returned',
-      regDate: DateTime.parse('2025-01-02'),
-      closedDate: null,
-      imageProvider: Image.asset('assets/phone.png').image,
-    ),
-    Post(
-      postType: PostType.found,
-      id: 3,
-      title: 'Wallet',
-      status: 'Returned',
-      regDate: DateTime.parse('2025-01-02'),
-      closedDate: DateTime.parse('2025-01-06'),
-      imageProvider: Image.asset('assets/phone.png').image,
-    ),
-    Post(
-      postType: PostType.found,
-      id: 4,
-      title: 'Keys',
-      status: 'Not Returned',
-      creatorId: 0,
-      regDate: DateTime.parse('2025-03-11'),
-      closedDate: null,
-      imageProvider: Image.asset('assets/keys.png').image,
-    ),
-    Post(
-      postType: PostType.found,
-      id: 5,
-      title: 'Bottle',
-      status: 'Not Returned',
-      regDate: DateTime.parse('2025-01-02'),
-      creatorId: 2,
-      closedDate: null,
-      imageProvider: Image.asset('assets/phone.png').image,
-    ),
-    Post(
-      postType: PostType.found,
-      id: 6,
-      title: 'Cycle',
-      status: 'Returned',
-      creatorId: 0,
-      regDate: DateTime.parse('2025-01-02'),
-      closedDate: DateTime.parse('2025-01-06'),
-      imageProvider: null,
-    ),
-  ];
+  // final List<Post> posts = [
+  //   Post(
+  //     postType: PostType.found,
+  //     id: 1,
+  //     title: 'Phone',
+  //     status: 'Returned',
+  //     regDate: DateTime.parse('2025-01-02'),
+  //     closedDate: DateTime.parse('2025-01-06'),
+  //     imageProvider: Image.asset('assets/phone.png').image,
+  //   ),
+  //   Post(
+  //     postType: PostType.found,
+  //     id: 2,
+  //     title: 'Mouse',
+  //     status: 'Not Returned',
+  //     regDate: DateTime.parse('2025-01-02'),
+  //     closedDate: null,
+  //     imageProvider: Image.asset('assets/phone.png').image,
+  //   ),
+  //   Post(
+  //     postType: PostType.found,
+  //     id: 3,
+  //     title: 'Wallet',
+  //     status: 'Returned',
+  //     regDate: DateTime.parse('2025-01-02'),
+  //     closedDate: DateTime.parse('2025-01-06'),
+  //     imageProvider: Image.asset('assets/phone.png').image,
+  //   ),
+  //   Post(
+  //     postType: PostType.found,
+  //     id: 4,
+  //     title: 'Keys',
+  //     status: 'Not Returned',
+  //     creatorId: 0,
+  //     regDate: DateTime.parse('2025-03-11'),
+  //     closedDate: null,
+  //     imageProvider: Image.asset('assets/keys.png').image,
+  //   ),
+  //   Post(
+  //     postType: PostType.found,
+  //     id: 5,
+  //     title: 'Bottle',
+  //     status: 'Not Returned',
+  //     regDate: DateTime.parse('2025-01-02'),
+  //     creatorId: 2,
+  //     closedDate: null,
+  //     imageProvider: Image.asset('assets/phone.png').image,
+  //   ),
+  //   Post(
+  //     postType: PostType.found,
+  //     id: 6,
+  //     title: 'Cycle',
+  //     status: 'Returned',
+  //     creatorId: 0,
+  //     regDate: DateTime.parse('2025-01-02'),
+  //     closedDate: DateTime.parse('2025-01-06'),
+  //     imageProvider: null,
+  //   ),
+  // ];
 
   bool _showDetails = false;
   Post? _selectedPost;
@@ -90,14 +91,19 @@ class _FoundItemState extends State<FoundItem> {
   }
 
   List<Post> filteredPosts = [];
+  bool _isLoading = true;
   Future<void> _loadUserLostPosts(BuildContext context) async {
     final postGetter = LoadPosts();
     try {
+      setState(() {
+        _isLoading = true;
+      });
       final posts =
           await postGetter.loadUserFoundPosts(context); // Await the backend call
       print(posts);
       setState(() {
         filteredPosts = posts; // Update the state with the loaded posts
+        _isLoading = false;
       });
     } catch (e) {
       print('Error loading posts: $e');
@@ -118,7 +124,7 @@ class _FoundItemState extends State<FoundItem> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Stack(
+      body: _isLoading?const Loader(): Stack(
         children: [
           // Background: list of found items
           Container(
@@ -129,7 +135,7 @@ class _FoundItemState extends State<FoundItem> {
               ),
             ),
             child: SafeArea(
-              child: ListView.builder(
+              child: filteredPosts.length>0? ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 itemCount: filteredPosts.length,
                 itemBuilder: (context, index) {
@@ -145,7 +151,9 @@ class _FoundItemState extends State<FoundItem> {
                     ),
                   );
                 },
-              ),
+              ):Center(
+                child: Text('No posts found',)
+              )
             ),
           ),
 
@@ -223,8 +231,8 @@ class _FoundItemState extends State<FoundItem> {
           if (post.imageProvider != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image(
-                image: post.imageProvider!,
+              child: Image.file(
+                post.imageProvider!,
                 fit: BoxFit.cover,
                 height: 80,
                 width: 80,

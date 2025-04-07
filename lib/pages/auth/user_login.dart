@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/services/auth_api.dart';
 import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,8 +35,8 @@ class _LoginState extends State<Login> {
     if (_loginKey.currentState!.validate()) {
       // collect login details i.e username,password
       var loginDetails = {
-        "username": _usernameController.text,
-        "password": _passwordController.text
+        "username": _usernameController.text.trim(),
+        "password": _passwordController.text.trim()
       };
 
       // api call for login
@@ -46,7 +48,7 @@ class _LoginState extends State<Login> {
         // set user name into userprovider
         context
             .read<UserProvider>()
-            .setUserName(newUsername: _usernameController.text);
+            .setUserName(newUsername: _usernameController.text.trim());
 
         // Extract cookies from the response headers
         final cookie = response.headers['set-cookie'];
@@ -70,6 +72,13 @@ class _LoginState extends State<Login> {
           // get profile details form userId
           final profileResponse = await ProfileApi.getProfileById(userId);
           print(profileResponse.body);
+
+          // save image
+          Future<File> saveProfileImage(Uint8List bytes,String filename)async{
+            final directory = await getApplicationDocumentsDirectory();
+            final file = File('${directory.path}/$filename');
+            return await file.writeAsBytes(bytes);
+          }
           // write the current logged in user's profile details into Profile Provider
           context.read<ProfileProvider>().setProfile(
               name: jsonDecode(profileResponse.body)['name'],
@@ -80,9 +89,8 @@ class _LoginState extends State<Login> {
               email: jsonDecode(profileResponse.body)['email'],
               rollNumber: jsonDecode(profileResponse.body)['roll'],
               profileImg: jsonDecode(profileResponse.body)['image'] != null
-                  ? MemoryImage(Uint8List.fromList(
-                      utf8.encode(jsonDecode(profileResponse.body)['image'])))
-                  : null);
+                  ? await saveProfileImage(base64Decode(jsonDecode(profileResponse.body)['image']), 'profile${userId}.jpg'):null);
+          print(profileResponse.body);
           print('logged in user profile details: with id: $userId');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

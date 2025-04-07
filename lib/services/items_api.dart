@@ -138,7 +138,7 @@ class ItemsApi {
         Uri.parse("$baseUrl/items/all"),
         headers: {"Cookie": cookie},
       );
-      print(jsonDecode(response.body)['posts'][0]);
+      print(jsonDecode(response.body)['posts']);
       // Parse the response body
       // final List<Map<String,dynamic>> jsonResponse = jsonDecode(response.body);
       // print(jsonResponse);

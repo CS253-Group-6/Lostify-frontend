@@ -3,8 +3,8 @@ import 'dart:io';
 
 class Item{
   int id = 0,type = 0,creator = 0;
-  String title, description, location1,location2, time;
-  String date;
+  String title, description, location1,location2;
+  int datetime;
   File? image;
   bool isFound = false;
 
@@ -12,8 +12,7 @@ class Item{
     required this.title,
     required this.description,
     required this.location1,
-    required this.date,
-    this.time = '',
+    required this.datetime,
     required this.image,
     // this.isFound = false,
     required this.type,
@@ -25,7 +24,7 @@ class Item{
   //   isFound = true;
   // }
   
-  Map<String, dynamic> toJson() {
+  Future<Map<String,dynamic>> toJson() async{
     return {
       'type': type,
       "title": title,
@@ -33,9 +32,8 @@ class Item{
       "location1": location1,
       "location2": location2,
       "creator": creator,
-      "date": date,
-      "time": time,
-      "image": base64Encode(image!.readAsBytesSync()), // Convert file to Base64
+      "date": datetime,
+      "image": base64Encode(await image!.readAsBytesSync()), // Convert file to Base64
       // "isFound": isFound,
     };
   }
@@ -47,7 +45,7 @@ class Item{
       creator: json['creator'],
       description: json['description'],
       location1: json['location'],
-      date: json['date'],
+      datetime: json['date'],
       // time: json['time'],
       image: File.fromRawPath(base64Decode(json['image'])), // Convert Base64 back to File
       // isFound: json['isFound'],

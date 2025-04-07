@@ -92,8 +92,8 @@ class ItemDetailsPage extends StatelessWidget {
                   Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image(
-                        image: post.imageProvider!,
+                      child: Image.file(
+                        post.imageProvider!,
                         height: 200,
                         width: 200,
                         fit: BoxFit.contain,

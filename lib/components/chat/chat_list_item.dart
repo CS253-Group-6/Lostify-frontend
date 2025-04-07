@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/components/utils/loader.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,12 @@ class _ChatListItemState extends State<ChatListItem>
     });
   }
 
-  String? name = '0';
+  String? name;
   int recieverUserId = 0;
+
+  // loading state
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -44,17 +49,21 @@ class _ChatListItemState extends State<ChatListItem>
 
   void getUserName() async {
     // get profile details of user by id
-
     recieverUserId = widget.chat['users'][0] ==
             Provider.of<ProfileProvider>(context, listen: false).id
         ? widget.chat['users'][1]
         : widget.chat['users'][0];
+    // get the name of user
+    setState(() {
+      _isLoading = true;
+    });
     final profileResponse = await ProfileApi.getProfileById(recieverUserId);
     final profileDetails = jsonDecode(profileResponse.body);
     print(profileDetails);
     setState(() {
       name = profileDetails['name'] ?? '0';
       recieverUserId = profileDetails['id'] ?? 0;
+      _isLoading = false;
     });
   }
 
@@ -78,42 +87,56 @@ class _ChatListItemState extends State<ChatListItem>
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(
-              'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
-        ),
-        title: Text("${name}"),
-        subtitle: Text(widget.chat['lastMessage']),
-        trailing: Column(
+    return _isLoading
+        ? Column(
           children: [
-            Text(widget.chat['status']),
-            Text(
-              widget.chat['lastMessageTime'] != null
-                  ? (widget.chat['lastMessageTime'] is Timestamp
-                      ? DateFormat('hh:mm').format(
-                          (widget.chat['lastMessageTime'] as Timestamp)
-                              .toDate(),
-                        )
-                      : widget.chat['lastMessageTime'] as String)
-                  : '...', // Fallback for null values
+            SizedBox(
+              width: 24, // Small width for the loader
+              height: 24, // Small height for the loader
+              child: CircularProgressIndicator(
+                strokeWidth: 2, // Thin stroke for a compact look
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
             ),
+            SizedBox(height: 14,)
           ],
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ChatScreen(
-                    chatDetails: ChatDetails(
-                        senderId: widget.chat['users'][0] == recieverUserId
-                            ? widget.chat['users'][1]
-                            : widget.chat['users'][0],
-                        recieverId: recieverUserId,
-                        recieverName: name ?? '0',
-                        itemId: widget.chat['itemId'],
-                        chatRoomId: widget.chat.id))),
-          );
-        });
+        )
+        : ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(
+                  'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
+            ),
+            title: Text("${name}"),
+            subtitle: Text(widget.chat['lastMessage']),
+            trailing: Column(
+              children: [
+                Text(widget.chat['status']),
+                Text(
+                  widget.chat['lastMessageTime'] != null
+                      ? (widget.chat['lastMessageTime'] is Timestamp
+                          ? DateFormat('hh:mm').format(
+                              (widget.chat['lastMessageTime'] as Timestamp)
+                                  .toDate(),
+                            )
+                          : widget.chat['lastMessageTime'] as String)
+                      : '...', // Fallback for null values
+                ),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                        chatDetails: ChatDetails(
+                            senderId: widget.chat['users'][0] == recieverUserId
+                                ? widget.chat['users'][1]
+                                : widget.chat['users'][0],
+                            recieverId: recieverUserId,
+                            recieverName: name ?? '0',
+                            itemId: widget.chat['itemId'],
+                            chatRoomId: widget.chat.id))),
+              );
+            });
   }
 }

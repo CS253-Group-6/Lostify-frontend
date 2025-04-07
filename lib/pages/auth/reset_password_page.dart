@@ -15,8 +15,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final _usernameController = TextEditingController();
 
   void handleResetPassword() async {
-    if (_usernameController.text.isNotEmpty) {
-      final response = await AuthApi.resetPassword(_usernameController.text);
+    if (_usernameController.text.trim().isNotEmpty) {
+      final response = await AuthApi.resetPassword(_usernameController.text.trim());
       if (response.statusCode >= 200 && response.statusCode < 210) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

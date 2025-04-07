@@ -46,14 +46,14 @@ class _ReportedItemPageState extends State<ReportedItemPage> {
   ];
 
   /// List of widgets corresponding to tabs in [_tabs].
-  final List<Widget> _widgets = const [ItemsTab(),];
+  final List<Widget> _widgets = const [ItemsTab(),ItemsTab()];
 
   var _isFabExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     /// User role
-    final int role = 0; // Replace with context.watch().user.role;
+    final int role = 1; // Replace with context.watch().user.role;
 
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].

@@ -91,6 +91,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
 
     // call otp api with the data
     final response = await AuthApi.verifyOtp(otpData);
+    print(response.body);
 
     // if correct otp verified
     if (response.statusCode >= 200 && response.statusCode <= 210) {

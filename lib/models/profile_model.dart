@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class ProfileModel {
   String name;
@@ -8,6 +8,8 @@ class ProfileModel {
   String? designation;
   int? rollNumber;
   File? profileImage;
+  String playerId;
+  bool isOnline = false;
 
 
   ProfileModel({
@@ -18,9 +20,23 @@ class ProfileModel {
     this.rollNumber = 0,
     this.email = '',
     this.profileImage,
-  });
+    this.playerId = '',
+    this.isOnline = false,
+  }){
+    _fetchAndSavePlayerId();
+  }
 
-  Future<Map<String,dynamic>> toJson()async{
+  void _fetchAndSavePlayerId()async{
+    // Fetch OneSignal player ID
+    String? fetchedPlayerId = await OneSignal.User.pushSubscription.id;
+    print("playerId : $fetchedPlayerId");
+
+    if (fetchedPlayerId != null && fetchedPlayerId != playerId) {
+      this.playerId = fetchedPlayerId;
+    }
+  }
+
+  Future<Map<String,dynamic>> toJson() async{
     return {
       'name': name,
       'address': address,
@@ -29,8 +45,10 @@ class ProfileModel {
       'roll': rollNumber,
       'email': email,
       'image': profileImage != null
-        ? base64Encode(profileImage!.readAsBytesSync())
+        ? base64Encode(await profileImage!.readAsBytesSync())
         : '',
+      'playerId': playerId,
+      'online': isOnline
     };
   }
 }

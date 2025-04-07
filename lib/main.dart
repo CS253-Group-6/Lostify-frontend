@@ -2,6 +2,7 @@ import 'package:final_project/models/chat_model.dart';
 import 'package:final_project/models/user_model.dart';
 import 'package:final_project/pages/edit_profile/edit_profile.dart';
 import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
+import 'package:final_project/providers/all_items_provider.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ Future main() async {
         ChangeNotifierProvider(
             create: (context) => UserProvider()), // Register UserProvider
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
+        ChangeNotifierProvider(create: (context) => AllItemsProvider())
       ],
       child: const MyApp(),
     ),

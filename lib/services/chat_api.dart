@@ -119,24 +119,24 @@ class ChatServices {
           .delete();
 
       // delete the chat from flask
-      final response =
-          await ItemsApi.claimItem(chatDetails.itemId, chatDetails.recieverId);
+      // final response =
+      //     await ItemsApi.claimItem(chatDetails.itemId, chatDetails.recieverId);
 
-      print('response: ${response.body}');
+      // print('response: ${response.body}');
 
-      if (!(response.statusCode >= 200 && response.statusCode <= 300)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Claim to the post failed',
-              style: TextStyle(color: Colors.white), // Text color
-            ),
-            backgroundColor: Colors.red, // Custom background color
-            duration: Duration(seconds: 3), // Display duration
-          ),
-        );
-        return;
-      }
+      // if (!(response.statusCode >= 200 && response.statusCode <= 300)) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //       content: Text(
+      //         'Claim to the post failed',
+      //         style: TextStyle(color: Colors.white), // Text color
+      //       ),
+      //       backgroundColor: Colors.red, // Custom background color
+      //       duration: Duration(seconds: 3), // Display duration
+      //     ),
+      //   );
+      //   return;
+      // }
 
       // display success messgae to frontend
       ScaffoldMessenger.of(context).showSnackBar(
@@ -169,22 +169,45 @@ class ChatServices {
   static void notifyUser(BuildContext context, ChatDetails chatDetails) async {
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
-    print('playerId: ${profileProvider.playerId}');
-    if (profileProvider.playerId != null) {
+    // print('playerId: ${profileProvider.playerId}');
+    List<String> ids = (chatDetails.chatRoomId.split('_'));
+
+    try{
+    // get user profile details by id
+    final recieverProfileResponse = await ProfileApi.getProfileById(chatDetails.recieverId);
+    print('recieverProfile: $recieverProfileResponse');
+    // get reciever playerId
+    final recieverPlayerId = jsonDecode(recieverProfileResponse.body)['playerId'];
+    print('recieverPlayerId: $recieverPlayerId');
+    if(recieverPlayerId != '' || recieverPlayerId !=null){
+      // send notification to reciever player
       await NotificationsApi.sendNotification(
-        profileProvider.playerId!,
+        recieverPlayerId,
         "Lostify",
-        "You have a new message in the chat from ${Provider.of<ProfileProvider>(context, listen: false).name}!",
+        "${Provider.of<ProfileProvider>(context, listen: false).name} just messaged you!",
       );
     }
+    }catch(e){
+      print('Error getting reciever profile: $e');
+    }
+    
+
+
+    // if (profileProvider.playerId != null) {
+    //   await NotificationsApi.sendNotification(
+    //     profileProvider.playerId!,
+    //     "Lostify",
+    //     "You have a new message in the chat from ${Provider.of<ProfileProvider>(context, listen: false).name}!",
+    //   );
+    // }
   }
 
   static void sendMessage(BuildContext context,
       TextEditingController messageController, ChatDetails chatDetails) async {
-    if (messageController.text.isNotEmpty) {
+    if (messageController.text.trim().isNotEmpty) {
       final newMessage = {
         'senderId': Provider.of<ProfileProvider>(context, listen: false).id,
-        'text': messageController.text,
+        'text': messageController.text.trim(),
         'type': 'text',
         'time': FieldValue.serverTimestamp(),
       };

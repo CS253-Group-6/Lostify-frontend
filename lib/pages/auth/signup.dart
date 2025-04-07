@@ -37,9 +37,9 @@ class _SignUpState extends State<SignUp> {
     if (_formKey.currentState!.validate()) {
       // create an user object instance
       User user = User(
-        username: _usernameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
+        username: _usernameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
       );
 
       // redirect to profile form page
@@ -260,7 +260,7 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value != _passwordController.text) {
+                                    if (value != _passwordController.text.trim()) {
                                       return "Passwords do not match";
                                     }
                                     return null;

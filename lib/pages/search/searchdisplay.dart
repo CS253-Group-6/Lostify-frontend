@@ -48,7 +48,7 @@ class _SearchDisplayPageState extends State<SearchDisplayPage> {
       // Convert each returned item into a Post object.
       // (Assuming response is a list of JSON items.)
       for (var item in posts) {
-        Post post = Post.fromJson(item);
+        Post post = await Post.fromJson(item);
         allPosts.add(post);
       }
       //final int userId = Provider.of<UserProvider>(context,listen: false).id;

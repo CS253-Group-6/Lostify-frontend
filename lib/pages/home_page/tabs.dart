@@ -1,5 +1,8 @@
+import 'package:final_project/components/utils/loader.dart';
+import 'package:final_project/providers/all_items_provider.dart';
 import 'package:final_project/utils/load_all_posts.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '/components/home/item_box.dart';
 import '/models/post.dart';
@@ -13,6 +16,7 @@ class LostItemsTab extends StatefulWidget {
 
 class LostItemsTabState extends State<LostItemsTab> {
   List<Post> _lostPosts = [];
+  bool _isLoading = true;
   // Change this flag to false to use the hardcoded version.
   final bool _useDynamicData = true; //TODO: change to true
 
@@ -20,16 +24,25 @@ class LostItemsTabState extends State<LostItemsTab> {
   void initState() {
     super.initState();
     // uncomment after backend
-
-    _loadLostPosts();
+    // if(Provider.of<AllItemsProvider>(context).allPosts.isNotEmpty){
+    //   _lostPosts = Provider.of<AllItemsProvider>(context).allPosts;
+    // }else{
+      _loadLostPosts();
+      print("loding..");
+    // }
+ 
   }
 
   Future<void> _loadLostPosts() async {
     final postGetter = LoadPosts();
     try {
-      final posts = await postGetter.loadLostPosts(); // Await the backend call
+      setState(() {
+        _isLoading = true;
+      });
+      final posts = await postGetter.loadLostPosts(context); // Await the backend call
       setState(() {
         _lostPosts = posts; // Update the state with the loaded posts
+        _isLoading = false;
       });
     } catch (e) {
       print('Error loading posts: $e');
@@ -38,7 +51,7 @@ class LostItemsTabState extends State<LostItemsTab> {
 
   // Dynamic version using API
   Widget _buildDynamicLostItems() {
-    return ListView.builder(
+    return _lostPosts.length>0? ListView.builder(
       itemCount: _lostPosts.length,
       itemBuilder: (context, index) {
         return Padding(
@@ -46,6 +59,8 @@ class LostItemsTabState extends State<LostItemsTab> {
           child: ItemBox(post: _lostPosts[index]),
         );
       },
+    ): Center(
+      child: Text("No posts"),
     );
   }
 
@@ -59,9 +74,9 @@ class LostItemsTabState extends State<LostItemsTab> {
         title: 'Hercules cycle',
         regDate: DateTime(2025, 03, 13),
         description: ' ',
-        imageProvider: const NetworkImage(
-          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-        ),
+        // imageProvider: const NetworkImage(
+        //   'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+        // ),
         address1: 'Hall 5',
         address2: 'Hall 5',
       ),
@@ -102,9 +117,9 @@ class LostItemsTabState extends State<LostItemsTab> {
         title: 'Hercules cycle',
         regDate: DateTime(2025, 03, 13),
         description: ' ',
-        imageProvider: const NetworkImage(
-          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-        ),
+        // imageProvider: const NetworkImage(
+        //   'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+        // ),
         address2: 'Hall 5',
       ),
       Post(
@@ -164,7 +179,7 @@ class LostItemsTabState extends State<LostItemsTab> {
           fit: BoxFit.cover,
         ),
       ),
-      child: _useDynamicData
+      child: _isLoading ? const Loader(): _useDynamicData
           ? _buildDynamicLostItems()
           : _buildHardcodedLostItems(),
     );
@@ -180,6 +195,7 @@ class FoundItemsTab extends StatefulWidget {
 
 class _FoundItemsTabState extends State<FoundItemsTab> {
   List<Post> _foundPosts = [];
+  bool _isLoading = true;
   // Change this flag to false to use the hardcoded version.
   final bool _useDynamicData = true; //TODO: change to true
 
@@ -195,9 +211,13 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
   Future<void> _loadFoundPosts() async {
     final postGetter = LoadPosts();
     try {
-      final posts = await postGetter.loadFoundPosts(); // Await the backend call
+      setState(() {
+        _isLoading = true;
+      });
+      final posts = await postGetter.loadFoundPosts(context); // Await the backend call
       setState(() {
         _foundPosts = posts; // Update the state with the loaded posts
+        _isLoading = false;
       });
     } catch (e) {
       print('Error loading posts: $e');
@@ -206,7 +226,7 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
 
   // Dynamic version using API
   Widget _buildDynamicFoundItems() {
-    return ListView.builder(
+    return _foundPosts.length>0? ListView.builder(
       itemCount: _foundPosts.length,
       itemBuilder: (context, index) {
         return Padding(
@@ -214,6 +234,8 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
           child: ItemBox(post: _foundPosts[index]),
         );
       },
+    ):Center(
+      child: Text("No posts"),
     );
   }
 
@@ -228,9 +250,9 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
         regDate: DateTime(2025, 03, 13),
         description:
             'I lost my cycle pls find it pls pls pls I\'ll give u Anirudh\'s gf for a night',
-        imageProvider: const NetworkImage(
-          'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
-        ),
+        // imageProvider: const NetworkImage(
+        //   'https://www.pentathlon.in/wp-content/uploads/2021/10/brut-rf-24t.webp',
+        // ),
         address2: 'Hall 5',
       ),
       Post(
@@ -289,7 +311,8 @@ class _FoundItemsTabState extends State<FoundItemsTab> {
           fit: BoxFit.cover,
         ),
       ),
-      child: _useDynamicData
+      child: _isLoading ? const Loader():
+      _useDynamicData
           ? _buildDynamicFoundItems()
           : _buildHardcodedFoundItems(),
     );

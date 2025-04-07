@@ -213,7 +213,7 @@ class _LocationDropdownState extends State<LocationDropdown> {
               child: SingleChildScrollView(
                 child: Column(
                   children: locations
-                      .where((loc) => loc.toLowerCase().contains(_controller.text.toLowerCase()))
+                      .where((loc) => loc.toLowerCase().contains(_controller.text.toLowerCase().trim()))
                       .map((loc) => ListTile(
                             title: Text(loc),
                             onTap: () {

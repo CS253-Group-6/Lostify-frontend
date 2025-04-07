@@ -10,6 +10,7 @@ class PostFilter {
     String? location,
     DateTime? startDate,
     DateTime? endDate,
+    int? reports,
   }) {
     return posts.where((post) {
       bool matchesUserId = userId == null || post.creatorId == userId;
@@ -25,7 +26,9 @@ class PostFilter {
         // Include posts with regDate equal or before the end date
         matchesDate = matchesDate && !post.regDate.isAfter(endDate);
       }
-      return matchesUserId && matchesPostType && matchesLocation && matchesDate;
+      // Include posts with report count greater than 0
+      bool matchesReports = reports == null || post.reports > 0;
+      return matchesUserId && matchesPostType && matchesLocation && matchesDate && matchesReports;
     }).toList();
   }
 }

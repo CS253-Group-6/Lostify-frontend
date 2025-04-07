@@ -142,14 +142,6 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 ),
                 child: const Text("Close"),
               ),
-            ElevatedButton(
-              onPressed: _closeChat,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text("Close"),
-            )
           ],
         ),
       ),
@@ -190,7 +182,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     final isMe = message['senderId'] ==
                         context.watch<ProfileProvider>().id;
                     print(
-                        'iseMe: $isMe,profileId: ${context.watch<ProfileProvider>().id}, messageId: ${message['senderId']}');
+                        'isMe: $isMe,profileId: ${context.watch<ProfileProvider>().id}, messageId: ${message['senderId']}');
 
                     return Align(
                       alignment:
