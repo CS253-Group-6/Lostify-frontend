@@ -121,235 +121,226 @@ class _LostAnItem2State extends State<LostAnItem2> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // var formData = widget.formdata;
-    return Scaffold(
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.only(left: 60),
-          child: Text(
-            "Lost An Item",
-            style: TextStyle(
-              color: Colors.white,
-            ),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Padding(
+        padding: EdgeInsets.only(left: 60),
+        child: Text(
+          "Lost An Item",
+          style: TextStyle(
+            color: Colors.white,
           ),
-        ),
-        backgroundColor: Colors.blue,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-          ),
+      backgroundColor: Colors.blue,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () => Navigator.pop(context),
+      ),
+    ),
+    body: Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/background.png'),
+          fit: BoxFit.cover,
         ),
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
-          child: Column(children: [
-            const SizedBox(height: 10),
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Add Location, Date and Time",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
               ),
-            ),
-            const SizedBox(height: 30),
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Location",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            LocationDropdown(
-              onLocationSelected: (String? newValue) {
-                setState(() {
-                  _location1 = newValue;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Add a Descriptive Location",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: locController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: "More specific location where you lost it",
-                hintStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey, // Change hint text color
-                  fontSize: 15, // Change hint text size
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Date",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              focusNode: _focusNode1,
-              controller: _dateController,
-              style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Select Date',
-                hintStyle: const TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                suffixIcon:
-                    const Icon(Icons.calendar_today, color: Colors.grey),
-              ),
-              readOnly: true,
-              onTap: () => _selectDate(context),
-            ),
-            const SizedBox(height: 30),
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Time",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              focusNode: _focusNode2,
-              controller: _timeController,
-              style: const TextStyle(color: Colors.black),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Select Time',
-                hintStyle: const TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                suffixIcon: const Icon(Icons.access_time, color: Colors.grey),
-              ),
-              readOnly: true,
-              onTap: () => _selectTime(context),
-            ),
-
-            const SizedBox(height: 210),
-            // Next Button
-            ElevatedButton(
-              onPressed: () {
-                try {
-                  // Validate required fields (Date, Time, and Location)
-
-                  if (_location1 == null) {
-                    throw Exception("Location is required.");
-                  }
-                  if (locController.text.trim().isEmpty) {
-                    throw Exception(" Specific location cannot be empty.");
-                  }
-                  if (_selectedDate == null) {
-                    throw Exception("Please select a date.");
-                  }
-                  if (_selectedTime == null) {
-                    throw Exception("Please select a time.");
-                  }
-
-                  print('Image Path: ${widget.postDetails1['image']}');
-
-                  // Create Item instance
-                  Item item = Item(
-                    type: 0,
-                    creator: Provider.of<UserProvider>(context, listen: false)
-                        .userId,
-                    title: widget.postDetails1['title'],
-                    description: widget.postDetails1['description'],
-                    location2: locController.text.trim(),
-                    location1: _location1!,
-                    datetime: combineDateAndTime(_selectedDate!, _selectedTime!).toUtc().millisecondsSinceEpoch ~/ 1000,
-                    image: (widget.postDetails1['image']),
-                    // isFound: false,
-                  );
-
-                  // Call API function to post lost item
-                  handleLostItemPost(item);
-                } catch (e) {
-                  // Show error message in a SnackBar
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(e.toString(),
-                          style: TextStyle(color: Colors.white)),
-                      backgroundColor: Colors.red,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Text(
+                        "Add Location, Date and Time",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Text(
+                        "Location",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    LocationDropdown(
+                      onLocationSelected: (String? newValue) {
+                        setState(() {
+                          _location1 = newValue;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Text(
+                        "Add a Descriptive Location",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: locController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "More specific location where you lost it",
+                        hintStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                          fontSize: 15,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Text(
+                        "Date",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      focusNode: _focusNode1,
+                      controller: _dateController,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Select Date',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        suffixIcon: const Icon(Icons.calendar_today, color: Colors.grey),
+                      ),
+                      readOnly: true,
+                      onTap: () => _selectDate(context),
+                    ),
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Text(
+                        "Time",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      focusNode: _focusNode2,
+                      controller: _timeController,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Select Time',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        suffixIcon: const Icon(Icons.access_time, color: Colors.grey),
+                      ),
+                      readOnly: true,
+                      onTap: () => _selectTime(context),
+                    ),
+                    const SizedBox(height: 30),
+                    // Post Button
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          try {
+                            // Validate required fields (Date, Time, and Location)
+                            if (_location1 == null) {
+                              throw Exception("Location is required.");
+                            }
+                            if (locController.text.trim().isEmpty) {
+                              throw Exception("Specific location cannot be empty.");
+                            }
+                            if (_selectedDate == null) {
+                              throw Exception("Please select a date.");
+                            }
+                            if (_selectedTime == null) {
+                              throw Exception("Please select a time.");
+                            }
+
+                            // Create Item instance
+                            Item item = Item(
+                              type: 0,
+                              creator: Provider.of<UserProvider>(context, listen: false).userId,
+                              title: widget.postDetails1['title'],
+                              description: widget.postDetails1['description'],
+                              location2: locController.text.trim(),
+                              location1: _location1!,
+                              datetime: combineDateAndTime(_selectedDate!, _selectedTime!).toUtc().millisecondsSinceEpoch ~/ 1000,
+                              image: (widget.postDetails1['image']),
+                            );
+
+                            // Call API function to post lost item
+                            handleLostItemPost(item);
+                          } catch (e) {
+                            // Show error message in a SnackBar
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(e.toString(), style: const TextStyle(color: Colors.white)),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          minimumSize: const Size(double.infinity, 50), // Adjusted size
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          "Post",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: const Text(
-                "Post",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
             ),
-          ]),
-        ),
+          );
+        },
       ),
-    );
-  }
+    ),
+  );
+}
 }

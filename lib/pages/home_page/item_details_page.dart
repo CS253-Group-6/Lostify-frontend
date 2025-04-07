@@ -166,39 +166,43 @@ class ItemDetailsPage extends StatelessWidget {
                 const SizedBox(height: 8),
                 // Location
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Icon(Icons.location_pin, size: 18),
                     const SizedBox(width: 8),
-                    Text(
-                      'Location: ${post.address2}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
+                    Expanded(
+                      child: Text(
+                        'Location: ${post.address2}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        overflow: TextOverflow.visible, // Ensure text wraps to the next line
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
+
                 // Description
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.description,
-                        size: 18, color: Colors.black),
+                    const Icon(Icons.description, size: 18, color: Colors.black),
                     const SizedBox(width: 8),
-                    const Text(
-                      'Description:',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
+                    Expanded(
+                      child: Text(
+                        'Description: ${post.description}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                        overflow: TextOverflow.visible, // Ensure text wraps to the next line
                       ),
                     ),
                   ],
                 ),
-                Text(
-                  post.description,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
-                ),
-                const Spacer(),
+                const SizedBox(height: 16),
                 // Action buttons (e.g., Report, Share, Chat)
                 // if (extraProperty != null)
                 if (extraProperty != null || postOwnerId == logged_in_userId)

@@ -144,7 +144,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
         child: SingleChildScrollView(
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
