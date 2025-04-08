@@ -211,49 +211,69 @@ class ItemDetailsPage extends StatelessWidget {
                     children: [
                       // Delete Button
                       ElevatedButton.icon(
-                        onPressed: () async {
-                          try {
-                            // Call the delete API using the given itemId
-                            final response = await ItemsApi.deleteItem(itemId);
-                            // final responseData = jsonDecode(response.body);
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Delete Post"),
+                              content: const Text("Are you sure you want to delete this post?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    try {
+                                      // Call the delete API using the given itemId
+                                      final response = await ItemsApi.deleteItem(itemId);
+                                      // final responseData = jsonDecode(response.body);
 
-                            if (response.statusCode == 204) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    '${post.title} deleted successfully!',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  backgroundColor: Colors.blue,
-                                  duration: const Duration(seconds: 3),
+                                      if (response.statusCode == 204) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              '${post.title} deleted successfully!',
+                                              style: const TextStyle(color: Colors.white),
+                                            ),
+                                            backgroundColor: Colors.blue,
+                                            duration: const Duration(seconds: 3),
+                                          ),
+                                        );
+                                        Navigator.pop(context);
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Failed to delete ${post.title}.',
+                                              style: const TextStyle(color: Colors.white),
+                                            ),
+                                            backgroundColor: Colors.red,
+                                            duration: const Duration(seconds: 3),
+                                          ),
+                                        );
+                                      }
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'An error occurred: $e',
+                                            style: const TextStyle(color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                          duration: const Duration(seconds: 3),
+                                        ),
+                                      );
+                                    } finally {
+                                      Navigator.pop(context); // Close the dialog
+                                    }
+                                  },
+                                  child: const Text("Delete", style: TextStyle(color: Colors.red)),
                                 ),
-                              );
-                              Navigator.pop(context);
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Failed to delete ${post.title}.',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  backgroundColor: Colors.red,
-                                  duration: const Duration(seconds: 3),
-                                ),
-                              );
-                            }
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'An error occurred: $e',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                backgroundColor: Colors.red,
-                                duration: const Duration(seconds: 3),
-                              ),
-                            );
-                          }
-                        },
+                              ],
+                            ),
+                          );
+                        } ,
                         icon: const Icon(Icons.delete, color: Colors.white),
                         label: const Text('Delete'),
                         style: ElevatedButton.styleFrom(
