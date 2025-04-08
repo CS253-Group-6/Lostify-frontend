@@ -1,3 +1,4 @@
+import 'package:final_project/pages/search/searchdisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../components/location/location.dart';
@@ -16,6 +17,16 @@ class _SearchPageState extends State<SearchPage> {
 
   // Sample dropdown options
   //List<String> locations = ["Library", "Cafeteria", "Park", "Classroom", "Gym"];
+
+  void handleSearch() async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SearchDisplayPage(
+                searchLocation: selectedSearchLocation!,
+                startDate: selectedDate1!,
+                endDate: selectedDate2!)));
+  }
 
   Future<void> _pickStartDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -71,139 +82,143 @@ class _SearchPageState extends State<SearchPage> {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/new_background.png"), // Updated background image
+            image: AssetImage(
+                "assets/images/new_background.png"), // Updated background image
             fit: BoxFit.cover,
           ),
         ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Location where item was lost
-              const Text(
-                "Lost Place",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 10),
-              LocationDropdown(
-                onLocationSelected: (String? newValue) {
-                  setState(() {
-                    selectedSearchLocation = newValue;
-                  });
-                },
-              ),
-              const SizedBox(height: 30),
-              // Date and time of loss
-              const Text(
-                "Expected Lost Date range",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => _pickStartDate(context),
-                      child: Container(
-                        height: 50,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              selectedDate1 != null
-                                  ? DateFormat('dd/MM/yyyy').format(selectedDate1!)
-                                  : "Start Date",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: selectedDate1 != null
-                                    ? Colors.black
-                                    : Colors.grey,
-                              ),
-                            ),
-                            const Icon(Icons.calendar_today, color: Colors.grey),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => _pickEndDate(context),
-                      child: Container(
-                        height: 50,
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              selectedDate2 != null
-                                  ? DateFormat('dd/MM/yyyy').format(selectedDate2!)
-                                  : "End Date",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: selectedDate2 != null
-                                    ? Colors.black
-                                    : Colors.grey,
-                              ),
-                            ),
-                            Icon(Icons.calendar_today, color: Colors.grey),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 270),
-              // Search Button
-              ElevatedButton(
-                onPressed: () {
-                  // Handle search action
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Location where item was lost
+                const Text(
+                  "Lost Place",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                const SizedBox(height: 10),
+                LocationDropdown(
+                  onLocationSelected: (String? newValue) {
+                    setState(() {
+                      selectedSearchLocation = newValue;
+                    });
+                  },
+                ),
+                const SizedBox(height: 30),
+                // Date and time of loss
+                const Text(
+                  "Expected Lost Date range",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
                   children: [
-                    Text(
-                      "Search",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _pickStartDate(context),
+                        child: Container(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                selectedDate1 != null
+                                    ? DateFormat('dd/MM/yyyy')
+                                        .format(selectedDate1!)
+                                    : "Start Date",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: selectedDate1 != null
+                                      ? Colors.black
+                                      : Colors.grey,
+                                ),
+                              ),
+                              const Icon(Icons.calendar_today,
+                                  color: Colors.grey),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    SizedBox(width: 8),
-                    Icon(Icons.search, color: Colors.white), // Magnifier icon
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _pickEndDate(context),
+                        child: Container(
+                          height: 50,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                selectedDate2 != null
+                                    ? DateFormat('dd/MM/yyyy')
+                                        .format(selectedDate2!)
+                                    : "End Date",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: selectedDate2 != null
+                                      ? Colors.black
+                                      : Colors.grey,
+                                ),
+                              ),
+                              Icon(Icons.calendar_today, color: Colors.grey),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 270),
+                // Search Button
+                ElevatedButton(
+                  onPressed: handleSearch,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Search",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                      SizedBox(width: 8),
+                      Icon(Icons.search, color: Colors.white), // Magnifier icon
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),),
+        ),
       ),
     );
   }

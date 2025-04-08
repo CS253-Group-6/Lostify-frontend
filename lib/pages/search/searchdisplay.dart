@@ -49,6 +49,7 @@ class _SearchDisplayPageState extends State<SearchDisplayPage> {
       // (Assuming response is a list of JSON items.)
       for (var item in posts) {
         Post post = await Post.fromJson(item);
+        // print(post.)
         allPosts.add(post);
       }
       //final int userId = Provider.of<UserProvider>(context,listen: false).id;
@@ -63,7 +64,7 @@ class _SearchDisplayPageState extends State<SearchDisplayPage> {
         startDate: widget.startDate,
         endDate: widget.endDate,
       );
-
+      print(filteredPosts);
       setState(() {
         searchResults = filteredPosts;
         isLoading = false;

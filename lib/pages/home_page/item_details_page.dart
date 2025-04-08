@@ -170,7 +170,7 @@ class ItemDetailsPage extends StatelessWidget {
                     const Icon(Icons.location_pin, size: 18),
                     const SizedBox(width: 8),
                     Text(
-                      'Location: ${post.address2}',
+                      'Location: ${post.address1}, ${post.address2}',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,
@@ -185,9 +185,9 @@ class ItemDetailsPage extends StatelessWidget {
                     const Icon(Icons.description,
                         size: 18, color: Colors.black),
                     const SizedBox(width: 8),
-                    const Text(
-                      'Description:',
-                      style: TextStyle(
+                    Text(
+                      'Description: ${post.description}',
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,
                       ),

@@ -171,27 +171,31 @@ class ChatServices {
         Provider.of<ProfileProvider>(context, listen: false);
     // print('playerId: ${profileProvider.playerId}');
     List<String> ids = (chatDetails.chatRoomId.split('_'));
+    print('ids : $ids');
 
-    try{
-    // get user profile details by id
-    final recieverProfileResponse = await ProfileApi.getProfileById(chatDetails.recieverId);
-    print('recieverProfile: $recieverProfileResponse');
-    // get reciever playerId
-    final recieverPlayerId = jsonDecode(recieverProfileResponse.body)['playerId'];
-    print('recieverPlayerId: $recieverPlayerId');
-    if(recieverPlayerId != '' || recieverPlayerId !=null){
-      // send notification to reciever player
-      await NotificationsApi.sendNotification(
-        recieverPlayerId,
-        "Lostify",
-        "${Provider.of<ProfileProvider>(context, listen: false).name} just messaged you!",
-      );
-    }
-    }catch(e){
+    try {
+      // get user profile details by id
+      final recieverProfileResponse = await ProfileApi.getProfileById(
+          Provider.of<ProfileProvider>(context, listen: false).id ==
+                  int.parse(ids[0])
+              ? int.parse(ids[1])
+              : int.parse(ids[0]));
+      print('recieverProfile: $recieverProfileResponse');
+      // get reciever playerId
+      final recieverPlayerId =
+          jsonDecode(recieverProfileResponse.body)['playerId'];
+      print('recieverPlayerId: $recieverPlayerId');
+      if (recieverPlayerId != '' || recieverPlayerId != null) {
+        // send notification to reciever player
+        await NotificationsApi.sendNotification(
+          recieverPlayerId,
+          "Lostify",
+          "${Provider.of<ProfileProvider>(context, listen: false).name} just messaged you!",
+        );
+      }
+    } catch (e) {
       print('Error getting reciever profile: $e');
     }
-    
-
 
     // if (profileProvider.playerId != null) {
     //   await NotificationsApi.sendNotification(
