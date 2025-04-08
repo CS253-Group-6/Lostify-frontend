@@ -129,6 +129,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/.cxx
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
