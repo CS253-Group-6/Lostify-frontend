@@ -51,6 +51,7 @@ class ProfileProvider extends ChangeNotifier {
     String email = '',
     int rollNumber = 0,
     File? profileImg,
+    bool isOnline = false,
     int id = 0,
   }) async {
     this.name = name;

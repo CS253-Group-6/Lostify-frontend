@@ -30,7 +30,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
   void handleFoundItemPost(Item item) async {
     try {
       print('itemDetails:');
-      print('json: ${item.toJson()}');
+      print('json: ${await item.toJson()}');
 
       final response = await ItemsApi.postItem(await item.toJson());
       if (response.statusCode >= 200 && response.statusCode < 300) {

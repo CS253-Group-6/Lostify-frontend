@@ -100,7 +100,7 @@ final class Post {
       status: json['status'] as String? ?? '',
       regDate: DateTime.fromMillisecondsSinceEpoch(json['date'] * 1000),
       closedDate: json['closedDate'] != null && json['closedDate'] != ""
-          ? DateTime.fromMicrosecondsSinceEpoch(json['closedDate'])
+          ? DateTime.fromMicrosecondsSinceEpoch(json['closedDate'] * 1000)
           : null,
       closedById: json['closedBy'] != null ? json['closedBy'] as int : null,
       reports: json['reportCount'] is int

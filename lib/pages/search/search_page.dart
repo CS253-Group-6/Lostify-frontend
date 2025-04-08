@@ -19,6 +19,7 @@ class _SearchPageState extends State<SearchPage> {
   //List<String> locations = ["Library", "Cafeteria", "Park", "Classroom", "Gym"];
 
   void handleSearch() async {
+    print('searching...');
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -214,9 +215,7 @@ class _SearchPageState extends State<SearchPage> {
                 const SizedBox(height: 270),
                 // Search Button
                 ElevatedButton(
-                  onPressed: () {
-                    // Handle search action
-                  },
+                  onPressed: handleSearch,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     minimumSize: const Size(double.infinity, 50),
