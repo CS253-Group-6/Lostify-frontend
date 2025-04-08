@@ -43,6 +43,11 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setId({required int id})async{
+    this.id = id;
+    notifyListeners();
+  }
+
   void setProfile({
     required String name,
     String address = '',

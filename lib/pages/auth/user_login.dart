@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:final_project/pages/home_page/home_interface.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/services/auth_api.dart';
 import 'package:final_project/services/profile_api.dart';
@@ -44,19 +45,21 @@ class _LoginState extends State<Login> {
       print(response.body);
       print(response.statusCode);
 
-      if(jsonDecode(response.body)['role'] == 1){
+      if (jsonDecode(response.body)['role'] == 1) {
         // user is admin
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Logged in successfully!',
-                style: TextStyle(color: Colors.white), // Text color
-              ),
-              backgroundColor: Colors.red, // Custom background color
-              duration: Duration(seconds: 3), // Display duration
+          SnackBar(
+            content: Text(
+              'You are admin! Please use Admin Login',
+              style: TextStyle(color: Colors.white), // Text color
             ),
-          );
-          return;
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeInterface()));
+        return;
       }
       // if successfull login
       if (response.statusCode >= 200 && response.statusCode < 210) {
@@ -89,11 +92,13 @@ class _LoginState extends State<Login> {
           print(profileResponse.body);
 
           // save image
-          Future<File> saveProfileImage(Uint8List bytes,String filename)async{
+          Future<File> saveProfileImage(
+              Uint8List bytes, String filename) async {
             final directory = await getApplicationDocumentsDirectory();
             final file = File('${directory.path}/$filename');
             return await file.writeAsBytes(bytes);
           }
+
           // write the current logged in user's profile details into Profile Provider
           context.read<ProfileProvider>().setProfile(
               name: jsonDecode(profileResponse.body)['name'],
@@ -104,7 +109,10 @@ class _LoginState extends State<Login> {
               email: jsonDecode(profileResponse.body)['email'],
               rollNumber: jsonDecode(profileResponse.body)['roll'],
               profileImg: jsonDecode(profileResponse.body)['image'] != null
-                  ? await saveProfileImage(base64Decode(jsonDecode(profileResponse.body)['image']), 'profile${userId}.jpg'):null);
+                  ? await saveProfileImage(
+                      base64Decode(jsonDecode(profileResponse.body)['image']),
+                      'profile${userId}.jpg')
+                  : null);
           print(profileResponse.body);
           print('logged in user profile details: with id: $userId');
           ScaffoldMessenger.of(context).showSnackBar(
@@ -172,7 +180,6 @@ class _LoginState extends State<Login> {
                 width: 452,
                 height: 271,
               ),
-             
               const SizedBox(height: 51),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 40),
