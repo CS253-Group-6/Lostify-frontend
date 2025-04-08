@@ -71,9 +71,17 @@ class _SearchDisplayPageState extends State<SearchDisplayPage> {
       });
     } catch (e) {
       print("Error loading posts: $e");
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Failed to load posts."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
 
   }

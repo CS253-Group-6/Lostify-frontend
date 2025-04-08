@@ -20,6 +20,24 @@ class _SearchPageState extends State<SearchPage> {
 
   void handleSearch() async {
     print('searching...');
+    if (selectedSearchLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please select a location."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    if (selectedDate1 == null || selectedDate2 == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please select a date range."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
     Navigator.push(
         context,
         MaterialPageRoute(
