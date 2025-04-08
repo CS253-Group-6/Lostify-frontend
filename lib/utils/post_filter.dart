@@ -12,13 +12,16 @@ class PostFilter {
     DateTime? endDate,
     int? reports,
   }) {
+    
     return posts.where((post) {
+      print('$location,${post.address1}');
       bool matchesUserId = userId == null || post.creatorId == userId;
       bool matchesPostType = postType == null || post.postType == postType;
       bool matchesLocation = location == null ||
           post.address1.toLowerCase() == location.toLowerCase();
       bool matchesDate = true;
       if (startDate != null) {
+        print('$startDate : ${post.regDate} : ${!post.regDate.isBefore(startDate)}');
         // Include posts with regDate equal or after the start date
         matchesDate = !post.regDate.isBefore(startDate);
       }
@@ -28,6 +31,7 @@ class PostFilter {
       }
       // Include posts with report count greater than 0
       bool matchesReports = reports == null || post.reports > 0;
+      print('$matchesUserId,$matchesPostType,$matchesLocation,$matchesDate,$matchesReports');
       return matchesUserId && matchesPostType && matchesLocation && matchesDate && matchesReports;
     }).toList();
   }

@@ -172,7 +172,7 @@ class ItemDetailsPage extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Location: ${post.address2}',
+                        'Location: ${post.address2}, ${post.address1}',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black,

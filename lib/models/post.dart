@@ -111,7 +111,8 @@ final class Post {
           json['image'] != null && (json['image'] as String).isNotEmpty
               ? await saveProfileImage(base64Decode(json['image']), 'item ${json['id']}')
               : null,
-      address2: json['address'] as String? ?? '',
+      address2: json['location2'] as String? ?? '',
+      address1: json['location1'] as String? ?? '',
     );
   }
 }
