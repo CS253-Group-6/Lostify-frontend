@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/auth/auth_input.dart';
 import '../../components/auth/custom_auth_button.dart';
 import '../../providers/user_provider.dart';
+import '../../providers/profile_provider.dart';
 
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
@@ -55,6 +56,7 @@ class AdminLoginState extends State<AdminLogin> {
 
           // save userId into UserProvier
           context.read<UserProvider>().setId(id: userId);
+          context.read<ProfileProvider>().setId(id: userId);
           print(Provider.of<UserProvider>(context, listen: false).userId);
 
           print('logged in user profile details: with id: $userId');
