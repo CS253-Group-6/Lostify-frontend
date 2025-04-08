@@ -162,50 +162,51 @@ class _ItemDetailsState extends State<ItemDetails> {
                   const SizedBox(height: 16),
                   const SizedBox(height: 16),
                   // Action buttons (Report, Chat)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                '${widget.post.title} reported!',
-                                style: TextStyle(
-                                    color: Colors.white), // Text color
+                  if (widget.post.closedById == null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  '${widget.post.title} reported!',
+                                  style: TextStyle(
+                                      color: Colors.white), // Text color
+                                ),
+                                backgroundColor:
+                                    Colors.blue, // Custom background color
+                                duration:
+                                    Duration(seconds: 3), // Display duration
                               ),
-                              backgroundColor:
-                                  Colors.blue, // Custom background color
-                              duration:
-                                  Duration(seconds: 3), // Display duration
+                            );
+                          },
+                          icon: const Icon(Icons.report, color: Colors.white),
+                          label: const Text('Report'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue, // Blue background
+                            foregroundColor: Colors.white, // White text
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          );
-                        },
-                        icon: const Icon(Icons.report, color: Colors.white),
-                        label: const Text('Report'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue, // Blue background
-                          foregroundColor: Colors.white, // White text
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      ElevatedButton.icon(
-                        onPressed: _addChat,
-                        icon: const Icon(Icons.chat, color: Colors.white),
-                        label: const Text('Chat'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue, // Blue background
-                          foregroundColor: Colors.white, // White text
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                        const SizedBox(width: 16),
+                        ElevatedButton.icon(
+                          onPressed: _addChat,
+                          icon: const Icon(Icons.chat, color: Colors.white),
+                          label: const Text('Chat'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue, // Blue background
+                            foregroundColor: Colors.white, // White text
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   const Divider(),
                   // User profile and Chat button
                   Padding(

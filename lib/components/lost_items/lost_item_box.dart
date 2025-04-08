@@ -283,7 +283,7 @@ class ItemBox extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 if (extraProperty == null)
-                  Text('Registered Date: ${dateAsString(regDate)}'),
+                  Text('Date: ${dateAsString(regDate)}'),
                 const SizedBox(height: 4),
                 if (extraProperty == null)
                   if (post.closedById != null) Text('Closed'),
