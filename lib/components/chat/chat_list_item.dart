@@ -60,11 +60,14 @@ class _ChatListItemState extends State<ChatListItem>
     final profileResponse = await ProfileApi.getProfileById(recieverUserId);
     final profileDetails = jsonDecode(profileResponse.body);
     print(profileDetails);
-    setState(() {
-      name = profileDetails['name'] ?? '0';
-      recieverUserId = profileDetails['id'] ?? 0;
-      _isLoading = false;
-    });
+    if (mounted) {
+      // check if the widget is still mounted before calling setState
+      setState(() {
+        name = profileDetails['name'] ?? '0';
+        recieverUserId = profileDetails['id'] ?? 0;
+        _isLoading = false;
+      });
+    }
   }
 
   @override
