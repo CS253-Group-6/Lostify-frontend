@@ -54,25 +54,39 @@ class AdminLoginState extends State<AdminLogin> {
           print('User ID: $userId');
           // print('User Role: $userRole');
 
-          // save userId into UserProvier
-          context.read<UserProvider>().setId(id: userId);
-          context.read<ProfileProvider>().setId(id: userId);
-          print(Provider.of<UserProvider>(context, listen: false).userId);
-
-          print('logged in user profile details: with id: $userId');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Logged in successfully!',
-                style: TextStyle(color: Colors.white), // Text color
+          if (userRole != 1) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Sorry, you lack admin privileges. Try user login!',
+                  style: TextStyle(color: Colors.white), // Text color
+                ),
+                backgroundColor: Colors.red, // Custom background color
+                duration: Duration(seconds: 3), // Display duration
               ),
-              backgroundColor: Colors.blue, // Custom background color
-              duration: Duration(seconds: 3), // Display duration
-            ),
-          );
+            );
+          } else {
 
-          Navigator.of(context).pushReplacementNamed('/home',
-              arguments: {'user_id': userId, 'user_role': userRole});
+            // save userId into UserProvier
+            context.read<UserProvider>().setId(id: userId);
+            context.read<ProfileProvider>().setId(id: userId);
+            print(Provider.of<UserProvider>(context, listen: false).userId);
+
+            print('logged in user profile details: with id: $userId');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Logged in successfully!',
+                  style: TextStyle(color: Colors.white), // Text color
+                ),
+                backgroundColor: Colors.blue, // Custom background color
+                duration: Duration(seconds: 3), // Display duration
+              ),
+            );
+
+            Navigator.of(context).pushReplacementNamed('/home',
+                arguments: {'user_id': userId, 'user_role': userRole});
+          }
         } else {
           print('No cookies found in the response.');
           ScaffoldMessenger.of(context).showSnackBar(
