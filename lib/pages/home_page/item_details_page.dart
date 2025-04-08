@@ -266,6 +266,10 @@ class ItemDetailsPage extends StatelessWidget {
                                       );
                                     } finally {
                                       Navigator.pop(context); // Close the dialog
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        post.postType == PostType.found ? '/found-items' : '/lost-items'
+                                      );
                                     }
                                   },
                                   child: const Text("Delete", style: TextStyle(color: Colors.red)),
