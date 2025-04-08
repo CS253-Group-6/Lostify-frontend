@@ -43,6 +43,21 @@ class _LoginState extends State<Login> {
       final response = await AuthApi.login(loginDetails);
       print(response.body);
       print(response.statusCode);
+
+      if(jsonDecode(response.body)['role'] == 1){
+        // user is admin
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Logged in successfully!',
+                style: TextStyle(color: Colors.white), // Text color
+              ),
+              backgroundColor: Colors.red, // Custom background color
+              duration: Duration(seconds: 3), // Display duration
+            ),
+          );
+          return;
+      }
       // if successfull login
       if (response.statusCode >= 200 && response.statusCode < 210) {
         // set user name into userprovider

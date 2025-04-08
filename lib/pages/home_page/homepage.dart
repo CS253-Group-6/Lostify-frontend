@@ -7,6 +7,7 @@ import 'package:final_project/pages/report_admin_pages/reported_items_page.dart'
 import 'package:final_project/services/auth_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/home/action_button.dart';
@@ -201,32 +202,150 @@ class _HomePageState extends State<HomePage> {
     );
 
     // Tab controller
-    return DefaultTabController(
-      length: _tabs.length,
-      child: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/new_background.png'),
-                fit: BoxFit.cover,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop && !_isFabExpanded) {
+          SystemNavigator.pop();
+        }
+      },
+      child: DefaultTabController(
+        length: _tabs.length,
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/new_background.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            // App bar wrapped with `PreferredSize`.
-            appBar: PreferredSize(
-              preferredSize: w.preferredSize,
-              child: Stack(
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              // App bar wrapped with `PreferredSize`.
+              appBar: PreferredSize(
+                preferredSize: w.preferredSize,
+                child: Stack(
+                  children: [
+                    IgnorePointer(
+                      ignoring: _isFabExpanded,
+                      child: ImageFiltered(
+                        imageFilter: _isFabExpanded
+                            ? ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0)
+                            : ImageFilter.blur(),
+                        child: w,
+                      ),
+                    ),
+                    // Overlay blur effect when the FAB is expanded
+                    if (_isFabExpanded)
+                      Container(
+                        color: Colors.white
+                            .withValues(alpha: 0.5), // Brighten the background
+                        child: const SizedBox
+                            .expand(), // Make sure this covers the entire screen
+                      ),
+                  ],
+                ),
+              ),
+              drawer: Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    // Remove 'const' here if you plan to show a dynamic name.
+                    DrawerHeader(
+                      decoration: const BoxDecoration(color: Colors.blue),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          (profileImage != null)?
+                            ClipOval(
+                              child: Image.file(
+                                profileImage,
+                                fit: BoxFit.cover,
+                                height: 80,
+                                width: 80,
+                              ),
+                            ):
+                            const Icon(Icons.person, size: 80,color: Colors.white,),
+                          const SizedBox(height: 10),
+                          // Replace 'John Doe' with the actual name or a variable holding it.
+                          Text(
+                            '$name',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Your lost items'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/lost-items');
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Your found items'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/found-items');
+                      },
+                    ),
+                    if (role == 1)
+                      ListTile(
+                        title: const Text('Reported Items'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ReportedItemPage()),
+                          );
+                        },
+                      ),
+                    ListTile(
+                      title: const Text('Messages'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatList()),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Edit Profile'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/edit-profile');
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Change Password'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChangePasswordPage()),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Logout'),
+                      onTap: () => _showLogoutDialog(context),
+                    ),
+                  ],
+                ),
+              ),
+      
+              body: Stack(
                 children: [
+                  // TabBarView wrapped with a blur effect
                   IgnorePointer(
                     ignoring: _isFabExpanded,
                     child: ImageFiltered(
                       imageFilter: _isFabExpanded
                           ? ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0)
                           : ImageFilter.blur(),
-                      child: w,
+                      child: TabBarView(children: _widgets),
                     ),
                   ),
                   // Overlay blur effect when the FAB is expanded
@@ -239,169 +358,59 @@ class _HomePageState extends State<HomePage> {
                     ),
                 ],
               ),
-            ),
-            drawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  // Remove 'const' here if you plan to show a dynamic name.
-                  DrawerHeader(
-                    decoration: const BoxDecoration(color: Colors.blue),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        (profileImage != null)?
-                          ClipOval(
-                            child: Image.file(
-                              profileImage,
-                              fit: BoxFit.cover,
-                              height: 80,
-                              width: 80,
-                            ),
-                          ):
-                          const Icon(Icons.person, size: 80,color: Colors.white,),
-                        const SizedBox(height: 10),
-                        // Replace 'John Doe' with the actual name or a variable holding it.
-                        Text(
-                          '$name',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
+              // Expandable floating action button
+              floatingActionButton: ExpandableFab(
+                initialOpen: false,
+                distance: 150.0,
+                onPressed: () {
+                  setState(() {
+                    _isFabExpanded = !_isFabExpanded;
+                  });
+                },
+                childWhileClosed: const Icon(Icons.add), // Icon when closed
+                // Child buttons that appear when expanded
+                children: <Row>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'Post a lost item',
+                        textScaler: TextScaler.linear(1.20),
+                      ),
+                      const SizedBox(width: 10.0, height: 10.0),
+                      ActionButton(
+                          icon: const Icon(Icons.report_problem),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/lost/post/1');
+                          }),
+                    ],
                   ),
-                  ListTile(
-                    title: const Text('Your lost items'),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/lost-items');
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Your found items'),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/found-items');
-                    },
-                  ),
-                  if (role == 1)
-                    ListTile(
-                      title: const Text('Reported Items'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ReportedItemPage()),
-                        );
-                      },
-                    ),
-                  ListTile(
-                    title: const Text('Messages'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ChatList()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Edit Profile'),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/edit-profile');
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Change Password'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChangePasswordPage()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Logout'),
-                    onTap: () => _showLogoutDialog(context),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'Post a found item',
+                        textScaler: TextScaler.linear(1.20),
+                      ),
+                      const SizedBox(width: 10.0, height: 10.0),
+                      ActionButton(
+                        icon: const Icon(Icons.archive),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/found/post/1');
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
+              // FloatingActionButton(
+              //   onPressed: () {},
+              //   tooltip: 'Make a new post',
+              //   child: const Icon(Icons.add),
+              // ),
             ),
-
-            body: Stack(
-              children: [
-                // TabBarView wrapped with a blur effect
-                IgnorePointer(
-                  ignoring: _isFabExpanded,
-                  child: ImageFiltered(
-                    imageFilter: _isFabExpanded
-                        ? ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0)
-                        : ImageFilter.blur(),
-                    child: TabBarView(children: _widgets),
-                  ),
-                ),
-                // Overlay blur effect when the FAB is expanded
-                if (_isFabExpanded)
-                  Container(
-                    color: Colors.white
-                        .withValues(alpha: 0.5), // Brighten the background
-                    child: const SizedBox
-                        .expand(), // Make sure this covers the entire screen
-                  ),
-              ],
-            ),
-            // Expandable floating action button
-            floatingActionButton: ExpandableFab(
-              initialOpen: false,
-              distance: 150.0,
-              onPressed: () {
-                setState(() {
-                  _isFabExpanded = !_isFabExpanded;
-                });
-              },
-              childWhileClosed: const Icon(Icons.add), // Icon when closed
-              // Child buttons that appear when expanded
-              children: <Row>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'Post a lost item',
-                      textScaler: TextScaler.linear(1.20),
-                    ),
-                    const SizedBox(width: 10.0, height: 10.0),
-                    ActionButton(
-                        icon: const Icon(Icons.report_problem),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/lost/post/1');
-                        }),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'Post a found item',
-                      textScaler: TextScaler.linear(1.20),
-                    ),
-                    const SizedBox(width: 10.0, height: 10.0),
-                    ActionButton(
-                      icon: const Icon(Icons.archive),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/found/post/1');
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            // FloatingActionButton(
-            //   onPressed: () {},
-            //   tooltip: 'Make a new post',
-            //   child: const Icon(Icons.add),
-            // ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
