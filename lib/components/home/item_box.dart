@@ -253,11 +253,8 @@ class ItemBox extends StatelessWidget {
                 const SizedBox(height: 4),
                 if (extraProperty == null)
                   Text('Registered Date: ${dateAsString(regDate)}'),
-                const SizedBox(height: 4),
-                if (extraProperty == null)
-                  Text('Found Date: ${dateAsString(foundDate)}'),
                 const SizedBox(height: 8),
-
+               
                 // "View Post" button navigates to ItemDetailsPage
                 Row(
                   children: [
