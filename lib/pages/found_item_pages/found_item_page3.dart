@@ -310,7 +310,7 @@ class _FoundItemPage3State extends State<FoundItemPage3> {
 
                         location2: locController.text.trim(),
                         location1: selectedPresentLocation!,
-                        datetime: combineDateAndTime(selectedDate!, selectedTime!).toUtc().microsecondsSinceEpoch ~/ 1000,
+                        datetime: combineDateAndTime(selectedDate!, selectedTime!).toUtc().millisecondsSinceEpoch ~/ 1000,
                         image: (widget.postDetails2['image']),
                         // isFound: true,
                       );
