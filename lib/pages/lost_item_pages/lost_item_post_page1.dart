@@ -105,6 +105,7 @@ class _LostAnItem1State extends State<LostAnItem1> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
                 const Text(
                   "Upload Image",
                   style: TextStyle(

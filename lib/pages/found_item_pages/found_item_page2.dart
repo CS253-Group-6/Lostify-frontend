@@ -33,7 +33,7 @@ class FoundItemPage2 extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,8 +83,9 @@ class FoundItemPage2 extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 250),
-                ElevatedButton(
+                const SizedBox(height: 30), // Consistent spacing
+              Center(
+                child: ElevatedButton(
                   onPressed: () {
                     try {
                       // Ensure controllers are not empty
@@ -92,9 +93,7 @@ class FoundItemPage2 extends StatelessWidget {
                         throw Exception("Title and Description cannot be empty.");
                       }
 
-
-
-                      Map<String,dynamic> postDetails2 = {
+                      Map<String, dynamic> postDetails2 = {
                         'title': titleController.text.trim(),
                         'description': descriptionController.text.trim(),
                         'image': postDetails1['image']
@@ -107,12 +106,11 @@ class FoundItemPage2 extends StatelessWidget {
                           builder: (context) => FoundItemPage3(postDetails2: postDetails2),
                         ),
                       );
-
                     } catch (e) {
                       // Show error message in a SnackBar
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+                          content: Text(e.toString(), style: const TextStyle(color: Colors.white)),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -128,11 +126,14 @@ class FoundItemPage2 extends StatelessWidget {
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
+} 
+
+// import 'package:flutter/material.dart';  
