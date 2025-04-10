@@ -43,7 +43,7 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setId({required int id})async{
+  void setId({required int id}) async {
     this.id = id;
     notifyListeners();
   }
@@ -70,6 +70,17 @@ class ProfileProvider extends ChangeNotifier {
     this.playerId = playerId;
     // Fetch and save player ID
     await _fetchAndSavePlayerId();
+    notifyListeners();
+  }
+
+  void reset() {
+    name = '';
+    address = '';
+    phoneNumber = '';
+    email = '';
+    rollNumber = 0;
+    profileImg = null;
+    playerId = '';
     notifyListeners();
   }
 }

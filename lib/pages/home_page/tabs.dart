@@ -30,7 +30,6 @@ class LostItemsTabState extends State<LostItemsTab> {
       _loadLostPosts();
       print("loding..");
     // }
- 
   }
 
   Future<void> _loadLostPosts() async {

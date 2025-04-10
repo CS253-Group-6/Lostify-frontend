@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:final_project/models/profile_model.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
+import 'package:final_project/providers/user_provider.dart';
 import 'package:final_project/services/auth_api.dart';
+import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,6 +73,42 @@ class _HomePageState extends State<HomePage> {
 
   var _isFabExpanded = false;
 
+  File? profileImage;
+  void getProfilePic() async {
+    final profileDetails = await ProfileApi.getProfileById(
+        Provider.of<UserProvider>(context, listen: false).id);
+    print(profileDetails.body);
+    final profilePath = jsonDecode(profileDetails.body)['image'] == ''
+        ? null
+        : await ProfileModel.saveProfileImage(
+            base64Decode(jsonDecode(profileDetails.body)['image']),
+            'profile ${jsonDecode(profileDetails.body)['userid']}');
+    if (profilePath == null) {
+      return;
+    }
+    print('path: ${await profilePath.exists()}');
+    if (await profilePath.exists()) {
+      final profileFile = await ProfileModel.saveProfileImage(
+        base64Decode(jsonDecode(profileDetails.body)['image']),
+        'profile ${jsonDecode(profileDetails.body)['userid']}',
+      );
+      setState(() {
+        profileImage = profileFile;
+      });
+    } else {
+      setState(() {
+        profileImage = null;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProfilePic();
+    // print(profileImage);
+  }
+
   @override
   Widget build(BuildContext context) {
     // get the role details from Navigator args
@@ -78,8 +117,7 @@ class _HomePageState extends State<HomePage> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>? ??
             {'user_id': 0, 'user_role': 0};
     // final Map<String, dynamic> roleData = jsonDecode(arguments);  // roleData = {'user_id': 2, 'user_role': '1'};
-    final profileImage =
-        Provider.of<ProfileProvider>(context, listen: false).profileImg;
+
     final name = Provider.of<ProfileProvider>(context, listen: false).name;
     print(profileImage);
 
@@ -91,6 +129,9 @@ class _HomePageState extends State<HomePage> {
     void handleLogout() async {
       final response = await AuthApi.logout();
       if (response.statusCode >= 200 && response.statusCode < 210) {
+        // Reset ProfileProvider and UserProvider
+        context.read<ProfileProvider>().reset();
+        context.read<UserProvider>().reset();
         // Logout successful
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -258,16 +299,20 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          (profileImage != null)?
-                            ClipOval(
-                              child: Image.file(
-                                profileImage,
-                                fit: BoxFit.cover,
-                                height: 80,
-                                width: 80,
-                              ),
-                            ):
-                            const Icon(Icons.person, size: 80,color: Colors.white,),
+                          (profileImage != null)
+                              ? ClipOval(
+                                  child: Image.file(
+                                    profileImage!,
+                                    fit: BoxFit.cover,
+                                    height: 80,
+                                    width: 80,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.person,
+                                  size: 80,
+                                  color: Colors.white,
+                                ),
                           const SizedBox(height: 10),
                           // Replace 'John Doe' with the actual name or a variable holding it.
                           Text(
@@ -335,7 +380,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-      
+
               body: Stack(
                 children: [
                   // TabBarView wrapped with a blur effect

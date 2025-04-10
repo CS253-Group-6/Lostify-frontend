@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:final_project/components/home/item_box.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../providers/user_provider.dart';
@@ -119,27 +120,28 @@ class _SearchDisplayPageState extends State<SearchDisplayPage> {
           itemBuilder: (context, index) {
             Post post = searchResults[index];
 // Display each post in a Card widget.
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 3,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: ListTile(
-                title: Text(post.title ?? "No Title"),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(post.description ?? ""),
-                    Text("Location: ${post.address1 ?? ""}"),
-                    Text("Date: ${DateFormat('dd/MM/yyyy').format(post.regDate)}"),
-                  ],
-                ),
-                onTap: () {
-// Optionally, navigate to a detailed view of the post.
-                },
-              ),
-            );
+//             return Card(
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//               elevation: 3,
+//               margin: const EdgeInsets.only(bottom: 15),
+//               child: ListTile(
+//                 title: Text(post.title ?? "No Title"),
+//                 subtitle: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text(post.description ?? ""),
+//                     Text("Location: ${post.address1 ?? ""}"),
+//                     Text("Date: ${DateFormat('dd/MM/yyyy').format(post.regDate)}"),
+//                   ],
+//                 ),
+//                 onTap: () {
+// // Optionally, navigate to a detailed view of the post.
+//                 },
+//               ),
+//             );
+           return ItemBox(post: post);
           },
         ),
       ),

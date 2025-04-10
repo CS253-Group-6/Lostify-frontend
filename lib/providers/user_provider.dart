@@ -16,5 +16,10 @@ class UserProvider extends ChangeNotifier{
     this.id = id;
     notifyListeners();
   }
+  void reset(){
+    username = '';
+    id = 0;
+    notifyListeners();
+  }
 
 }

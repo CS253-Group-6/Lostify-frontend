@@ -51,6 +51,7 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 final convo = snapshot.data!.docs[index];
+                print(convo);
                 return ChatListItem(chat: convo);
               },
             );

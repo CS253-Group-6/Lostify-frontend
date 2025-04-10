@@ -46,7 +46,7 @@ class AdminLoginState extends State<AdminLogin> {
 
         if (cookie != null) {
           // Save the cookies to shared preferences
-          // await prefs.setString('cookies', cookie);
+          await prefs.setString('cookies', cookie);
           // Parse user_id and user_role from the cookies
           final int userId = jsonDecode(response.body)['id'];
           final int userRole = jsonDecode(response.body)['role'];

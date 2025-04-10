@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:final_project/models/profile_model.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/providers/user_provider.dart';
 import 'package:final_project/services/profile_api.dart';
@@ -30,6 +31,7 @@ class EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
+
     // Initialize the text controllers with existing profile data
     _nameController.text =
         Provider.of<ProfileProvider>(context, listen: false).name;
@@ -43,8 +45,18 @@ class EditProfilePageState extends State<EditProfilePage> {
         Provider.of<ProfileProvider>(context, listen: false)
             .rollNumber
             .toString();
-    _imageFile = Provider.of<ProfileProvider>(context, listen: false)
-            .profileImg;
+    _imageFile =
+        profileImage;
+  }
+  File? profileImage;
+  void getProfilePic() async {
+    final profileDetails = await ProfileApi.getProfileById(
+        Provider.of<UserProvider>(context, listen: false).id);
+    profileImage = await ProfileModel.saveProfileImage(
+        base64Decode(jsonDecode(profileDetails.body)['image']), 'profile ${jsonDecode(profileDetails.body)['userid']}');
+    setState(() {
+      profileImage = profileImage;
+    });
   }
 
   // Function to dispose of the controllers
