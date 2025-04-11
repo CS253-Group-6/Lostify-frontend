@@ -23,6 +23,9 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
   // four focus nodes
   final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
 
+  // bool for isSubmitting
+  bool _isSubmitting = false;
+
   // initially resend is disabled  and after 30 sec it is enabled
   bool _isResendEnabled = false; // To track if the resend button is enabled
   int _resendCountdown = 30; // Countdown timer in seconds
@@ -89,6 +92,9 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     };
     print(otpData);
 
+    setState(() {
+      _isSubmitting = true;
+    });
     // call otp api with the data
     final response = await AuthApi.verifyOtp(otpData);
     print(response.body);
@@ -106,6 +112,10 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
         final id = jsonDecode(loginResponse.body)['id'];
         // print('${jsonDecode(loginResponse.body)}');
         if (role != null) {
+          // set submitting state as false
+          setState(() {
+            _isSubmitting = false;
+          });
           // Parse user_id and user_role from the cookies
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -124,6 +134,10 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
           });
         }
       } else {
+        // if login failed
+        setState(() {
+          _isSubmitting = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -135,12 +149,6 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
           ),
         );
       }
-
-      // TODO: if error donot redirect to home
-      // Navigator.of(context).pushNamed('/home', arguments: {
-      //   'user_id': int.parse('0'),
-      //   'user_role': '0',
-      // });
     }
 
     // Navigator.of(context).pushReplacementNamed('/home');
@@ -152,12 +160,16 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
     if (_isResendEnabled) {
       var responseSignup = await AuthApi.signUp(widget.signUpDetails);
       if (responseSignup.statusCode == 201) {
+        setState(() {
+          _isResendEnabled = false;
+        });
         // code to handle successful response
-        _isResendEnabled = false;
+        
         _startResendTimer();
       }
-
-      _isResendEnabled = false;
+      setState(() {
+        _isResendEnabled = false;
+      });
       _startResendTimer();
     }
   }
@@ -253,8 +265,8 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                       width: 300,
                       height: 40,
                       child: Custombutton(
-                        text: "Continue",
-                        onClick: handleSubmit,
+                        text: _isSubmitting?"Submitting.." : "Continue",
+                        onClick:_isSubmitting? ()=>null : handleSubmit,
                       )),
                 ],
               ),

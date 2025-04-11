@@ -80,7 +80,7 @@ class ChatServices {
 
   static createChatId(BuildContext context, int itemId, int postOwnerId) {
     final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+        Provider.of<UserProvider>(context, listen: false);
     int currUserId = profileProvider.id;
     print('currUserId: $currUserId, postOwnerId: $postOwnerId');
     if (currUserId < postOwnerId) {

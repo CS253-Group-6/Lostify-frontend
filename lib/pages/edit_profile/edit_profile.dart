@@ -55,6 +55,7 @@ class EditProfilePageState extends State<EditProfilePage> {
     profileImage = await ProfileModel.saveProfileImage(
         base64Decode(jsonDecode(profileDetails.body)['image']), 'profile ${jsonDecode(profileDetails.body)['userid']}');
     setState(() {
+      print(profileImage);
       profileImage = profileImage;
     });
   }
@@ -328,6 +329,7 @@ class EditProfilePageState extends State<EditProfilePage> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
+        enabled: label != "Roll Number",
         controller: controller,
         validator: (value) {
           if (!(value == null || value.isEmpty) && label == 'Roll Number') {

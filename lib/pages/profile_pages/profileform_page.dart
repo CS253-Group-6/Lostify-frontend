@@ -45,11 +45,14 @@ class _ProfileFormState extends State<ProfileForm> {
   final TextEditingController _designationController = TextEditingController();
   final TextEditingController _rollNoController = TextEditingController();
 
+  // bool for is submitting
+  bool _isSubmitting = false;
+
   void handleSubmit() async {
     // validate the form details filled
     if (_formKey.currentState!.validate()) {
       // final userProvider = Provider.of<UserProvider>(context, listen: false);
-      
+
       // collect the profile details data
       ProfileModel profileData = ProfileModel(
           name: _nameController.text.trim(),
@@ -58,8 +61,7 @@ class _ProfileFormState extends State<ProfileForm> {
           rollNumber: int.tryParse(_rollNoController.text),
           phoneNumber: _phoneController.text.trim(),
           email: widget.user.email.trim(),
-          profileImage: _image
-      );
+          profileImage: _image);
 
       // create a Json data compatible with signup api request body
       Map<String, dynamic> signUpDetails = {
@@ -70,8 +72,11 @@ class _ProfileFormState extends State<ProfileForm> {
       print('signUp details:');
       print(signUpDetails);
       print('image: ${signUpDetails['image'] == null}');
+
+      setState(() {
+        _isSubmitting = true;
+      });
       // api call to signup
-      
       final response = await AuthApi.signUp(signUpDetails);
       print(response.statusCode);
       print(response.body);
@@ -86,8 +91,10 @@ class _ProfileFormState extends State<ProfileForm> {
             designation: _designationController.text.trim(),
             phoneNumber: _phoneController.text.trim(),
             rollNumber: int.parse(_rollNoController.text),
-            profileImg: _image != null ? _image!: null);
-
+            profileImg: _image != null ? _image! : null);
+        setState(() {
+          _isSubmitting = false;
+        });
         // show a snack bar with success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -107,60 +114,58 @@ class _ProfileFormState extends State<ProfileForm> {
       } else {
         print(jsonDecode(response.body)['message']);
         // show a snack bar with error message
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Error signing up: ${jsonDecode(response.body)['message']}")));
-            // TODO: on failure do not redirect.
-            Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                ConfirmationCode(signUpDetails: signUpDetails)));
-      } 
-
-     // TODO: comment this after intergration with backend and uncomment the upper part
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) =>
-              ConfirmationCode(signUpDetails: signUpDetails)));
-      // TODO: comment this after intergration with backend and uncomment the upper part
-      // Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) =>
-      //         ConfirmationCode(signUpDetails: signUpDetails)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                "Error signing up: ${jsonDecode(response.body)['message']}",
+                style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+                )
+                );
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
 
   File? _image;
   final ImagePicker _picker = ImagePicker();
 
-Future<void> _pickImage() async {
-  try {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      final fileSize = await file.length(); // Get file size in bytes
+  Future<void> _pickImage() async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final file = File(pickedFile.path);
+        final fileSize = await file.length(); // Get file size in bytes
 
-      // Check if the file size exceeds 10 MB (10 * 1024 * 1024 bytes)
-      if (fileSize > 10 * 1024 * 1024) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("File size exceeds 10 MB. Please upload a smaller file."),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return; // Do not set the image if it exceeds the size limit
+        // Check if the file size exceeds 10 MB (10 * 1024 * 1024 bytes)
+        if (fileSize > 10 * 1024 * 1024) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  "File size exceeds 10 MB. Please upload a smaller file."),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return; // Do not set the image if it exceeds the size limit
+        }
+
+        setState(() {
+          _image = file; // Set the image if the size is valid
+        });
       }
-
-      setState(() {
-        _image = file; // Set the image if the size is valid
-      });
+    } catch (e) {
+      print("Error picking image: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("An error occurred while picking the image."),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
-  } catch (e) {
-    print("Error picking image: $e");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("An error occurred while picking the image."),
-        backgroundColor: Colors.red,
-      ),
-    );
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -232,59 +237,66 @@ Future<void> _pickImage() async {
                           validate: false,
                         ),
                         const SizedBox(height: 8),
-                       Column(
-                        children: [
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Upload Profile pic",
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                        Column(
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Upload Profile pic",
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Display the selected image in a small square box
-                                if (_image != null)
-                                  Container(
-                                    width: 70, // Set the width of the box
-                                    height: 70, // Set the height of the box
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey), // Add a border
-                                      borderRadius: BorderRadius.circular(8), // Optional rounded corners
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8), // Match the box's rounded corners
-                                      child: Image.file(
-                                        _image!,
-                                        fit: BoxFit.contain, // Ensure the entire image is visible within the box
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Display the selected image in a small square box
+                                  if (_image != null)
+                                    Container(
+                                      width: 70, // Set the width of the box
+                                      height: 70, // Set the height of the box
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey), // Add a border
+                                        borderRadius: BorderRadius.circular(
+                                            8), // Optional rounded corners
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            8), // Match the box's rounded corners
+                                        child: Image.file(
+                                          _image!,
+                                          fit: BoxFit
+                                              .contain, // Ensure the entire image is visible within the box
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    const Text("No file selected"),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: _pickImage,
+                                    style: ElevatedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: const Color(0xFF32ADE6),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
                                       ),
                                     ),
-                                  )
-                                else
-                                  const Text("No file selected"),
-                                const SizedBox(height: 20),
-                                ElevatedButton(
-                                  onPressed: _pickImage,
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: const Color(0xFF32ADE6),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4.0),
-                                    ),
+                                    child: const Text("Choose File"),
                                   ),
-                                  child: const Text("Choose File"),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                         const SizedBox(height: 50),
-                        Custombutton(text: "Get OTP", onClick: handleSubmit),
+                        Custombutton(
+                            text: _isSubmitting ? "Getting OTP..." : "Get OTP",
+                            onClick: _isSubmitting ? () => null : handleSubmit),
                       ],
                     ),
                   ),

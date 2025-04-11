@@ -27,7 +27,7 @@ class _SignUpState extends State<SignUp> {
 
   // form key
   final _formKey = GlobalKey<FormState>();
-
+  
   // text editing controllers for username,email,password to get the value in the TextFormFields
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -165,6 +165,7 @@ class _SignUpState extends State<SignUp> {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "Please enter your email";
+                                      // return null;
                                     } else {
                                       RegExp emailValidate = RegExp(
                                           r".+@.+");

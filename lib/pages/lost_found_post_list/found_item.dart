@@ -20,66 +20,6 @@ class FoundItem extends StatefulWidget {
 }
 
 class _FoundItemState extends State<FoundItem> {
-  // Example data for found items
-  // final List<Post> posts = [
-  //   Post(
-  //     postType: PostType.found,
-  //     id: 1,
-  //     title: 'Phone',
-  //     status: 'Returned',
-  //     regDate: DateTime.parse('2025-01-02'),
-  //     closedDate: DateTime.parse('2025-01-06'),
-  //     imageProvider: Image.asset('assets/phone.png').image,
-  //   ),
-  //   Post(
-  //     postType: PostType.found,
-  //     id: 2,
-  //     title: 'Mouse',
-  //     status: 'Not Returned',
-  //     regDate: DateTime.parse('2025-01-02'),
-  //     closedDate: null,
-  //     imageProvider: Image.asset('assets/phone.png').image,
-  //   ),
-  //   Post(
-  //     postType: PostType.found,
-  //     id: 3,
-  //     title: 'Wallet',
-  //     status: 'Returned',
-  //     regDate: DateTime.parse('2025-01-02'),
-  //     closedDate: DateTime.parse('2025-01-06'),
-  //     imageProvider: Image.asset('assets/phone.png').image,
-  //   ),
-  //   Post(
-  //     postType: PostType.found,
-  //     id: 4,
-  //     title: 'Keys',
-  //     status: 'Not Returned',
-  //     creatorId: 0,
-  //     regDate: DateTime.parse('2025-03-11'),
-  //     closedDate: null,
-  //     imageProvider: Image.asset('assets/keys.png').image,
-  //   ),
-  //   Post(
-  //     postType: PostType.found,
-  //     id: 5,
-  //     title: 'Bottle',
-  //     status: 'Not Returned',
-  //     regDate: DateTime.parse('2025-01-02'),
-  //     creatorId: 2,
-  //     closedDate: null,
-  //     imageProvider: Image.asset('assets/phone.png').image,
-  //   ),
-  //   Post(
-  //     postType: PostType.found,
-  //     id: 6,
-  //     title: 'Cycle',
-  //     status: 'Returned',
-  //     creatorId: 0,
-  //     regDate: DateTime.parse('2025-01-02'),
-  //     closedDate: DateTime.parse('2025-01-06'),
-  //     imageProvider: null,
-  //   ),
-  // ];
 
   bool _showDetails = false;
   Post? _selectedPost;
@@ -91,7 +31,7 @@ class _FoundItemState extends State<FoundItem> {
   }
 
   List<Post> filteredPosts = [];
-  bool _isLoading = true;
+  bool _isLoading = false;
   Future<void> _loadUserLostPosts(BuildContext context) async {
     final postGetter = LoadPosts();
     try {

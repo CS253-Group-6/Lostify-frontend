@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
     final profilePath = jsonDecode(profileDetails.body)['image'] == ''
         ? null
         : await ProfileModel.saveProfileImage(
-            base64Decode(jsonDecode(profileDetails.body)['image']),
+            base64Decode(jsonDecode(profileDetails.body)['image'] ?? ''),
             'profile ${jsonDecode(profileDetails.body)['userid']}');
     if (profilePath == null) {
       return;

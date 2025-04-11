@@ -28,6 +28,9 @@ class _LoginState extends State<Login> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // on submit start loader
+  bool _isSubmitting = false;
+
   void handleReset() {
     Navigator.of(context).pushNamed('/reset-password');
   }
@@ -39,7 +42,11 @@ class _LoginState extends State<Login> {
         "username": _usernameController.text.trim(),
         "password": _passwordController.text.trim()
       };
-
+      
+      // start loader
+      setState(() {
+        _isSubmitting = true;
+      });
       // api call for login
       final response = await AuthApi.login(loginDetails);
       print(response.body);
@@ -57,6 +64,9 @@ class _LoginState extends State<Login> {
             duration: Duration(seconds: 3), // Display duration
           ),
         );
+        setState(() {
+          _isSubmitting = false;
+        });
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeInterface()));
         return;
@@ -115,6 +125,10 @@ class _LoginState extends State<Login> {
                   : null);
           print(profileResponse.body);
           print('logged in user profile details: with id: $userId');
+          // set isSubmitting as false
+          setState(() {
+            _isSubmitting = false;
+          });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -130,6 +144,9 @@ class _LoginState extends State<Login> {
               arguments: {'user_id': userId, 'user_role': userRole});
         } else {
           print('No cookies found in the response.');
+          setState(() {
+            _isSubmitting = false;
+          });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -144,6 +161,9 @@ class _LoginState extends State<Login> {
 
         // Navigator.of(context).pushReplacementNamed('/');
       } else {
+        setState(() {
+          _isSubmitting = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -237,8 +257,8 @@ class _LoginState extends State<Login> {
                                 ),
                                 const SizedBox(height: 24),
                                 Custombutton(
-                                  text: "Login",
-                                  onClick: handleSubmit,
+                                  text: _isSubmitting ?"Logging in..." : "Login",
+                                  onClick: _isSubmitting ? () => null : handleSubmit,
                                 ),
                               ],
                             ),
