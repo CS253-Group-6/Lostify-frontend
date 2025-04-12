@@ -106,6 +106,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 textController: _usernameController,
                                 hintText: "Enter CC username",
                                 showEyeIcon: false,
+                                label: "Reset Password",
                               ),
                               const SizedBox(height: 24),
                               Custombutton(

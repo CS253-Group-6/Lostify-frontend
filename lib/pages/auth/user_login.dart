@@ -231,12 +231,14 @@ class _LoginState extends State<Login> {
                                   textController: _usernameController,
                                   hintText: "Enter your IITK username",
                                   showEyeIcon: false,
+                                  label: "Username",
                                 ),
                                 const SizedBox(height: 16),
                                 Input(
                                   textController: _passwordController,
                                   hintText: "Enter Password",
                                   showEyeIcon: true,
+                                  label: "Password",
                                 ),
                                 const SizedBox(height: 16),
                                 Container(

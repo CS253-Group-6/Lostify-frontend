@@ -45,15 +45,16 @@ class EditProfilePageState extends State<EditProfilePage> {
         Provider.of<ProfileProvider>(context, listen: false)
             .rollNumber
             .toString();
-    _imageFile =
-        profileImage;
+    _imageFile = profileImage;
   }
+
   File? profileImage;
   void getProfilePic() async {
     final profileDetails = await ProfileApi.getProfileById(
         Provider.of<UserProvider>(context, listen: false).id);
     profileImage = await ProfileModel.saveProfileImage(
-        base64Decode(jsonDecode(profileDetails.body)['image']), 'profile ${jsonDecode(profileDetails.body)['userid']}');
+        base64Decode(jsonDecode(profileDetails.body)['image']),
+        'profile ${jsonDecode(profileDetails.body)['userid']}');
     setState(() {
       print(profileImage);
       profileImage = profileImage;
@@ -94,23 +95,31 @@ class EditProfilePageState extends State<EditProfilePage> {
   // Function to save the profile details
   void _saveProfile() async {
     if (_formKey.currentState!.validate()) {
-      final profileData = {
-        "name": _nameController.text.trim(),
-        "phoneNumber": _phoneController.text.trim(),
-        "address": _addressController.text.trim(),
-        "designation": _designationController.text.trim(),
-        "rollNumber": _rollNumberController.text.trim(),
-        "profileImage": _imageFile != null
-            ? base64Encode(await _imageFile!.readAsBytesSync())
-            : '',
-        "email": Provider.of<ProfileProvider>(context, listen: false).email
-      };
-      print(profileData);
+      // final profileData = {
+      //   "name": _nameController.text.trim(),
+      // "phoneNumber": _phoneController.text.trim(),
+      // "address": _addressController.text.trim(),
+      // "designation": _designationController.text.trim(),
+      // "rollNumber": _rollNumberController.text.trim(),
+      // "profileImage": _imageFile != null
+      //     ? base64Encode(await _imageFile!.readAsBytesSync())
+      //     : '',
+      // "email": Provider.of<ProfileProvider>(context, listen: false).email
+      // };
+      final profileData = ProfileModel(
+          name: _nameController.text.trim(),
+          phoneNumber: _phoneController.text.trim(),
+          address: _addressController.text.trim(),
+          designation: _designationController.text.trim(),
+          rollNumber: int.tryParse(_rollNumberController.text.trim()) ?? 0,
+          profileImage: _imageFile != null ? _imageFile : null,
+          email: Provider.of<ProfileProvider>(context, listen: false).email);
+      print(await profileData.toJson());
 
       // Save the profile data to the database or API
       try {
         int userId = Provider.of<UserProvider>(context, listen: false).userId;
-        final response = await ProfileApi.editProfile(userId, profileData);
+        final response = await ProfileApi.editProfile(userId, await profileData.toJson());
         print(response.statusCode);
         print(response.body);
         if (response.statusCode >= 200 && response.statusCode < 300) {

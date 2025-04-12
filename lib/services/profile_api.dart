@@ -39,6 +39,7 @@ class ProfileApi {
       );
       return response;
     } catch (e) {
+      print('here $e');
       return http.Response(
           jsonEncode({"message": "Unexpected error: $e", "statusCode": 500}),
           500);

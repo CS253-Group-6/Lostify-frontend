@@ -171,12 +171,14 @@ class AdminLoginState extends State<AdminLogin> {
                                   textController: _usernameController,
                                   hintText: "Enter your IITK username",
                                   showEyeIcon: false,
+                                  label: "Username",
                                 ),
                                 SizedBox(height: 16),
                                 Input(
                                   textController: _passwordController,
                                   hintText: "Enter Password",
                                   showEyeIcon: true,
+                                  label: "Password",
                                 ),
                                 SizedBox(height: 16),
                                 Container(
