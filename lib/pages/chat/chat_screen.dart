@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -108,6 +109,21 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
   }
 
+  String _formatLastSeen(DateTime lastSeen) {
+    final now = DateTime.now();
+    final difference = now.difference(lastSeen);
+
+    if (difference.inMinutes < 1) {
+      return 'just now';
+    } else if (difference.inHours < 1) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inDays < 1) {
+      return '${difference.inHours} hours ago';
+    } else {
+      return DateFormat('MMM d, yyyy').format(lastSeen);
+    }
+  }
+
   @override
   void dispose() {
     _messageController.dispose();
@@ -128,8 +144,38 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
             ),
             const SizedBox(width: 10),
-            Text(widget.chatDetails.recieverName,
-                style: TextStyle(color: Colors.white)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.chatDetails.recieverName,
+                    style: TextStyle(color: Colors.white)),
+                StreamBuilder(
+                    stream: FirebaseDatabase.instance
+                        .ref()
+                        .child('users/${widget.chatDetails.recieverId}')
+                        .onValue,
+                    builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                      String statusText = 'Offline';
+                      if (snapshot.hasData &&
+                          snapshot.data!.snapshot.value != null) {
+                        final data = Map<String, dynamic>.from(
+                            snapshot.data!.snapshot.value as Map);
+                        final isOnline = data['online'] ?? false;
+                        if (isOnline) {
+                          statusText = 'Online';
+                        } else if (data['last_seen'] != null) {
+                          final lastSeen = DateTime.fromMillisecondsSinceEpoch(
+                              data['last_seen']);
+                          statusText = 'Last seen at ${_formatLastSeen(lastSeen)}';
+                        }
+                      }
+                      return Text(
+                        statusText,
+                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                      );
+                    })
+              ],
+            ),
             const Spacer(),
             if (widget.chatDetails.senderId ==
                 Provider.of<ProfileProvider>(context, listen: false).id)

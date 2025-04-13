@@ -7,6 +7,7 @@ import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
 import 'package:final_project/providers/user_provider.dart';
 import 'package:final_project/services/auth_api.dart';
+import 'package:final_project/services/chat_api.dart';
 import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  /// List of tab titles.
   /// List of tab titles.
   final List<Widget> _tabs = const [
     Tab(
@@ -111,6 +111,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userId = Provider.of<UserProvider>(context, listen: false).id;
+    if (userId > 0) {
+      ChatStateManager.listenToValue(userId);
+    }
     // get the role details from Navigator args
 
     final roleData =

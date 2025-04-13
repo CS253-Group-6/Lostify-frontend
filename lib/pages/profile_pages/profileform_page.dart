@@ -3,6 +3,7 @@ import "dart:io";
 
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
+import "package:onesignal_flutter/onesignal_flutter.dart";
 import "package:provider/provider.dart";
 
 import "../../components/auth/custom_auth_button.dart";
@@ -48,11 +49,30 @@ class _ProfileFormState extends State<ProfileForm> {
   // bool for is submitting
   bool _isSubmitting = false;
 
+  // get a player id
+  String? _playerId;
+
+  Future<String> _fetchAndSavePlayerId() async {
+    // Fetch OneSignal player ID
+    String? fetchedPlayerId = await OneSignal.User.pushSubscription.id;
+    print("playerId : $fetchedPlayerId");
+
+    if (fetchedPlayerId != null && fetchedPlayerId.isNotEmpty) {
+      setState(() {
+        _playerId = fetchedPlayerId;
+      });
+      return fetchedPlayerId;
+    } else {
+      return '';
+    }
+  }
+
   void handleSubmit() async {
     // validate the form details filled
     if (_formKey.currentState!.validate()) {
       // final userProvider = Provider.of<UserProvider>(context, listen: false);
-
+      // get player id
+      await _fetchAndSavePlayerId();
       // collect the profile details data
       ProfileModel profileData = ProfileModel(
           name: _nameController.text.trim(),
@@ -61,7 +81,8 @@ class _ProfileFormState extends State<ProfileForm> {
           rollNumber: int.tryParse(_rollNoController.text),
           phoneNumber: _phoneController.text.trim(),
           email: widget.user.email.trim(),
-          profileImage: _image);
+          profileImage: _image,
+          playerId: _playerId ?? '');
 
       // create a Json data compatible with signup api request body
       Map<String, dynamic> signUpDetails = {
@@ -115,14 +136,13 @@ class _ProfileFormState extends State<ProfileForm> {
         print(jsonDecode(response.body)['message']);
         // show a snack bar with error message
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                "Error signing up: ${jsonDecode(response.body)['message']}",
-                style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: Colors.red, // Custom background color
-            duration: Duration(seconds: 3), // Display duration
-                )
-                );
+          content: Text(
+            "Error signing up: ${jsonDecode(response.body)['message']}",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red, // Custom background color
+          duration: Duration(seconds: 3), // Display duration
+        ));
         setState(() {
           _isSubmitting = false;
         });

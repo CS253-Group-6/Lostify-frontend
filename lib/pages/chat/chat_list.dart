@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/components/utils/loader.dart';
 import 'package:final_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import '../../components/chat/chat_list_item.dart';
 
 // Messages Screen
 class ChatList extends StatefulWidget {
+  
   const ChatList({super.key});
 
   @override
@@ -14,6 +16,12 @@ class ChatList extends StatefulWidget {
 }
 
 class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
+  bool isLoadingChats = false;
+  void setLoadingChats(bool isLoading){
+    setState(() {
+      isLoadingChats = isLoading;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     print(context.watch<UserProvider>().id);
@@ -47,7 +55,7 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
               return const Center(child: Text('No chats found'));
             }
-            return ListView.builder(
+            return isLoadingChats? Loader() : ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 final convo = snapshot.data!.docs[index];

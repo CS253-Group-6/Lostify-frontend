@@ -46,7 +46,7 @@ class _SignUpState extends State<SignUp> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Registered successfully',
+            'Complete your profile to sign up successfully!',
             style: TextStyle(color: Colors.white), // Text color
           ),
           backgroundColor: Colors.blue, // Custom background color

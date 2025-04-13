@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/providers/user_provider.dart';
 import 'package:final_project/services/items_api.dart';
 import 'package:final_project/services/profile_api.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -232,5 +233,33 @@ class ChatServices {
       });
       notifyUser(context, chatDetails);
     }
+  }
+}
+
+class ChatStateManager{
+  static final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
+
+  static void setUserStatus(int userId){
+    final userStatusRef = _databaseReference.child('/users/$userId');
+    // set status to be online
+    userStatusRef.set({
+      'status': 'online',
+      'last_seen': ServerValue.timestamp
+    });
+
+    // set status to offline
+    userStatusRef.onDisconnect().set({
+      'status': 'offline',
+      'last_seen': ServerValue.timestamp
+    });
+
+  }
+  // listen to the value
+  static void listenToValue(int userId){
+    _databaseReference.child('.info/connected').onValue.listen((event){
+      if(event.snapshot.value == true){
+        setUserStatus(userId);
+      }
+    });
   }
 }

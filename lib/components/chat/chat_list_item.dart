@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/components/utils/loader.dart';
 import 'package:final_project/providers/profile_provider.dart';
+import 'package:final_project/services/items_api.dart';
 import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +14,10 @@ import '../../pages/chat/chat_screen.dart';
 class ChatListItem extends StatefulWidget {
   // firebase data snapshot
   final QueryDocumentSnapshot chat;
+  // final Function(bool) setLoadingChats;
 
-  const ChatListItem({super.key, required this.chat});
+  const ChatListItem(
+      {super.key, required this.chat});
 
   @override
   State<ChatListItem> createState() => _ChatListItemState();
@@ -32,6 +34,7 @@ class _ChatListItemState extends State<ChatListItem>
 
   String? name;
   int recieverUserId = 0;
+  String? postTitle;
 
   // loading state
   bool _isLoading = true;
@@ -43,20 +46,40 @@ class _ChatListItemState extends State<ChatListItem>
     WidgetsBinding.instance.addObserver(this);
     // set status to be online
     setStatus('Online');
-    // set the name of the user
-    getUserName();
+    // load data
+    _loadData();
   }
 
-  void getUserName() async {
+  Future<void> _loadData() async {
+    if(mounted){
+      setState(() {
+        _isLoading = true;
+      });
+    }
+    try {
+      // Simulate async data loading
+      // set the name of the user
+      await getUserName();
+      // set the post title
+      await getPostTitle();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        // widget.setLoadingChats(
+        //     false); // Notify parent that this item is done loading
+      }
+    }
+  }
+
+  Future<void> getUserName() async {
     // get profile details of user by id
     recieverUserId = widget.chat['users'][0] ==
             Provider.of<ProfileProvider>(context, listen: false).id
         ? widget.chat['users'][1]
         : widget.chat['users'][0];
     // get the name of user
-    setState(() {
-      _isLoading = true;
-    });
     final profileResponse = await ProfileApi.getProfileById(recieverUserId);
     final profileDetails = await jsonDecode(profileResponse.body);
     print(profileDetails['name']);
@@ -65,7 +88,17 @@ class _ChatListItemState extends State<ChatListItem>
       setState(() {
         name = profileDetails['name'] ?? '0';
         recieverUserId = profileDetails['id'] ?? 0;
-        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> getPostTitle() async {
+    // get the post title
+    final resp = await ItemsApi.getItemById(widget.chat['itemId']);
+    final postDetails = await jsonDecode(resp.body);
+    if (mounted) {
+      setState(() {
+        postTitle = postDetails['title'] ?? 'title';
       });
     }
   }
@@ -92,28 +125,30 @@ class _ChatListItemState extends State<ChatListItem>
   Widget build(BuildContext context) {
     return _isLoading
         ? Column(
-          children: [
-            SizedBox(
-              width: 24, // Small width for the loader
-              height: 24, // Small height for the loader
-              child: CircularProgressIndicator(
-                strokeWidth: 2, // Thin stroke for a compact look
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            children: [
+              SizedBox(
+                width: 24, // Small width for the loader
+                height: 24, // Small height for the loader
+                child: CircularProgressIndicator(
+                  strokeWidth: 2, // Thin stroke for a compact look
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ),
               ),
-            ),
-            SizedBox(height: 14,)
-          ],
-        )
+              SizedBox(
+                height: 14,
+              )
+            ],
+          )
         : ListTile(
             leading: CircleAvatar(
               backgroundImage: NetworkImage(
                   'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
             ),
-            title: Text("${name}"),
+            title: Text("${name}($postTitle)"),
             subtitle: Text(widget.chat['lastMessage']),
             trailing: Column(
               children: [
-                Text(widget.chat['status']),
+                // Text(widget.chat['status']),
                 Text(
                   widget.chat['lastMessageTime'] != null
                       ? (widget.chat['lastMessageTime'] is Timestamp

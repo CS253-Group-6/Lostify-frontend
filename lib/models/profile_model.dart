@@ -25,19 +25,9 @@ class ProfileModel {
     this.playerId = '',
     this.isOnline = false,
     this.id = 0
-  }) {
-    _fetchAndSavePlayerId();
-  }
+  });
 
-  void _fetchAndSavePlayerId() async {
-    // Fetch OneSignal player ID
-    String? fetchedPlayerId = await OneSignal.User.pushSubscription.id;
-    print("playerId : $fetchedPlayerId");
-
-    if (fetchedPlayerId != null && fetchedPlayerId != playerId) {
-      this.playerId = fetchedPlayerId;
-    }
-  }
+  
 
   // save image
   static Future<File> saveProfileImage(Uint8List bytes, String filename) async {
