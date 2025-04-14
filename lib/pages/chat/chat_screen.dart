@@ -13,7 +13,6 @@ import '../../providers/profile_provider.dart';
 import '../../services/chat_api.dart';
 import '../../utils/upload_handler.dart';
 
-
 class ChatScreen extends StatefulWidget {
   final ChatDetails chatDetails;
   const ChatScreen({super.key, required this.chatDetails});
@@ -81,21 +80,21 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     });
   }
 
-String shortenName(String name) {
-  // Split the name by spaces and take the first part
-  String firstName = name.split(' ').first;
+  String shortenName(String name) {
+    // Split the name by spaces and take the first part
+    String firstName = name.split(' ').first;
 
-  // Define a character limit for the name
-  const int charLimit = 10;
+    // Define a character limit for the name
+    const int charLimit = 10;
 
-  // Check if the name exceeds the character limit
-  if (firstName.length > charLimit) {
-    return '${firstName.substring(0, charLimit)}...'; // Shorten the name and add '...'
+    // Check if the name exceeds the character limit
+    if (firstName.length > charLimit) {
+      return '${firstName.substring(0, charLimit)}...'; // Shorten the name and add '...'
+    }
+
+    return firstName; // Return the full first name if it fits
   }
 
-  return firstName; // Return the full first name if it fits
-}
-  
   Future<void> _closeChat() async {
     final shouldClose = await showDialog<bool>(
       context: context,
@@ -156,9 +155,11 @@ String shortenName(String name) {
         backgroundColor: Colors.blue,
         title: Row(
           children: [
-            const CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
+            CircleAvatar(
+              backgroundImage: widget.chatDetails.imageFile == null
+                  ? NetworkImage(
+                      'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8=')
+                  : FileImage(widget.chatDetails.imageFile!) as ImageProvider,
             ),
             const SizedBox(width: 10),
             Column(
@@ -175,25 +176,29 @@ String shortenName(String name) {
                         .onValue,
                     builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
                       String statusText = 'Offline';
-                      print('entered: ${widget.chatDetails.recieverId} ${snapshot.data!.snapshot.value}');
+                      // print(
+                      //     'entered: ${widget.chatDetails.recieverId} ${snapshot.data!.snapshot.value}');
                       if (snapshot.hasData &&
                           snapshot.data!.snapshot.value != null) {
-                            print('here');
                         final data = Map<String, dynamic>.from(
                             snapshot.data!.snapshot.value as Map);
-                        print('data: $data');
+                        print('Real time data: $data');
                         final isOnline = data['online'] ?? false;
                         if (isOnline) {
                           statusText = 'Online';
                         } else if (data['last_seen'] != null) {
                           final lastSeen = DateTime.fromMillisecondsSinceEpoch(
                               data['last_seen']);
-                          statusText = 'Last seen at ${_formatLastSeen(lastSeen)}';
+                          statusText =
+                              'Last seen at ${_formatLastSeen(lastSeen)}';
                         }
+                      }else{
+                        print('No data available for user ${widget.chatDetails.recieverId}');
                       }
                       return Text(
                         statusText,
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
                       );
                     })
               ],

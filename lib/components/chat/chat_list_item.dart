@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/models/profile_model.dart';
 import 'package:final_project/providers/profile_provider.dart';
 import 'package:final_project/providers/user_provider.dart';
 import 'package:final_project/services/items_api.dart';
@@ -17,8 +19,7 @@ class ChatListItem extends StatefulWidget {
   final QueryDocumentSnapshot chat;
   // final Function(bool) setLoadingChats;
 
-  const ChatListItem(
-      {super.key, required this.chat});
+  const ChatListItem({super.key, required this.chat});
 
   @override
   State<ChatListItem> createState() => _ChatListItemState();
@@ -34,6 +35,7 @@ class _ChatListItemState extends State<ChatListItem>
   }
 
   String? name;
+  File? imageFile;
   int recieverUserId = 0;
   String? postTitle;
 
@@ -52,7 +54,7 @@ class _ChatListItemState extends State<ChatListItem>
   }
 
   Future<void> _loadData() async {
-    if(mounted){
+    if (mounted) {
       setState(() {
         _isLoading = true;
       });
@@ -60,7 +62,7 @@ class _ChatListItemState extends State<ChatListItem>
     try {
       // Simulate async data loading
       // set the name of the user
-      await getUserName();
+      await getProfileDetails();
       // set the post title
       await getPostTitle();
     } finally {
@@ -74,7 +76,7 @@ class _ChatListItemState extends State<ChatListItem>
     }
   }
 
-  Future<void> getUserName() async {
+  Future<void> getProfileDetails() async {
     // get profile details of user by id
     recieverUserId = widget.chat['users'][0] ==
             Provider.of<UserProvider>(context, listen: false).id
@@ -85,13 +87,22 @@ class _ChatListItemState extends State<ChatListItem>
     final profileDetails = await jsonDecode(profileResponse.body);
     print(profileDetails['name']);
     if (mounted) {
+      final profilePic = await ProfileModel.saveProfileImage(
+        base64Decode(profileDetails['image']), 
+        'profile ${profileDetails['userid']}',
+      );
       // check if the widget is still mounted before calling setState
       setState(() {
         name = profileDetails['name'] ?? '0';
-        recieverUserId = profileDetails['id'] ?? 0;
+        imageFile = profileDetails['image'] != null
+            ? profilePic
+            : null; // Set imageFile to null if not available
+        // print('imageFile: $imageFile');
+        recieverUserId = Provider.of<UserProvider>(context,listen: false).id ?? 0;
       });
     }
   }
+
 
   Future<void> getPostTitle() async {
     // get the post title
@@ -142,8 +153,10 @@ class _ChatListItemState extends State<ChatListItem>
           )
         : ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8='),
+              backgroundImage: imageFile == null
+                  ? NetworkImage(
+                      'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8=')
+                  : FileImage(imageFile!),
             ),
             title: Text("${name}($postTitle)"),
             subtitle: Text(widget.chat['lastMessage']),
@@ -174,7 +187,9 @@ class _ChatListItemState extends State<ChatListItem>
                             recieverId: recieverUserId,
                             recieverName: name ?? '0',
                             itemId: widget.chat['itemId'],
+                            imageFile: imageFile,
                             chatRoomId: widget.chat.id))),
+      
               );
             });
   }
