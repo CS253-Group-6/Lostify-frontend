@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/providers/user_provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -156,10 +157,13 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         .onValue,
                     builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
                       String statusText = 'Offline';
+                      print('entered: ${widget.chatDetails.recieverId} ${snapshot.data!.snapshot.value}');
                       if (snapshot.hasData &&
                           snapshot.data!.snapshot.value != null) {
+                            print('here');
                         final data = Map<String, dynamic>.from(
                             snapshot.data!.snapshot.value as Map);
+                        print('data: $data');
                         final isOnline = data['online'] ?? false;
                         if (isOnline) {
                           statusText = 'Online';
@@ -178,7 +182,7 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             ),
             const Spacer(),
             if (widget.chatDetails.senderId ==
-                Provider.of<ProfileProvider>(context, listen: false).id)
+                Provider.of<UserProvider>(context, listen: false).id)
               ElevatedButton(
                 onPressed: () async =>
                     await ChatServices.deleteChat(context, widget.chatDetails),

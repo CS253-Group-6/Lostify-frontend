@@ -149,6 +149,21 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
           ),
         );
       }
+    }else{
+      // if otp is not verified
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '${jsonDecode(response.body)['message']}',
+              style: TextStyle(color: Colors.white), // Text color
+            ),
+            backgroundColor: Colors.red, // Custom background color
+            duration: Duration(seconds: 3), // Display duration
+          ),
+        );
+        setState(() {
+          _isSubmitting = false;
+        });
     }
 
     // Navigator.of(context).pushReplacementNamed('/home');
@@ -158,8 +173,11 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
   void handleResendOtp() async {
     // code to handle resend otp
     if (_isResendEnabled) {
+      setState(() {
+          _isResendEnabled = false;
+        });
       var responseSignup = await AuthApi.signUp(widget.signUpDetails);
-      if (responseSignup.statusCode == 201) {
+      if (responseSignup.statusCode >= 201 && responseSignup.statusCode<=210) {
         setState(() {
           _isResendEnabled = false;
         });

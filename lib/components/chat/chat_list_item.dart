@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/providers/profile_provider.dart';
+import 'package:final_project/providers/user_provider.dart';
 import 'package:final_project/services/items_api.dart';
 import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ class _ChatListItemState extends State<ChatListItem>
   Future<void> getUserName() async {
     // get profile details of user by id
     recieverUserId = widget.chat['users'][0] ==
-            Provider.of<ProfileProvider>(context, listen: false).id
+            Provider.of<UserProvider>(context, listen: false).id
         ? widget.chat['users'][1]
         : widget.chat['users'][0];
     // get the name of user

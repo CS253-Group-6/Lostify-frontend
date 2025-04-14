@@ -13,11 +13,19 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final _usernameController = TextEditingController();
+  // is Submitting
+  bool _isSubmitting = false;
 
   void handleResetPassword() async {
     if (_usernameController.text.trim().isNotEmpty) {
+      setState(() {
+        _isSubmitting = true;
+      });
       final response = await AuthApi.resetPassword(_usernameController.text.trim());
       if (response.statusCode >= 200 && response.statusCode < 210) {
+        setState(() {
+          _isSubmitting = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -31,6 +39,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
         Navigator.pushReplacementNamed(context, '/user/login');
       } else {
+        setState(() {
+          _isSubmitting = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -110,7 +121,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                               ),
                               const SizedBox(height: 24),
                               Custombutton(
-                                text: "Reset Password",
+                                text: _isSubmitting?"Sending Password..." :"Reset Password",
                                 onClick: handleResetPassword,
                               ),
                             ],

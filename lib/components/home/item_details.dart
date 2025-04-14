@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ class _ItemDetailsState extends State<ItemDetails> {
 
   String createChatId() {
     final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+        Provider.of<UserProvider>(context, listen: false);
     int currUserId = profileProvider.id;
     if (currUserId < widget.postOwnerId) {
       return '${currUserId}_${widget.postOwnerId}';
@@ -39,7 +40,7 @@ class _ItemDetailsState extends State<ItemDetails> {
   void _addChat() {
     String chatId = createChatId();
     final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+        Provider.of<UserProvider>(context, listen: false);
     int currUserId = profileProvider.id;
     _chatInstance.collection("chats").doc(chatId).set({
       "users": [currUserId, widget.postOwnerId],

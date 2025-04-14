@@ -141,7 +141,7 @@ class EditProfilePageState extends State<EditProfilePage> {
               duration: Duration(seconds: 3), // Display duration
             ),
           );
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

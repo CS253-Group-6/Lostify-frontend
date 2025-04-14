@@ -78,7 +78,7 @@ class _ProfileFormState extends State<ProfileForm> {
           name: _nameController.text.trim(),
           address: _addressController.text.trim(),
           designation: _designationController.text.trim(),
-          rollNumber: int.tryParse(_rollNoController.text),
+          rollNumber: int.tryParse(_rollNoController.text) ?? 0,
           phoneNumber: _phoneController.text.trim(),
           email: widget.user.email.trim(),
           profileImage: _image,
@@ -111,7 +111,7 @@ class _ProfileFormState extends State<ProfileForm> {
             email: widget.user.email.trim(),
             designation: _designationController.text.trim(),
             phoneNumber: _phoneController.text.trim(),
-            rollNumber: int.parse(_rollNoController.text),
+            rollNumber: _rollNoController.text!=''? int.parse(_rollNoController.text) : 0,
             profileImg: _image != null ? _image! : null);
         setState(() {
           _isSubmitting = false;

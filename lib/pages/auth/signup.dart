@@ -27,7 +27,7 @@ class _SignUpState extends State<SignUp> {
 
   // form key
   final _formKey = GlobalKey<FormState>();
-  
+
   // text editing controllers for username,email,password to get the value in the TextFormFields
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -123,6 +123,12 @@ class _SignUpState extends State<SignUp> {
                                 if (value == null || value.isEmpty) {
                                   return "Please enter your username";
                                 }
+                                // Check if the username contains only alphanumeric characters
+                                final alphanumericRegex =
+                                    RegExp(r'^[a-zA-Z0-9]+$');
+                                if (!alphanumericRegex.hasMatch(value.trim())) {
+                                  return "Username must be alphanumeric";
+                                }
                                 return null;
                               },
                               decoration: const InputDecoration(
@@ -167,8 +173,7 @@ class _SignUpState extends State<SignUp> {
                                       return "Please enter your email";
                                       // return null;
                                     } else {
-                                      RegExp emailValidate = RegExp(
-                                          r".+@.+");
+                                      RegExp emailValidate = RegExp(r".+@.+");
                                       if (!emailValidate.hasMatch(value)) {
                                         return "Please enter a valid email address";
                                       }
@@ -261,7 +266,8 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value != _passwordController.text.trim()) {
+                                    if (value !=
+                                        _passwordController.text.trim()) {
                                       return "Passwords do not match";
                                     }
                                     return null;

@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   var _isFabExpanded = false;
 
   File? profileImage;
-  void getProfilePic() async {
+  Future<void> getProfilePic() async {
     final profileDetails = await ProfileApi.getProfileById(
         Provider.of<UserProvider>(context, listen: false).id);
     print(profileDetails.body);
@@ -87,12 +87,14 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     print('path: ${await profilePath.exists()}');
-    if (await profilePath.exists()) {
+    if (await profilePath.exists() && jsonDecode(profileDetails.body)['image'] != null) {
+      
       final profileFile = await ProfileModel.saveProfileImage(
-        base64Decode(jsonDecode(profileDetails.body)['image']),
+        base64Decode(jsonDecode(profileDetails.body)['image']), 
         'profile ${jsonDecode(profileDetails.body)['userid']}',
       );
       setState(() {
+        print('entered set');
         profileImage = profileFile;
       });
     } else {
@@ -363,8 +365,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       title: const Text('Edit Profile'),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/edit-profile');
+                      onTap: () async{
+                        final result = await Navigator.pushNamed(context, '/edit-profile');
+                        print('reult$result');
+                        if(result == true){
+                          // re-fetch profile pic
+                          await getProfilePic();
+                        }
                       },
                     ),
                     ListTile(
