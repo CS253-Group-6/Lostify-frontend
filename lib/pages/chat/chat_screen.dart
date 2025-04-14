@@ -13,6 +13,7 @@ import '../../providers/profile_provider.dart';
 import '../../services/chat_api.dart';
 import '../../utils/upload_handler.dart';
 
+
 class ChatScreen extends StatefulWidget {
   final ChatDetails chatDetails;
   const ChatScreen({super.key, required this.chatDetails});
@@ -80,6 +81,21 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     });
   }
 
+String shortenName(String name) {
+  // Split the name by spaces and take the first part
+  String firstName = name.split(' ').first;
+
+  // Define a character limit for the name
+  const int charLimit = 10;
+
+  // Check if the name exceeds the character limit
+  if (firstName.length > charLimit) {
+    return '${firstName.substring(0, charLimit)}...'; // Shorten the name and add '...'
+  }
+
+  return firstName; // Return the full first name if it fits
+}
+  
   Future<void> _closeChat() async {
     final shouldClose = await showDialog<bool>(
       context: context,
@@ -148,8 +164,10 @@ class ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.chatDetails.recieverName,
-                    style: TextStyle(color: Colors.white)),
+                Text(
+                  shortenName(widget.chatDetails.recieverName),
+                  style: const TextStyle(color: Colors.white),
+                ),
                 StreamBuilder(
                     stream: FirebaseDatabase.instance
                         .ref()

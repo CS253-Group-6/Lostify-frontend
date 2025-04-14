@@ -320,18 +320,20 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.white,
                                 ),
                           const SizedBox(height: 10),
-                          // Replace 'John Doe' with the actual name or a variable holding it.
+                          // Updated Text widget for the name
                           Text(
-                            '$name',
+                            name,
                             style: const TextStyle(
                               fontSize: 20,
                               color: Colors.white,
                             ),
+                            maxLines: 1, // Restrict to a single line
+                            overflow: TextOverflow.ellipsis, // Add '...' if the text overflows
                           ),
                         ],
                       ),
                     ),
-                    ListTile(
+                                        ListTile(
                       title: const Text('Your lost items'),
                       onTap: () {
                         Navigator.pushNamed(context, '/lost-items');
