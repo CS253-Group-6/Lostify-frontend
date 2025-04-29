@@ -1,16 +1,33 @@
-# final_project
+# Lostify
 
-A new Flutter project.
+Source code for the frontend of Lostify for Android devices.
 
-## Getting Started
+## Building the app
 
-This project is a starting point for a Flutter application.
+1. Make sure you have Flutter installed and up-to-date. Consult the
+   [official guide](https://docs.flutter.dev/get-started/install) for
+   instructions on setting up Flutter on your device.
 
-A few resources to get you started if this is your first Flutter project:
+2. Clone the repository.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+3. Open a shell in the root directory of the local clone of the repository
+   and execute the following commands:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    ```bash
+    flutter pub get
+    flutter build apk
+    ```
+
+The APK will be found at
+[`build/app/outputs/apk/release/`](build/app/outputs/apk/release/).
+
+## Installing the app
+
+To install the APK on an Android device:
+
+1. Build the project as described above.
+
+2. Connect your target device (Android) using a USB cable.
+
+3. Open a shell in the root directory of the local clone of the repository
+   and run `flutter install`.
