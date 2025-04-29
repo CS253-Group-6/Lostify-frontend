@@ -13,7 +13,7 @@ class ProfileProvider extends ChangeNotifier {
 
   Future<void> _fetchAndSavePlayerId() async {
     // Fetch OneSignal player ID
-    String? fetchedPlayerId = await OneSignal.User.pushSubscription.id;
+    String? fetchedPlayerId = OneSignal.User.pushSubscription.id;
     print("playerId : $fetchedPlayerId");
 
     if (fetchedPlayerId != null && fetchedPlayerId != playerId) {
@@ -27,16 +27,17 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  ProfileProvider(
-      {this.name = '',
-      this.address = '',
-      this.designation = '',
-      this.phoneNumber = '',
-      this.rollNumber = 0,
-      this.id = 0,
-      this.playerId,
-      this.email = '',
-      this.profileImg = null});
+  ProfileProvider({
+    this.name = '',
+    this.address = '',
+    this.designation = '',
+    this.phoneNumber = '',
+    this.rollNumber = 0,
+    this.id = 0,
+    this.playerId,
+    this.email = '',
+    this.profileImg
+  });
 
   void setName({required String name}) async {
     this.name = name;
@@ -67,7 +68,7 @@ class ProfileProvider extends ChangeNotifier {
     this.rollNumber = rollNumber;
     this.id = id;
     this.profileImg;
-    this.playerId = playerId;
+    playerId = playerId;
     // Fetch and save player ID
     await _fetchAndSavePlayerId();
     notifyListeners();

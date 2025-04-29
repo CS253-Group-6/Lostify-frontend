@@ -1,10 +1,9 @@
-import 'package:final_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/location/location.dart';
 import '../../models/item_model.dart';
+import '../../providers/user_provider.dart';
 import '../../services/items_api.dart';
 
 class LostAnItem2 extends StatefulWidget {
@@ -92,20 +91,6 @@ class _LostAnItem2State extends State<LostAnItem2> {
           ),
         );
       }
-
-      // TODO: uncomment upper part and comment navigator below
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text(
-      //       'Item posted successfully!',
-      //       style: TextStyle(color: Colors.white), // Text color
-      //     ),
-      //     backgroundColor: Colors.blue, // Custom background color
-      //     duration: Duration(seconds: 3), // Display duration
-      //   ),
-      // );
-
-      // Navigator.pushNamed(context, '/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

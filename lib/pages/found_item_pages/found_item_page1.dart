@@ -66,7 +66,7 @@ Widget build(BuildContext context) {
                 width: double.infinity,
                 height: 250,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: _image != null

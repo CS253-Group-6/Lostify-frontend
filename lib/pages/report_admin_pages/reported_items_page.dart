@@ -38,23 +38,15 @@ class ReportedItemPage extends StatefulWidget {
 
 class _ReportedItemPageState extends State<ReportedItemPage> {
   /// List of tab titles.
-  final List<Widget> _tabs = const [
-    Tab(
-      text: 'Lost',
-    ),
-    Tab(text: 'Found')
-  ];
+  final List<Widget> _tabs = const [Tab(text: 'Lost'), Tab(text: 'Found')];
 
   /// List of widgets corresponding to tabs in [_tabs].
-  final List<Widget> _widgets = const [ItemsTab(),ItemsTab()];
+  final List<Widget> _widgets = const [ItemsTab(), ItemsTab()];
 
-  var _isFabExpanded = false;
+  final _isFabExpanded = false;
 
   @override
   Widget build(BuildContext context) {
-    /// User role
-    final int role = 1; // Replace with context.watch().user.role;
-
     /// App bar prepared outside so that size can be queried in the
     /// constructor of [PreferredSize].
     final w = AppBar(
@@ -100,10 +92,8 @@ class _ReportedItemPageState extends State<ReportedItemPage> {
                   // Overlay blur effect when the FAB is expanded
                   if (_isFabExpanded)
                     Container(
-                      color: Colors.white
-                          .withValues(alpha: 0.5), // Brighten the background
-                      child: const SizedBox
-                          .expand(), // Make sure this covers the entire screen
+                      color: Colors.white.withValues(alpha: 0.5), // Brighten the background
+                      child: const SizedBox.expand(), // Make sure this covers the entire screen
                     ),
                 ],
               ),
@@ -126,10 +116,8 @@ class _ReportedItemPageState extends State<ReportedItemPage> {
                 // Overlay blur effect when the FAB is expanded
                 if (_isFabExpanded)
                   Container(
-                    color: Colors.white
-                        .withValues(alpha: 0.5), // Brighten the background
-                    child: const SizedBox
-                        .expand(), // Make sure this covers the entire screen
+                    color: Colors.white.withValues(alpha: 0.5), // Brighten the background
+                    child: const SizedBox.expand(), // Make sure this covers the entire screen
                   ),
               ],
             ),

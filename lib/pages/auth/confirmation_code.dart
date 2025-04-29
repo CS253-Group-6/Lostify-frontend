@@ -203,91 +203,88 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                 image: AssetImage("assets/images/Admin Login.png"),
                 fit: BoxFit.cover)),
         child: Center(
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(45.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 280,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Enter confirmation code",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 25),
-                          ),
-                          SizedBox(height: 4),
-                          Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                "Enter the 4 digit verification code sent to your registered email.",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Color(0xFF71727A), fontSize: 14),
-                              )),
-                        ]),
-                  ),
-                  SizedBox(height: 40),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: List.generate(
-                            4,
-                            (index) => Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  width: 50,
-                                  height: 50,
-                                  child: TextField(
-                                    controller: _controllers[index],
-                                    focusNode: _focusNodes[index],
-                                    keyboardType: TextInputType.number,
-                                    textAlign: TextAlign.center,
-                                    maxLength: 1,
-                                    onChanged: (value) =>
-                                        _onChanged(value, index),
-                                    decoration: const InputDecoration(
-                                      counterText: "",
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                )),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      GestureDetector(
-                        onTap: handleResendOtp,
-                        child: FractionallySizedBox(
-                          alignment: Alignment.centerRight,
-                          widthFactor: 0.85,
-                          child: Text(
-                            "Resend OTP?",
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              color: _isResendEnabled
-                                  ? Color(0xFF006FFD)
-                                  : Colors.grey[500],
+          child: Padding(
+            padding: const EdgeInsets.all(45.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 280,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Enter confirmation code",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25),
+                        ),
+                        SizedBox(height: 4),
+                        Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Enter the 4 digit verification code sent to your registered email.",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: Color(0xFF71727A), fontSize: 14),
+                            )),
+                      ]),
+                ),
+                SizedBox(height: 40),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(
+                        4,
+                        (index) => Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 2),
+                          width: 50,
+                          height: 50,
+                          child: TextField(
+                            controller: _controllers[index],
+                            focusNode: _focusNodes[index],
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            maxLength: 1,
+                            onChanged: (value) =>
+                                _onChanged(value, index),
+                            decoration: const InputDecoration(
+                              counterText: "",
+                              border: OutlineInputBorder(),
                             ),
+                          ),
+                        )
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    GestureDetector(
+                      onTap: handleResendOtp,
+                      child: FractionallySizedBox(
+                        alignment: Alignment.centerRight,
+                        widthFactor: 0.85,
+                        child: Text(
+                          "Resend OTP?",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            color: _isResendEnabled
+                                ? Color(0xFF006FFD)
+                                : Colors.grey[500],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 100),
-                  Container(
-                      width: 300,
-                      height: 40,
-                      child: Custombutton(
-                        text: _isSubmitting?"Submitting.." : "Continue",
-                        onClick:_isSubmitting? ()=>null : handleSubmit,
-                      )),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 100),
+                SizedBox(
+                  width: 300,
+                  height: 40,
+                  child: Custombutton(
+                    text: _isSubmitting ? "Submitting..." : "Continue",
+                    onClick:_isSubmitting ? () {} : handleSubmit,
+                  )
+                ),
+              ],
             ),
           ),
         ),

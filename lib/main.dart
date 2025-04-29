@@ -1,32 +1,28 @@
-import 'package:final_project/models/chat_model.dart';
-import 'package:final_project/models/user_model.dart';
-import 'package:final_project/pages/edit_profile/edit_profile.dart';
-import 'package:final_project/pages/report_admin_pages/reported_items_page.dart';
-import 'package:final_project/providers/all_items_provider.dart';
-import 'package:final_project/providers/profile_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '/components/home/item_details.dart';
-import '/pages/chat/chat_list.dart';
-import '/pages/chat/chat_screen.dart';
-import '/pages/lost_item_pages/lost_item_post_page1.dart';
-import '../../models/post.dart';
+import 'models/user_model.dart';
 import 'pages/auth/admin_login.dart';
 import 'pages/auth/confirmation_code.dart';
 import 'pages/auth/reset_password_page.dart';
 import 'pages/auth/signup.dart';
 import 'pages/auth/user_login.dart';
 import 'pages/change_password_pages/change_password.dart';
+import 'pages/chat/chat_list.dart';
+import 'pages/edit_profile/edit_profile.dart';
 import 'pages/found_item_pages/found_item_page1.dart';
 import 'pages/home_page/home_interface.dart';
 import 'pages/home_page/homepage.dart';
 import 'pages/lost_found_post_list/found_item.dart';
 import 'pages/lost_found_post_list/lost_item.dart';
+import 'pages/lost_item_pages/lost_item_post_page1.dart';
 import 'pages/profile_pages/profileform_page.dart';
+import 'pages/report_admin_pages/reported_items_page.dart';
 import 'pages/search/search_page.dart';
+import 'providers/all_items_provider.dart';
+import 'providers/profile_provider.dart';
 import 'providers/user_provider.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -81,16 +77,16 @@ class MyApp extends StatelessWidget {
         // home pages
         '/homeInterface': (context) => HomeInterface(), // home interface
         '/home': (context) => HomePage(), // home page
-        '/item-details': (context) => ItemDetails(
-              itemId: 0,
-              postOwnerId: 0,
-              post: Post(
-                  postType: PostType.lost,
-                  id: 0,
-                  title: 'title',
-                  status: 'status',
-                  regDate: DateTime.now()),
-            ),
+        // '/item-details': (context) => ItemDetails(
+        //       itemId: 0,
+        //       postOwnerId: 0,
+        //       post: Post(
+        //           postType: PostType.lost,
+        //           id: 0,
+        //           title: 'title',
+        //           status: 'status',
+        //           regDate: DateTime.now()),
+        //     ),
 
         // // lost item routes
         '/lost/post/1': (context) => LostAnItem1(), //lost postpage 1
@@ -105,14 +101,14 @@ class MyApp extends StatelessWidget {
 
         // chat pages
         '/chat-list': (context) => ChatList(),
-        '/chat-screen': (context) => ChatScreen(
-              chatDetails: ChatDetails(
-                  senderId: 1,
-                  recieverId: 1,
-                  itemId: 1,
-                  chatRoomId: '8_9',
-                  recieverName: 'Vinay'),
-            ),
+        // '/chat-screen': (context) => ChatScreen(
+        //       chatDetails: ChatDetails(
+        //           senderId: 1,
+        //           recieverId: 1,
+        //           itemId: 1,
+        //           chatRoomId: '8_9',
+        //           recieverName: 'Vinay'),
+        //     ),
         // edit profile page
         // others
         // '/about' : (context) => , // about us page

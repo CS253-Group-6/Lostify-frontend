@@ -112,7 +112,7 @@ class EditProfilePageState extends State<EditProfilePage> {
           address: _addressController.text.trim(),
           designation: _designationController.text.trim(),
           rollNumber: int.tryParse(_rollNumberController.text.trim()) ?? 0,
-          profileImage: _imageFile != null ? _imageFile : null,
+          profileImage: _imageFile,
           email: Provider.of<ProfileProvider>(context, listen: false).email);
       print(await profileData.toJson());
 
@@ -260,10 +260,10 @@ class EditProfilePageState extends State<EditProfilePage> {
                         //         : AssetImage('assets/images/profile_hardcoded.png') as ImageProvider,
                         //   ),
                         // ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
                         // Form Fields
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: Form(
                             key: _formKey,
@@ -364,7 +364,7 @@ class EditProfilePageState extends State<EditProfilePage> {
           labelText: label,
           alignLabelWithHint: true,
           filled: true,
-          fillColor: Colors.white.withOpacity(0.4),
+          fillColor: Colors.white.withValues(alpha: 0.4),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),

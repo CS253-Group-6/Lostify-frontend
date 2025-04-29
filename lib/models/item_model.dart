@@ -33,7 +33,7 @@ class Item{
       "location2": location2,
       "creator": creator,
       "date": datetime,
-      "image": base64Encode(await image!.readAsBytesSync()), // Convert file to Base64
+      "image": base64Encode(image!.readAsBytesSync()), // Convert file to Base64
       // "isFound": isFound,
     };
   }

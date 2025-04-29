@@ -36,10 +36,8 @@ class AuthApi {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final cookieData = response.headers['set-cookie'];
         final cookieIdx = cookieData!.indexOf('session=');
-        final cookie = cookieData!.substring(cookieIdx);
-        if (cookie != null) {
-          await prefs.setString('cookies', cookie);
-        }
+        final cookie = cookieData.substring(cookieIdx);
+        await prefs.setString('cookies', cookie);
       }
       return response;
     } catch (e) {

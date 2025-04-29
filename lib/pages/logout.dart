@@ -14,6 +14,8 @@ void main() {
 
 // Home Page Widget
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +38,8 @@ class HomePage extends StatelessWidget {
 
 // Logout Confirmation Page Widget
 class LogoutConfirmationPage extends StatelessWidget {
+  const LogoutConfirmationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +58,7 @@ class LogoutConfirmationPage extends StatelessWidget {
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: Container(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
             ),
           ),
           // Confirmation Dialog
@@ -67,7 +71,7 @@ class LogoutConfirmationPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     spreadRadius: 2,
                   ),
@@ -156,6 +160,8 @@ class LogoutConfirmationPage extends StatelessWidget {
 
 // Login Page Widget
 class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

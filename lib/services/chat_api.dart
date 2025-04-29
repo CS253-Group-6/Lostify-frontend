@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/providers/user_provider.dart';
-import 'package:final_project/services/items_api.dart';
-import 'package:final_project/services/profile_api.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +10,8 @@ import '../../pages/chat/chat_screen.dart';
 import '../../providers/profile_provider.dart';
 import '../../services/notifications_api.dart';
 import '../../utils/upload_handler.dart';
+import '../providers/user_provider.dart';
+import 'profile_api.dart';
 
 class ChatServices {
   static Map<String, dynamic> recieverDetails = {};
@@ -85,9 +84,9 @@ class ChatServices {
     int currUserId = profileProvider.id;
     print('currUserId: $currUserId, postOwnerId: $postOwnerId');
     if (currUserId < postOwnerId) {
-      return '${currUserId}_${postOwnerId}_${itemId}';
+      return '${currUserId}_${postOwnerId}_$itemId';
     } else {
-      return '${postOwnerId}_${currUserId}_${itemId}';
+      return '${postOwnerId}_${currUserId}_$itemId';
     }
   }
 
@@ -168,8 +167,8 @@ class ChatServices {
   }
 
   static void notifyUser(BuildContext context, ChatDetails chatDetails) async {
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    // final profileProvider =
+    //     Provider.of<ProfileProvider>(context, listen: false);
     // print('playerId: ${profileProvider.playerId}');
     List<String> ids = (chatDetails.chatRoomId.split('_'));
     print('ids : $ids');

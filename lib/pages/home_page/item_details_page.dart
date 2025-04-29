@@ -22,41 +22,7 @@ class ItemDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int logged_in_userId =
-        Provider.of<UserProvider>(context, listen: false).userId;
-    void deletePost(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Delete Post"),
-          content: const Text("Are you sure you want to delete this post?"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                // onDelete(); // Calls the delete function passed from parent
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      '${post.title} deleted!',
-                      style: TextStyle(color: Colors.white), // Text color
-                    ),
-                    backgroundColor: Colors.blue, // Custom background color
-                    duration: Duration(seconds: 3), // Display duration
-                  ),
-                );
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Text("Delete", style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        ),
-      );
-    }
+    int loggedInUserid = Provider.of<UserProvider>(context, listen: false).userId;
 
     return Scaffold(
       appBar: AppBar(
@@ -205,7 +171,7 @@ class ItemDetailsPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 // Action buttons (e.g., Report, Share, Chat)
                 // if (extraProperty != null)
-                if (extraProperty != null || postOwnerId == logged_in_userId)
+                if (extraProperty != null || postOwnerId == loggedInUserid)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

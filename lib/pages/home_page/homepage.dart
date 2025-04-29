@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    void _showLogoutDialog(BuildContext context) {
+    void showLogoutDialog(BuildContext context) {
       showDialog(
         context: context,
         barrierDismissible: true, // Close dialog when tapped outside
@@ -333,7 +333,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                                        ListTile(
+                    ListTile(
                       title: const Text('Your lost items'),
                       onTap: () {
                         Navigator.pushNamed(context, '/lost-items');
@@ -352,7 +352,8 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ReportedItemPage()),
+                              builder: (context) => ReportedItemPage()
+                            ),
                           );
                         },
                       ),
@@ -388,7 +389,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       title: const Text('Logout'),
-                      onTap: () => _showLogoutDialog(context),
+                      onTap: () => showLogoutDialog(context),
                     ),
                   ],
                 ),

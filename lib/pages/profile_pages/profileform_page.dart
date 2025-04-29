@@ -54,7 +54,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   Future<String> _fetchAndSavePlayerId() async {
     // Fetch OneSignal player ID
-    String? fetchedPlayerId = await OneSignal.User.pushSubscription.id;
+    String? fetchedPlayerId = OneSignal.User.pushSubscription.id;
     print("playerId : $fetchedPlayerId");
 
     if (fetchedPlayerId != null && fetchedPlayerId.isNotEmpty) {
@@ -106,13 +106,14 @@ class _ProfileFormState extends State<ProfileForm> {
       if (response.statusCode >= 201 && response.statusCode < 210) {
         // store the profile details into the provider
         context.read<ProfileProvider>().setProfile(
-            name: _nameController.text.trim(),
-            address: _addressController.text.trim(),
-            email: widget.user.email.trim(),
-            designation: _designationController.text.trim(),
-            phoneNumber: _phoneController.text.trim(),
-            rollNumber: _rollNoController.text!=''? int.parse(_rollNoController.text) : 0,
-            profileImg: _image != null ? _image! : null);
+          name: _nameController.text.trim(),
+          address: _addressController.text.trim(),
+          email: widget.user.email.trim(),
+          designation: _designationController.text.trim(),
+          phoneNumber: _phoneController.text.trim(),
+          rollNumber: _rollNoController.text!=''? int.parse(_rollNoController.text) : 0,
+          profileImg: _image
+        );
         setState(() {
           _isSubmitting = false;
         });
@@ -316,7 +317,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         const SizedBox(height: 50),
                         Custombutton(
                             text: _isSubmitting ? "Getting OTP..." : "Get OTP",
-                            onClick: _isSubmitting ? () => null : handleSubmit),
+                            onClick: _isSubmitting ? () {} : handleSubmit),
                       ],
                     ),
                   ),

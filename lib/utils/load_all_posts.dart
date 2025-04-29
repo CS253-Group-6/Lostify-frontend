@@ -10,7 +10,8 @@ import '../../services/items_api.dart';
 import './post_filter.dart';
 
 class LoadPosts {
-  List<Post> _allPosts = [];
+  final List<Post> _allPosts = [];
+  
   Future<List<Post>> loadAllPosts(BuildContext context) async {
     final response = await ItemsApi.getAllItems();
     print('response data is');

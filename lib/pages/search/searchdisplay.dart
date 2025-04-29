@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:final_project/components/home/item_box.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../../providers/user_provider.dart';
+
+import '../../components/home/item_box.dart';
 import '../../models/post.dart';
 import '../../services/items_api.dart';
 import '../../utils/post_filter.dart';
-import 'package:provider/provider.dart';
 
 class SearchDisplayPage extends StatefulWidget {
 // The search criteria passed from SearchPage.
@@ -16,14 +14,14 @@ class SearchDisplayPage extends StatefulWidget {
   final DateTime endDate;
 
   const SearchDisplayPage({
-    Key? key,
+    super.key,
     required this.searchLocation,
     required this.startDate,
     required this.endDate,
-  }) : super(key: key);
+  });
 
   @override
-  _SearchDisplayPageState createState() => _SearchDisplayPageState();
+  State<SearchDisplayPage> createState() => _SearchDisplayPageState();
 }
 
 class _SearchDisplayPageState extends State<SearchDisplayPage> {

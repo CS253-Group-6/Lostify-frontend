@@ -2,17 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/models/profile_model.dart';
-import 'package:final_project/providers/profile_provider.dart';
-import 'package:final_project/providers/user_provider.dart';
-import 'package:final_project/services/items_api.dart';
-import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/chat_model.dart';
+import '../../models/profile_model.dart';
 import '../../pages/chat/chat_screen.dart';
+import '../../providers/user_provider.dart';
+import '../../services/items_api.dart';
+import '../../services/profile_api.dart';
 
 class ChatListItem extends StatefulWidget {
   // firebase data snapshot
@@ -98,7 +97,7 @@ class _ChatListItemState extends State<ChatListItem>
             ? profilePic
             : null; // Set imageFile to null if not available
         // print('imageFile: $imageFile');
-        recieverUserId = Provider.of<UserProvider>(context,listen: false).id ?? 0;
+        recieverUserId = Provider.of<UserProvider>(context,listen: false).id;
       });
     }
   }
@@ -158,7 +157,7 @@ class _ChatListItemState extends State<ChatListItem>
                       'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8=')
                   : FileImage(imageFile!),
             ),
-            title: Text("${name}($postTitle)"),
+            title: Text("$name($postTitle)"),
             subtitle: Text(widget.chat['lastMessage']),
             trailing: Column(
               children: [

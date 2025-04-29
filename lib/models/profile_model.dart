@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ProfileModel {
@@ -45,7 +44,7 @@ class ProfileModel {
       'roll': rollNumber,
       'email': email,
       'image': profileImage != null
-          ? base64Encode(await profileImage!.readAsBytesSync())
+          ? base64Encode(profileImage!.readAsBytesSync())
           : '',
       'playerId': playerId,
       'online': isOnline

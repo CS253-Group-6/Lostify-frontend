@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import '../../services/items_api.dart';
+
 import '../../models/post.dart';
 import '../../pages/home_page/item_details_page.dart';
+import '../../services/items_api.dart';
 
 /// Type of post (for lost item or for found item). Passed as argument
 /// to the constructor of [PostType].

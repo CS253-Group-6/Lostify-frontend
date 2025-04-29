@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
+// import 'package:uuid/uuid.dart';
 
 class UploadHandler {
 
@@ -65,7 +65,7 @@ class UploadHandler {
 
     if (image != null) {
       // generate unique id for each image of some random string
-      String fileName = Uuid().v1();
+      // String fileName = Uuid().v1();
 
       // get the image file
       final File file = File(image.path);

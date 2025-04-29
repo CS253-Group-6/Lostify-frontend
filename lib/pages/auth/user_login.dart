@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:final_project/pages/home_page/home_interface.dart';
-import 'package:final_project/providers/profile_provider.dart';
-import 'package:final_project/services/auth_api.dart';
-import 'package:final_project/services/profile_api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/auth/auth_input.dart';
 import '../../components/auth/custom_auth_button.dart';
+import '../../providers/profile_provider.dart';
 import '../../providers/user_provider.dart';
+import '../../services/auth_api.dart';
+import '../../services/profile_api.dart';
+import '../home_page/home_interface.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -81,7 +81,7 @@ class _LoginState extends State<Login> {
         // Extract cookies from the response headers
         final cookie = response.headers['set-cookie'];
         print('Cookies: $cookie');
-        final prefs = await SharedPreferences.getInstance();
+        // final prefs = await SharedPreferences.getInstance();
 
         if (cookie != null) {
           // Save the cookies to shared preferences
@@ -121,7 +121,7 @@ class _LoginState extends State<Login> {
               profileImg: jsonDecode(profileResponse.body)['image'] != null
                   ? await saveProfileImage(
                       base64Decode(jsonDecode(profileResponse.body)['image']),
-                      'profile${userId}.jpg')
+                      'profile$userId.jpg')
                   : null);
           print(profileResponse.body);
           print('logged in user profile details: with id: $userId');
@@ -260,7 +260,7 @@ class _LoginState extends State<Login> {
                                 const SizedBox(height: 24),
                                 Custombutton(
                                   text: _isSubmitting ?"Logging in..." : "Login",
-                                  onClick: _isSubmitting ? () => null : handleSubmit,
+                                  onClick: _isSubmitting ? () {} : handleSubmit,
                                 ),
                               ],
                             ),

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class AllItemsProvider extends ChangeNotifier {
   List<Post> allPosts = [];
 
-  void updateData(List<Post> all_posts) {
-    this.allPosts = all_posts;
+  void updateData(List<Post> allPosts) {
+    this.allPosts = allPosts;
     notifyListeners();  // Notify UI to refresh
   }
 }

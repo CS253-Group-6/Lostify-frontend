@@ -1,12 +1,12 @@
 import 'dart:ui';
 
-import 'package:final_project/components/utils/loader.dart';
-import 'package:final_project/utils/load_all_posts.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/lost_items/lost_item_box.dart';
+import '../../components/utils/loader.dart';
 import '../../models/post.dart';
 import '../../pages/chat/chat_page.dart';
+import '../../utils/load_all_posts.dart';
 
 class LostItem extends StatefulWidget {
   const LostItem({super.key});
@@ -121,25 +121,27 @@ class _LostItemState extends State<LostItem> {
               ),
             ),
             child: SafeArea(
-              child: filteredPosts.length>0? ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                itemCount: filteredPosts.length,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: ItemBox(
-                      post: filteredPosts[index],
-                      // onViewDetails: () {
-                      //   setState(() {
-                      //     _showDetails = true;
-                      //     _selectedPost = filteredPosts[index];
-                      //   });
-                      // },
-                    ),
-                  );
-                },
-              ): Center(
-                child: Text('No posts found'),
-              )
+              child: filteredPosts.isNotEmpty
+                ? ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  itemCount: filteredPosts.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: ItemBox(
+                        post: filteredPosts[index],
+                        // onViewDetails: () {
+                        //   setState(() {
+                        //     _showDetails = true;
+                        //     _selectedPost = filteredPosts[index];
+                        //   });
+                        // },
+                      ),
+                    );
+                  },
+                )
+                : const Center(
+                  child: Text('No posts found'),
+                )
             ),
           ),
 

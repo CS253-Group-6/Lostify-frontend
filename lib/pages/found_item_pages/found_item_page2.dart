@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'found_item_page3.dart';
 
 class FoundItemPage2 extends StatelessWidget {
-   Map<String, dynamic> postDetails1;
+  final Map<String, dynamic> postDetails1;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
-  FoundItemPage2({super.key,required this.postDetails1});
+  FoundItemPage2({super.key, required this.postDetails1});
 
   @override
   Widget build(BuildContext context) {

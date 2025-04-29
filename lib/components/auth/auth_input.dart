@@ -20,7 +20,6 @@ class _InputState extends State<Input> {
   bool _isObscured = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isObscured = widget.showEyeIcon;
   }

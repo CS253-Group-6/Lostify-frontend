@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 
 enum PostType { lost, found }
@@ -32,8 +31,7 @@ final class Post {
     required this.postType,
     required this.id,
     required this.title,
-    this.creatorId =
-        123, // TODO: Change this: Once the provider for this is set up, make it required and remove the default value
+    required this.creatorId,
     this.status = '',
     required this.regDate,
     this.closedDate,
