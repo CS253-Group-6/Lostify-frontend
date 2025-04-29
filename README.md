@@ -14,8 +14,8 @@ Source code for the frontend of Lostify for Android devices.
    and execute the following commands:
 
     ```bash
-    flutter pub get
-    flutter build apk
+    flutter pub get         # Get dependencies
+    flutter build apk       # Build APK in release mode
     ```
 
 The APK will be found at
