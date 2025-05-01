@@ -55,7 +55,7 @@ class _SignUpState extends State<SignUp> {
       );
 
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ProfileForm(user: user)));
+        MaterialPageRoute(builder: (context) => ProfileForm(user: user)));
     }
   }
 

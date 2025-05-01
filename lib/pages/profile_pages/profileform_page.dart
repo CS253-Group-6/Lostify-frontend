@@ -75,14 +75,15 @@ class _ProfileFormState extends State<ProfileForm> {
       await _fetchAndSavePlayerId();
       // collect the profile details data
       ProfileModel profileData = ProfileModel(
-          name: _nameController.text.trim(),
-          address: _addressController.text.trim(),
-          designation: _designationController.text.trim(),
-          rollNumber: int.tryParse(_rollNoController.text) ?? 0,
-          phoneNumber: _phoneController.text.trim(),
-          email: widget.user.email.trim(),
-          profileImage: _image,
-          playerId: _playerId ?? '');
+        name: _nameController.text.trim(),
+        address: _addressController.text.trim(),
+        designation: _designationController.text.trim(),
+        rollNumber: int.tryParse(_rollNoController.text) ?? 0,
+        phoneNumber: _phoneController.text.trim(),
+        email: widget.user.email.trim(),
+        profileImage: _image,
+        playerId: _playerId ?? ''
+      );
 
       // create a Json data compatible with signup api request body
       Map<String, dynamic> signUpDetails = {
@@ -279,18 +280,14 @@ class _ProfileFormState extends State<ProfileForm> {
                                       width: 70, // Set the width of the box
                                       height: 70, // Set the height of the box
                                       decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.grey), // Add a border
-                                        borderRadius: BorderRadius.circular(
-                                            8), // Optional rounded corners
+                                        border: Border.all(color: Colors.grey), // Add a border
+                                        borderRadius: BorderRadius.circular(8), // Optional rounded corners
                                       ),
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            8), // Match the box's rounded corners
+                                        borderRadius: BorderRadius.circular(8), // Match the box's rounded corners
                                         child: Image.file(
                                           _image!,
-                                          fit: BoxFit
-                                              .contain, // Ensure the entire image is visible within the box
+                                          fit: BoxFit.contain, // Ensure the entire image is visible within the box
                                         ),
                                       ),
                                     )
@@ -316,8 +313,9 @@ class _ProfileFormState extends State<ProfileForm> {
                         ),
                         const SizedBox(height: 50),
                         Custombutton(
-                            text: _isSubmitting ? "Getting OTP..." : "Get OTP",
-                            onClick: _isSubmitting ? () {} : handleSubmit),
+                          text: _isSubmitting ? "Getting OTP..." : "Get OTP",
+                          onClick: _isSubmitting ? () {} : handleSubmit
+                        ),
                       ],
                     ),
                   ),

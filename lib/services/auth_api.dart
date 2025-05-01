@@ -12,7 +12,7 @@ class AuthApi {
     try {
       final response = await http.post(
         Uri.parse("$baseUrl/auth/signup/get_otp"),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json"}, 
         body: jsonEncode(userDetails),
       );
       print(response.body);
