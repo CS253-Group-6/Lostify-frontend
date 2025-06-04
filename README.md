@@ -1,5 +1,7 @@
 # Lostify
 
+[![CodeFactor](https://www.codefactor.io/repository/github/cs253-group-6/lostify-frontend/badge)](https://www.codefactor.io/repository/github/cs253-group-6/lostify-frontend)
+
 Source code for the frontend of Lostify for Android devices.
 
 ## Building the app
